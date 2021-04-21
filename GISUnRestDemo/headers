@@ -1,4 +1,4 @@
-GET /village-council-service/api/v1/data?identifier=4231083E000PB7&name=&surname=&patronymic=&pid=11000000000000029162 HTTP/1.0
+GET /village-council-service/api/v1/movements/sys_organ/26/period/28.01.2021/31.01.2021?first=0&count=10 HTTP/1.0
 Host: a.todes.by:13555
 Keep-Alive: 300
 Connection: keep-alive

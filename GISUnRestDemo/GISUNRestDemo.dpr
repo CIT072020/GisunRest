@@ -11,7 +11,7 @@ uses
   uROCExchg in '..\uROCExchg.pas',
   uRegIntX in '..\uRegIntX.pas',
   uGetSrvX in '..\uGetSrvX.pas',
-  uRestClient in '..\uRestClient.pas';
+  uRestClient in '..\RestClient\uRestClient.pas';
 
 {$R *.res}
 

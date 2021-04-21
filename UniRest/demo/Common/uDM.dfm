@@ -5,8 +5,10 @@ object DM: TDM
   Height = 159
   Width = 228
   object RestClient: TRestClient
-    ConnectionType = hctWinHttp
+    ConnectionType = hctSyna
     EnabledCompression = False
+    TimeOut.SendTimeout = 10000
+    TimeOut.ReceiveTimeout = 10000
     Left = 24
     Top = 24
   end

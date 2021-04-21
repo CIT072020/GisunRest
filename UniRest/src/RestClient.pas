@@ -303,8 +303,8 @@ begin
   FLogin := '';
   FPassword := '';
 
-  FEnabledCompression := True;
-  FVerifyCert := True;
+  FEnabledCompression := False;
+  FVerifyCert := False;
 end;
 
 destructor TRestClient.Destroy;

@@ -15,6 +15,9 @@ type
 implementation
 
 uses SysUtils,
+    {$IFDEF USE_SYNA}
+    HttpConnectionSyna,
+    {$ENDIF}
     {$IFDEF USE_INDY}
     HttpConnectionIndy,
     {$ENDIF}
@@ -31,6 +34,11 @@ uses SysUtils,
 class function THttpConnectionFactory.NewConnection(AType: THttpConnectionType): IHttpConnection;
 begin
   case AType of
+    hctSyna:  {$IFDEF USE_SYNA}
+              Result := THttpConnectionSyna.Create;
+              {$ELSE}
+              raise Exception.Create('Synapse not supported. If do you have an indy installation, enable USE_SYNA compiler directive.');
+              {$ENDIF}
     hctIndy:  {$IFDEF USE_INDY}
               Result := THttpConnectionIndy.Create;
               {$ELSE}

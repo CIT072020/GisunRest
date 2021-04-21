@@ -29,11 +29,7 @@ requires
   vcl,
   dbrtl,
   dsnap,
-  soaprtl
-  //,IndyCore70,
-  //IndySystem70,
-  //IndyProtocols70
-  ;
+  soaprtl;
 
 contains
   RestClient in '..\..\src\RestClient.pas',

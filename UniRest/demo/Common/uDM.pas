@@ -6,7 +6,7 @@ uses
   SysUtils, Classes, RestClient;
 
 const
-  CONTEXT_PATH = 'http://localhost:8080/java-rest-server/rest/';
+  CONTEXT_PATH = 'http://localhost:3000/rest/';
     
 type
   TDM = class(TDataModule)
