@@ -1,0 +1,30 @@
+{
+    "cover": {
+        "message_id": "{E093945A-2803-4B72-85DC-87DF57FE41C6}",
+        "message_type": {
+            "code": "88",
+            "type": -2
+        },
+        "message_time": "2021-04-15T12:21:42.151+03:00",
+        "message_source": {
+            "code": "17120",
+            "type": 80
+        },
+        "parent_message_id": "4D7961DF-3057-4587-A498-5D995C733D80",
+        "dataset": [
+            15
+        ]
+    },
+    "response": {
+        "personal_data":
+        [{
+                "request_id": "1",
+                "data": {
+                    "identif": "7120691A001PB3",
+                    "last_name": "ТРИГУБОВИЧ"
+
+                }
+            }
+        ]
+    }
+}

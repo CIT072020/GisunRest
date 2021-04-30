@@ -1,0 +1,147 @@
+{
+  "posts": 
+  [
+  {
+   "rid": 5,
+   "pid": 111110815014021226,
+   "identif": "4090940B026PB5",
+   "sysOrganWhere":    
+     {
+      "klUniPK":       
+       {
+         "type": -5,
+         "code": 30
+      },
+      "lex1": "БОРИСОВСКОЕ РУВД МИНСКОЙ ОБЛАСТИ",
+      "lex2": null,
+      "lex3": null,
+      "dateBegin": "2009-04-25T12:50:40.000+0300",
+      "active": 1
+     },
+   "sysOrganFrom":
+     {
+      "klUniPK":
+       {
+         "type": -5,
+         "code": 26
+       },
+      "lex1": "АСБ ГУВД МИНГОРИСПОЛКОМА",
+      "lex2": null,
+      "lex3": null,
+      "dateBegin": "2009-04-25T12:49:13.000+0300",
+      "active": 1
+     },
+   "dateRec": "2018-10-24T23:05:26.000+0300"
+  },
+  {
+   "rid": 6,
+   "pid": 111110815014021227,
+   "identif": "3140462K000VF6",
+   "sysOrganWhere":    
+     {
+      "klUniPK":       
+       {
+         "type": -5,
+         "code": 30
+      },
+      "lex1": "БОРИСОВСКОЕ РУВД МИНСКОЙ ОБЛАСТИ",
+      "lex2": null,
+      "lex3": null,
+      "dateBegin": "2009-04-25T12:50:40.000+0300",
+      "active": 1
+     },
+   "sysOrganFrom":
+     {
+      "klUniPK":
+       {
+         "type": -5,
+         "code": 26
+       },
+      "lex1": "АСБ ГУВД МИНГОРИСПОЛКОМА",
+      "lex2": null,
+      "lex3": null,
+      "dateBegin": "2009-04-25T12:49:13.000+0300",
+      "active": 1
+     },
+   "dateRec": "2018-10-24T23:05:26.000+0300"
+  }
+  ],
+
+  "Departs": 
+  [
+  {
+   "rid": 5,
+   "pid": 111110815014021226,
+   "identif": "4090940B026PB5",
+   "sysOrganWhere":    
+     {
+      "klUniPK":       
+       {
+         "type": -5,
+         "code": 30
+      },
+      "lex1": "БОРИСОВСКОЕ РУВД МИНСКОЙ ОБЛАСТИ",
+      "lex2": null,
+      "lex3": null,
+      "dateBegin": "2009-04-25T12:50:40.000+0300",
+      "active": 1
+     },
+   "sysOrganFrom":
+     {
+      "klUniPK":
+       {
+         "type": -5,
+         "code": 26
+       },
+      "lex1": "АСБ ГУВД МИНГОРИСПОЛКОМА",
+      "lex2": null,
+      "lex3": null,
+      "dateBegin": "2009-04-25T12:49:13.000+0300",
+      "active": 1
+     },
+   "dateRec": "2018-10-24T23:05:26.000+0300"
+  },
+  {
+   "rid": 6,
+   "pid": 111110815014021227,
+   "identif": "3140462K000VF6",
+   "sysOrganWhere":    
+     {
+      "klUniPK":       
+       {
+         "type": -5,
+         "code": 30
+      },
+      "lex1": "БОРИСОВСКОЕ РУВД МИНСКОЙ ОБЛАСТИ",
+      "lex2": null,
+      "lex3": null,
+      "dateBegin": "2009-04-25T12:50:40.000+0300",
+      "active": 1
+     },
+   "sysOrganFrom":
+     {
+      "klUniPK":
+       {
+         "type": -5,
+         "code": 26
+       },
+      "lex1": "АСБ ГУВД МИНГОРИСПОЛКОМА",
+      "lex2": null,
+      "lex3": null,
+      "dateBegin": "2009-04-25T12:49:13.000+0300",
+      "active": 1
+     },
+   "dateRec": "2018-10-24T23:05:26.000+0300"
+  }
+  ],
+
+  "comments": 
+  [
+    { "id": 1, "body": "some comment", "postId": 1 },
+    { "id": 2, "body": "some comment", "postId": 1 }
+  ],
+  "profile": 
+  {
+    "name": "typicode"
+  }
+}
