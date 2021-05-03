@@ -6,7 +6,8 @@ uses
   SysUtils, Classes, RestClient;
 
 const
-  CONTEXT_PATH = 'http://localhost:3000/rest/';
+  CONTEXT_PATH = 'http://localhost:3000/';
+  RESRC_PATH   = 'person/';
     
 type
   TDM = class(TDataModule)

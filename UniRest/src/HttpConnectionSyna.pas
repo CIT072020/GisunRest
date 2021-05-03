@@ -224,6 +224,7 @@ begin
   try
     //FSynaHttp.Get(AUrl, AResponse);
     FSynaHttp.HTTPMethod('GET', AUrl);
+    AResponse.CopyFrom(FSynaHttp.Document, 0);
   except
     on E : Exception do
       if GenExceptHandl(AUrl, nil, AResponse, E, nil, Get) then
@@ -236,8 +237,11 @@ procedure THttpConnectionSyna.Post(AUrl: string; AContent, AResponse: TStream);
 begin
   try
     //FSynaHttp.Post(AUrl, AContent, AResponse);
+    FSynaHttp.Document.Clear;
     FSynaHttp.Document.CopyFrom(AContent, 0);
+    FSynaHttp.Document.SaveToFile('PostData');
     FSynaHttp.HTTPMethod('POST', AUrl);
+    AResponse.CopyFrom(FSynaHttp.Document, 0);
   except
     on E: Exception do
       if GenExceptHandl(AUrl, AContent, AResponse, E, Post) then

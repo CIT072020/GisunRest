@@ -47,7 +47,7 @@ begin
   if TFrm_Person.Modify(vPerson) then
   begin
     try
-      DM.RestClient.Resource(CONTEXT_PATH + 'person')
+      DM.RestClient.Resource(CONTEXT_PATH + RESRC_PATH)
                               .Accept(RestUtils.MediaType_Json)
                               .Header('Accept-Encoding', 'gzip')
                               .ContentType(RestUtils.MediaType_Json)
@@ -73,7 +73,7 @@ begin
   begin
     vPerson := TPerson(ListView1.Items[ListView1.ItemIndex].Data);
 
-    DM.RestClient.Resource(CONTEXT_PATH + 'person')
+    DM.RestClient.Resource(CONTEXT_PATH + RESRC_PATH)
                  .Accept(RestUtils.MediaType_Json)
                  .ContentType(RestUtils.MediaType_Json)
                  .Delete(vPerson);
@@ -84,7 +84,7 @@ end;
 
 procedure TFrm_PersonList.btnResetClick(Sender: TObject);
 begin
-  DM.RestClient.Resource(CONTEXT_PATH + 'persons/reset').GET();
+  DM.RestClient.Resource(CONTEXT_PATH + RESRC_PATH + 'reset').GET();
 
   RefreshList;
 end;
@@ -99,7 +99,7 @@ begin
 
     if TFrm_Person.Modify(vPerson) then
     begin
-      DM.RestClient.Resource(CONTEXT_PATH + 'person')
+      DM.RestClient.Resource(CONTEXT_PATH + RESRC_PATH)
                    .Accept(RestUtils.MediaType_Json)
                    .ContentType(RestUtils.MediaType_Json)
                    .Put(vPerson)
@@ -146,7 +146,7 @@ var
 begin
   ClearList;
 
-  vResponse := TObjectList(Dm.RestClient.Resource(CONTEXT_PATH + 'persons')
+  vResponse := TObjectList(Dm.RestClient.Resource(CONTEXT_PATH + RESRC_PATH)
                               .Accept(RestUtils.MediaType_Json)
                               .Get(TObjectList, TPerson));
   try
