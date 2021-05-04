@@ -218,11 +218,12 @@ begin
   Result := NeedRaise;
 end;
 
-
+// GET
 procedure THttpConnectionSyna.Get(AUrl: string; AResponse: TStream);
 begin
   try
     //FSynaHttp.Get(AUrl, AResponse);
+    FSynaHttp.Document.Clear;
     FSynaHttp.HTTPMethod('GET', AUrl);
     AResponse.CopyFrom(FSynaHttp.Document, 0);
   except
@@ -232,7 +233,7 @@ begin
   end;
 end;
 
-
+// POST
 procedure THttpConnectionSyna.Post(AUrl: string; AContent, AResponse: TStream);
 begin
   try
@@ -250,11 +251,31 @@ begin
 end;
 
 
+// PUT
+procedure THttpConnectionSyna.Put(AUrl: string; AContent, AResponse: TStream);
+begin
+  try
+    //FSynaHttp.Put(AUrl, AContent, AResponse);
+    FSynaHttp.Document.Clear;
+    FSynaHttp.Document.CopyFrom(AContent, 0);
+    FSynaHttp.HTTPMethod('PUT', AUrl);
+    AResponse.CopyFrom(FSynaHttp.Document, 0);
+  except
+    on E: Exception do
+      if GenExceptHandl(AUrl, AContent, AResponse, E, Put) then
+        raise;
+  end;
+end;
+
+// PATCH
 procedure THttpConnectionSyna.Patch(AUrl: string; AContent, AResponse: TStream);
 begin
   try
     //FSynaHttp.Patch(AUrl, AContent, AResponse);
+    FSynaHttp.Document.Clear;
+    FSynaHttp.Document.CopyFrom(AContent, 0);
     FSynaHttp.HTTPMethod('PATCH', AUrl);
+    AResponse.CopyFrom(FSynaHttp.Document, 0);
   except
     on E: Exception do
       if GenExceptHandl(AUrl, AContent, AResponse, E, Patch) then
@@ -263,19 +284,7 @@ begin
 end;
 
 
-procedure THttpConnectionSyna.Put(AUrl: string; AContent, AResponse: TStream);
-begin
-  try
-    //FSynaHttp.Put(AUrl, AContent, AResponse);
-    FSynaHttp.HTTPMethod('PUT', AUrl);
-  except
-    on E: Exception do
-      if GenExceptHandl(AUrl, AContent, AResponse, E, Put) then
-        raise;
-  end;
-end;
-
-
+// DELETE
 procedure THttpConnectionSyna.Delete(AUrl: string; AContent, AResponse: TStream);
 begin
   try
@@ -297,7 +306,7 @@ end;
 
 function THttpConnectionSyna.GetOnConnectionLost: THTTPConnectionLostEvent;
 begin
-  result := OnConnectionLost;
+  Result := OnConnectionLost;
 end;
 
 function THttpConnectionSyna.GetResponseCode: Integer;
@@ -401,7 +410,7 @@ begin
   for i := 0 to AHeaders.Count-1 do
   begin
     //FSynaHttp.Request.CustomHeaders.AddValue(AHeaders.Names[i], AHeaders.ValueFromIndex[i]);
-    FSynaHttp.Headers.AddObject(AHeaders.Names[i], TObject(AHeaders.ValueFromIndex[i]));
+    FSynaHttp.Headers.AddObject(AHeaders.Names[i], TObject(AHeaders.Objects[i]));
   end;
 
   Result := Self;
