@@ -61,6 +61,7 @@ type
     procedure FormDestroy(Sender: TObject);
     procedure btnGetDocsClick(Sender: TObject);
     procedure btnGetNSIClick(Sender: TObject);
+    procedure btnGetUNClick(Sender: TObject);
     procedure btnPostDocClick(Sender: TObject);
   private
     { Private declarations }
@@ -72,6 +73,7 @@ type
 var
   Form1: TForm1;
   RegInt : TRegIntX;
+  BlackBox : TROCExchg;
   // для отладки POST
   //GETRes : TResultHTTP;
 
@@ -104,13 +106,13 @@ begin
   edOrgan.Text  := '26';
 //  dtBegin.Value := StrToDate('01.01.2021');
 //  dtEnd.Value   := StrToDate('10.01.2021');
-  dtBegin.Value := StrToDate('28.01.2021');
-  dtEnd.Value   := StrToDate('31.01.2021');
+  dtBegin.Value := StrToDate('09.10.2020');
+  dtEnd.Value   := StrToDate('01.01.2021');
   edFirst.Text  := '0';
   edCount.Text  := '10';
   cbSrcPost.ItemIndex := 0;
 
-  BlackBox := TROCExchg.Create(INI_NAME);
+  BlackBox := TROCExchg.Create('..\..\Lais7\Service\' + INI_NAME);
   Self.Caption := 'Обмен с адресом: ' + BlackBox.Host.URL;
   Create4UN;
 end;
@@ -301,6 +303,14 @@ begin
     end;
     ShowDeb(IntToStr(BlackBox.ResHTTP.ResCode) + ' ' + BlackBox.ResHTTP.ResMsg, cbClearLog.Checked);
   end;
+end;
+
+// GET для регистра населения
+procedure TForm1.btnGetUNClick(Sender: TObject);
+var
+  i : Integer;
+begin
+
 end;
 
 

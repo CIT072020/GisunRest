@@ -345,8 +345,9 @@ object Form1: TForm1
     Top = 651
     Width = 119
     Height = 25
-    Caption = 'GET - '#1056#1077#1075#1053#1072#1089
+    Caption = 'GET - '#1056#1077#1075#1080#1089#1090#1088#1053#1072#1089
     TabOrder = 22
+    OnClick = btnGetUNClick
   end
   object DataSource1: TDataSource
     Left = 664

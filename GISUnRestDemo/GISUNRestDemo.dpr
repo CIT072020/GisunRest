@@ -4,11 +4,7 @@ uses
   ExceptionLog,
   Forms,
   Unit1 in 'Unit1.pas' {Form1},
-  uROCService in '..\uROCService.pas',
-  uROCDTO in '..\uROCDTO.pas',
-  uROCNSI in '..\uROCNSI.pas',
   fPIN4Av in 'fPIN4Av.pas' {fPINGet},
-  uROCExchg in '..\uROCExchg.pas',
   uRegIntX in '..\uRegIntX.pas',
   uGetSrvX in '..\uGetSrvX.pas',
   uRestClient in '..\RestClient\uRestClient.pas';
