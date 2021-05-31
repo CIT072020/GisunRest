@@ -309,8 +309,11 @@ end;
 procedure TForm1.btnGetUNClick(Sender: TObject);
 var
   i : Integer;
+  s : string;
 begin
-
+  i := 58 + 0;
+  s := (TButton(Sender)).Caption + ' ' + IntToStr(i);
+  (TButton(Sender)).Caption := s;
 end;
 
 
