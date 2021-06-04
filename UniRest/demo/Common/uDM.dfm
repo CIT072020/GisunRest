@@ -1,7 +1,7 @@
 object DM: TDM
   OldCreateOrder = False
-  Left = 1338
-  Top = 345
+  Left = 1311
+  Top = 238
   Height = 159
   Width = 228
   object RestClient: TRestClient

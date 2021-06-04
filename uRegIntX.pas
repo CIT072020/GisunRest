@@ -23,7 +23,7 @@ const
 //=== *** === === *** === === *** === === *** === =>
   UN_INI_NAME = '..\GISUN\GISUN.ini';
 //=== *** === === *** === === *** === === *** === <=
- 
+
   // Режимы обмена с регистром населения
   EM_DEFLT = 0;
   EM_SOAP  = 1;
@@ -37,31 +37,44 @@ const
 type
   TExchangeMode = (emDefault, emSOAP, emJSON, emMIXED);
 
-
+   //Интерфейс для обмена с регистром населения
   TRegIntX = class(TRegInt)
   private
     FExchMode : Integer;
+    FConfig   : TRestConfig;
     FIniIn,
     FIniOut,
     FIni : TSasaIniFile;
-    FGetSrv : TGetSrvX;
     FRestClient : TRestClient;
 
-    function SetTypeAndIDMsg(ActKind: TActKind; var MessageType: string; const PCount : Integer = -1; const INCount : Integer = -1) : TObject;
-    function GetRestIN(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument:TDataSet; slPar:TStringList): TRequestResult;
-  public
-    property GisunX : TGetSrvX read FGetSrv write FGetSrv;
+    // Подготовка тела запроса
+    function MakeBody(ActKind: TActKind; MessageType: string; const Input, Dokument : TDataSet; slPar:TStringList) : string;
 
-    //
-    function Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet;
-      const Dokument:TDataSet=nil; slPar:TStringList=nil; EMode : Integer = EM_SOAP): TRequestResult;
+    //function SetTypeAndIDMsg(ActKind: TActKind; var MessageType: string; const PCount : Integer = -1; const INCount : Integer = -1) : TObject;
+    function GetRestIN(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument:TDataSet; slPar:TStringList): TRestResponse;
+
+    ///----!!!!
+    //FGetSrv : TGetSrvX;
+  public
+    property Config : TRestConfig read FConfig write FConfig;
+    property ApiClient : TRestClient read FRestClient write FRestClient;
+
+    // Получение персональных данных, ИН, резервирование ИН
+    function Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument: TDataSet = nil;
+    slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRestResponse;
+
     // версия для работы с REST-сервисами
-    function GetRest(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument:TDataSet; slPar:TStringList): TRequestResult;
-    //
+    function GetRest(ActKind: TActKind; MessageType: string; const Input, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestResponse;
+
+    // Передача документов в регистр
     function Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet;
       var Error: TDataSet; EMode : Integer = EM_SOAP): TRequestResult;
 
     constructor Create(MessageSource: string; Ini : TSasaIniFile = nil);
+    destructor Destroy;
+
+    ///----!!!!
+    //property GisunX : TGetSrvX read FGetSrv write FGetSrv;
   end;
 
 
@@ -129,6 +142,69 @@ uses
   SysUtils,
   kbmMemTable,
   FuncPr;
+
+
+constructor TRegIntX.Create(MessageSource: string; Ini : TSasaIniFile = nil);
+var
+  i : Integer;
+begin
+  inherited Create(MessageSource);
+  FIni := Ini;
+  FExchMode := EM_SOAP;
+  if (Assigned(Ini)) then
+    FExchMode := Ini.ReadInteger(SCT_ADMIN, 'EXCHG_MODE', EM_SOAP);
+
+  Config := TRestConfig.Create;
+  ApiClient := TRestClient.Create;
+
+  //FGetSrv := TGetSrvX.Create;
+end;
+
+
+destructor TRegIntX.Destroy;
+begin
+  FreeAndNil(FRestClient);
+  FreeAndNil(FConfig);
+  inherited;
+end;
+
+
+
+
+
+// Получение из регистра
+function TRegIntX.Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument: TDataSet = nil;
+    slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRestResponse;
+var
+  ResObs : TRequestResult;
+begin
+  Result := TRestResponse.Create;
+  if (ExchMode = EM_DEFLT) then
+    ExchMode := FExchMode;
+  if (ExchMode = EM_SOAP) then begin
+    ResObs := inherited Get(ActKind, MessageType, Input, Output, Error, Dokument, slPar);
+  end
+  else begin
+    // Через REST-сервис
+    // Подготовка Body
+    // Подготовка Headers
+    Result := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar);
+
+
+  end;
+end;
+
+// Запись в регистр документов
+function TRegIntX.Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet; var Error: TDataSet; EMode : Integer = EM_SOAP): TRequestResult;
+begin
+  Result := rrFault;
+end;
+
+
+
+
+
+
 
 
 // Числовое целое из MemTable
@@ -313,48 +389,6 @@ end;
 
 
 
-constructor TRegIntX.Create(MessageSource: string; Ini : TSasaIniFile = nil);
-var
-  i : Integer;
-begin
-  inherited Create(MessageSource);
-  FIni := Ini;
-  if (not Assigned(Ini)) then
-    FExchMode := EM_SOAP
-  else begin
-    FExchMode := Ini.ReadInteger(SCT_ADMIN, 'EXCHG_MODE', EM_SOAP);
-    if (FExchMode <> EM_SOAP) then begin
-      // JSON допускается
-    end;
-  end;
-  FGetSrv := TGetSrvX.Create;
-
-end;
-
-// Получение из регистра
-function TRegIntX.Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet;
-  const Dokument:TDataSet=nil; slPar:TStringList=nil; EMode : Integer = EM_SOAP): TRequestResult;
-begin
-  Result := rrFault;
-  if (FExchMode <> EM_MIXED) then
-    EMode := FExchMode;
-  if (EMode = EM_SOAP) then
-    Result := inherited Get(ActKind, MessageType, Input, Output, Error, Dokument, slPar)
-  else begin
-    // Через REST-сервис
-    // Подготовка Body
-    // Подготовка Headers
-    Result := GetRest(ActKind, MessageType, Input, Output, Error, Dokument, slPar);
-
-
-  end;
-end;
-
-// Запись в регистр документов
-function TRegIntX.Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet; var Error: TDataSet; EMode : Integer = EM_SOAP): TRequestResult;
-begin
-  Result := rrFault;
-end;
 
 
 
@@ -373,9 +407,7 @@ end;
 
 
 
-
-
-
+(*
 function TRegIntX.SetTypeAndIDMsg(ActKind: TActKind; var MessageType: string; const PCount: Integer = -1; const INCount: Integer = -1): TObject;
 //var
   //old: Integer;
@@ -398,13 +430,13 @@ begin
 // было         registerPersonIdentifRequest:=GisunX.CreateRegisterPersonIdentifRequest(MessageType);
 //-------------------
 end;
-
+*)
 
 
 
 //Запрос на получение ИН по Ф.И.О.
 //----------------------------------------------------------------
-function TRegIntX.GetRestIN(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument:TDataSet; slPar:TStringList): TRequestResult;
+function TRegIntX.GetRestIN(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument:TDataSet; slPar:TStringList): TRestResponse;
 var
    registerRequest: wsGisun.register_request;
    registerPersonIdentifRequest: wsGisun.register_person_identif_request;
@@ -423,10 +455,13 @@ var
    lOk:Boolean;
    doc:TRegDocument;
    //FGisun : TGetSrvX;
+  ResObs : TRequestResult;
 
 begin
-         Result := rrFault;
-         registerPersonIdentifRequest := wsGisun.register_person_identif_request(SetTypeAndIDMsg(ActKind, MessageType));
+  ResObs := rrFault;
+         Result := TRestResponse.Create;
+         //registerPersonIdentifRequest := wsGisun.register_person_identif_request(SetTypeAndIDMsg(ActKind, MessageType));
+         registerPersonIdentifRequest := wsGisun.register_person_identif_request(1);
          FRequestMessageId:= registerPersonIdentifRequest.cover.message_id;
 
          //скопировать данные из входной таблицы в свойства объекта
@@ -464,11 +499,13 @@ begin
 //  ???             registerResponse.cover.message_id;
 
             if lOk then begin
-               Result:=rrOk;
+               //Result:=rrOk;
+               ResObs := rrOk;
                Output:=CreateOutputTable(akGetPersonalData); //akGetPersonIdentif
                //Проверяем заголовок сообщения
                if registerResponse.cover.parent_message_id<>FRequestMessageId then begin
-                  Result:=rrAfterError;
+                  //Result:=rrAfterError;
+                  ResObs := rrAfterError;
                   FFaultError:='Ошибка обмена с регистром. Не совпадают идентификаторы сообщений запроса и ответа.';
                   Log.Add('!ОШИБКА: не совпадают идентификаторы сообщений')
                end;
@@ -484,14 +521,16 @@ begin
                      Output.Post;
                   end
                   else begin
-                     Result:=rrAfterError;
+                     //Result:=rrAfterError;
+                     ResObs := rrAfterError;
                      FFaultError:='Ошибка обмена с регистром. Не найден идентификатор запроса персональных данных.';
                      Log.Add('!ОШИБКА: не совпадают идентификаторы запросов персональных данных')
                   end;
                end;
             end
             else begin
-               Result:=rrFault;
+               //Result:=rrFault;
+               ResObs := rrFault;
                Temp:=TkbmMemTable.Create(nil);
                CreateAndCopyMemTable(FGisun.Error, Temp);
                Error:=TDataSet(Temp);
@@ -514,9 +553,9 @@ end;
 
 
 
-
+(*
 //----------------------------------------------------------------
-function TRegIntX.GetRest(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument:TDataSet; slPar:TStringList): TRequestResult;
+function TRegIntX.GetRest(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument:TDataSet; slPar:TStringList): TRestResponse;
 var
    registerRequest: wsGisun.register_request;
    registerPersonIdentifRequest: wsGisun.register_person_identif_request;
@@ -874,5 +913,37 @@ begin
       end;
    end;
 end;
+*)
+
+
+// Подготовка тела запроса
+function TRegIntX.MakeBody(ActKind: TActKind; MessageType: string; const Input, Dokument : TDataSet; slPar:TStringList) : string;
+var
+  s : string;
+begin
+  Result := s;
+end;
+
+
+// Получение персональных данных, ИН, резервирование ИН через REST-сервис
+function TRegIntX.GetRest(ActKind: TActKind; MessageType: string; const Input, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestResponse;
+var
+  i : Integer;
+  s : string;
+  Req : TRestRequest;
+
+begin
+  Result := TRestResponse.Create;
+  // Формирование запроса на сервер
+  Req := TRestRequest.Create(Self.Config.DefHeader);
+  s := Req.MakeReqLine('POST', slPar);
+  Req.Body := MakeBody(ActKind, MessageType, Input, Dokument, slPar);
+
+  Result := ApiClient.CallApi(Req);
+end;
+
+
+
+
 
 end.

@@ -34,7 +34,10 @@ var
 
 implementation
 
-uses Person, uFrm_Person, uDM;
+uses
+  Person,
+  uFrm_Person,
+  uDM;
 
 {$R *.dfm}
 

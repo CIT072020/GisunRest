@@ -73,6 +73,7 @@ type
     FVerifyCert: boolean;
 
     {$IFDEF SUPPORTS_ANONYMOUS_METHODS}
+    // Äëÿ 2009+
     FTempHandler: TRestResponseHandlerFunc;
     procedure DoRequestFunc(Method: TRequestMethod; ResourceRequest: TResource; AHandler: TRestResponseHandlerFunc);
     procedure HandleAnonymousMethod(ResponseContent: TStream);
@@ -446,10 +447,10 @@ begin
 end;
 
 {$IFDEF SUPPORTS_ANONYMOUS_METHODS}
+// Äëÿ 2009+
 procedure TRestClient.DoRequestFunc(Method: TRequestMethod; ResourceRequest: TResource; AHandler: TRestResponseHandlerFunc);
 begin
   FTempHandler := AHandler;
-
   DoRequest(Method, ResourceRequest, HandleAnonymousMethod);
 end;
 
