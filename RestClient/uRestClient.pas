@@ -5,7 +5,8 @@ interface
 uses
   Classes,
   SysUtils,
- {$IFDEF SYNA} httpsend  {$ENDIF}
+  {$IFDEF SYNA} httpsend,  {$ENDIF}
+  uUNDTO
   ;
 
 type
@@ -43,6 +44,7 @@ type
     // Remarks:
     //     This number is incremented each time the RestClient sends the request.
     FAttempts : integer;
+    FPersDataDTO : TPersDataDTO;
   public
     property Params : TStringList read FParams write FParams;
     property Header : TStringList read FHeader write FHeader;
@@ -85,19 +87,20 @@ type
 
 implementation
 
-
 // Запрос к REST-серверу
 constructor TRestRequest.Create(DefHeader : TStringList);
 begin
   inherited Create;
   FHeader := TStringList.Create;
   FHeader.AddStrings(DefHeader);
+  FPersDataDTO := TPersDataDTO.Create;
   FAttempts := 0;
 end;
 
 // Запрос к REST-серверу
 destructor TRestRequest.Destroy;
 begin
+  FreeAndNil(FPersDataDTO);
   FreeAndNil(FHeader);
   inherited;
 end;
@@ -109,6 +112,131 @@ var
 
 begin
   Result := s;
+end;
+
+
+function TRestRequest.MakeAgreement(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
+var
+  OperInf,
+  Targ,
+  Rights,
+  IssDate,
+  ExpDate,
+  AssgnPers,
+  Insp, LeadInsp,
+  s: string;
+begin
+  try
+    OperInf  := 'Организация адрес';
+    Targ     := 'верификация персональных данных';
+    Rights   := '201,703,208,480,481,482,490,491,527,528,252,465,466,516,517';
+    IssDate  := '2021-06-07T13:22:09.619+03:00';
+    ExpDate  := '2023-06-07T13:22:09.619+03:00';
+    Insp     := '"инспектор Иванов"';
+    LeadInsp := ',"начальник инспектора Петров"';
+
+    AssgnPers := Format('"assignee_persons":[%s%s]', [Insp, LeadInsp]);
+
+    Result := Format('"agreement":{"operator_info":"%s","target":"%s","rights":[%s],"issue_date":"%s","expiry_date": "%s",%s}',
+      [OperInf, Targ, Rights, IssDate, ExpDate, AssgnPers]);
+  except
+  end;
+
+end;
+
+
+function TRestRequest.MakeCover(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
+var
+  MsgId,
+  MsgTypeCode,
+  MsgSrcCode,
+  DSet,
+  s: string;
+begin
+  try
+  MsgId       := '4D7961DF-3057-4587-A498-5D995C733D80';
+  MsgTypeCode := '88';
+  MsgSrcCode  := '7689';
+  DSet        := '[15]';
+
+  Result := Format('"cover":{"message_id":"%s","message_type":{"code":"%s","type":-2},"message_source":{"code":"%s","type":80},%s,"dataset":%s}',
+    [MsgId, MsgTypeCode, MsgSrcCode, MakeAgreement, Dset]);
+  except
+  end;
+
+end;
+
+
+
+function TRestRequest.MakeReqRequest4OneIN(const ReqId, IdNum: string): string;
+begin
+  try
+    ReqId := '1';
+    IdNum := '7120691A001PB3';
+    Result := Format('{"request_id":"%s","identif_number":"%s"}', [ReqId, IdNum]);
+  except
+  end;
+end;
+
+
+function TRestRequest.MakeReqRequestByIN(dsDoc: TDataSet; StreamDoc: TStringStream): string;
+var
+  ReqId,
+  IdNum,
+  s: string;
+begin
+  try
+  ReqId := '1';
+  IdNum :=
+  MsgSrcCode  := '7689';
+  DSet        := '[15]';
+
+  Result := Format('{"request_id":"%s","identif_number":"%s"}', []);
+
+  except
+  end;
+
+end;
+
+function TRestRequest.MakeReqRequestByFIO(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
+var
+  SurName,
+  Name,
+  SName,
+  BDate,
+  s: string;
+begin
+  try
+  SurName := 'ИВАНОВ';
+  Name    := 'ИВАН';
+  SName   := 'ИВАНОВИЧ';
+  BDate   := '20120511';
+
+  Result := Format('"surname":"%s","name":"%s","sname":"%s","bdate":"%s"', [SurName, Name, SName, BDate]);
+
+  except
+  end;
+
+end;
+
+
+function TRestRequest.MakeReqRequest(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
+var
+  MsgTypeCode,
+  MsgSrcCode,
+  DSet,
+  s: string;
+begin
+  try
+  MsgTypeCode := '88';
+  MsgSrcCode  := '7689';
+  DSet        := '[15]';
+
+  Result := Format('"cover":{"message_type":{"code":"%s","type":-2},"message_source":{"code":"%s","type":80},%s,"dataset":%s}',
+    [MsgTypeCode, MsgSrcCode, MakeAgreement, Dset]);
+  except
+  end;
+
 end;
 
 

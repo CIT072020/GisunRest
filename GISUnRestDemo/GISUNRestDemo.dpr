@@ -7,7 +7,8 @@ uses
   fPIN4Av in 'fPIN4Av.pas' {fPINGet},
   uRegIntX in '..\uRegIntX.pas',
   uGetSrvX in '..\uGetSrvX.pas',
-  uRestClient in '..\RestClient\uRestClient.pas';
+  uRestClient in '..\RestClient\uRestClient.pas',
+  uUNDTO in '..\uUNDTO.pas';
 
 {$R *.res}
 
