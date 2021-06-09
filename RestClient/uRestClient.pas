@@ -5,24 +5,31 @@ interface
 uses
   Classes,
   SysUtils,
+  DB,
   {$IFDEF SYNA} httpsend,  {$ENDIF}
+  mRegInt,
   uUNDTO
   ;
 
 type
+  TRestConfig = class;
 
   // Соответствие типов документов методам и параметрам HTTP-запросов
-  TAktTypes2Meth = class
+  TActInf = class
   private
   public
-    Method : string;
-    ResPath : string;
+    Act      : TActKind;
+    Oper     : TOperation;
+    ResPath  : string;
+    Method   : string;
   end;
 
   // Запрос к REST-серверу
   TRestRequest = class
   private
+    FCfg    : TRestConfig;
     FMethod : string;
+    FFullURL : string;
     // Summary:
     //     The Resource URL to make the request against. Tokens are substituted with UrlSegment parameters and match by name.
     //     Should not include the scheme or domain. Do not include leading slash. Combined with RestClient.BaseUrl to assemble final URL:
@@ -44,15 +51,23 @@ type
     // Remarks:
     //     This number is incremented each time the RestClient sends the request.
     FAttempts : integer;
+    FActInf   : TActInf;
     FPersDataDTO : TPersDataDTO;
+
+    function MakeAgreement : string;
+    function MakeCover(InDS: TDataSet): string;
+    function MakeReqInBody(const InDS: TDataSet): string;
   public
     property Params : TStringList read FParams write FParams;
     property Header : TStringList read FHeader write FHeader;
     property Body : string read FBody write FBody;
 
+    function SetActInf(ActKind: TActKind; MessageType: string; const Input, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestRequest;
     function MakeReqLine(Meth : string; Pars : TStringList) : string;
+    // Подготовка тела запроса
+    function MakeBody(const InDS, Dokument: TDataSet; slPar:TStringList): TRestRequest;
 
-    constructor Create(DefHeader : TStringList);
+    constructor Create(Cfg : TRestConfig);
     destructor Destroy;
   end;
 
@@ -87,12 +102,14 @@ type
 
 implementation
 
-// Запрос к REST-серверу
-constructor TRestRequest.Create(DefHeader : TStringList);
+// Создание запроса к REST-серверу
+constructor TRestRequest.Create(Cfg : TRestConfig);
 begin
   inherited Create;
+  FCfg := Cfg;
   FHeader := TStringList.Create;
-  FHeader.AddStrings(DefHeader);
+  FHeader.AddStrings(Cfg.DefHeader);
+  FActInf := TActInf.Create;
   FPersDataDTO := TPersDataDTO.Create;
   FAttempts := 0;
 end;
@@ -100,22 +117,48 @@ end;
 // Запрос к REST-серверу
 destructor TRestRequest.Destroy;
 begin
+  FreeAndNil(FActInf);
   FreeAndNil(FPersDataDTO);
   FreeAndNil(FHeader);
   inherited;
 end;
 
+
+// Заполнение дполнительных полей в зависимости от типа документа
+function TRestRequest.SetActInf(ActKind: TActKind; MessageType: string; const Input, Dokument: TDataSet; var Output, Error: TDataSet; slPar: TStringList): TRestRequest;
+var
+  s: string;
+begin
+  FActInf.Act := ActKind;
+  if (ActKind = akGetPersonalData) OR (ActKind = akGetPersonIdentif) then begin
+    FActInf.Oper := opGet;
+  end
+  else begin
+    FActInf.Oper := opPost;
+
+  end;
+  case ActKind of
+    akGetPersonalData:
+      FActInf.ResPath := 'common/register';
+    akGetPersonIdentif:
+      FActInf.ResPath := 'common/person-identif';
+  end;
+  Result := Self;
+end;
+
+
+
 // Формирование строки запроса (ReqLine) к REST-серверу
 function TRestRequest.MakeReqLine(Meth : string; Pars : TStringList) : string;
 var
   s : string;
-
 begin
+  FFullURL := FCfg.BasePath + FResource;
   Result := s;
 end;
 
 
-function TRestRequest.MakeAgreement(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
+function TRestRequest.MakeAgreement : string;
 var
   OperInf,
   Targ,
@@ -145,7 +188,7 @@ begin
 end;
 
 
-function TRestRequest.MakeCover(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
+function TRestRequest.MakeCover(InDS: TDataSet): string;
 var
   MsgId,
   MsgTypeCode,
@@ -153,6 +196,7 @@ var
   DSet,
   s: string;
 begin
+  Result := '';
   try
   MsgId       := '4D7961DF-3057-4587-A498-5D995C733D80';
   MsgTypeCode := '88';
@@ -167,76 +211,79 @@ begin
 end;
 
 
-
-function TRestRequest.MakeReqRequest4OneIN(const ReqId, IdNum: string): string;
+function TRestRequest.MakeReqInBody(const InDS: TDataSet): string;
+var
+  iIN, iPD: Integer;
+  MsgTypeCode, MsgSrcCode, DSet, sPersDat, sIN, sR, s: string;
 begin
+  s := '';
   try
-    ReqId := '1';
-    IdNum := '7120691A001PB3';
-    Result := Format('{"request_id":"%s","identif_number":"%s"}', [ReqId, IdNum]);
+    if (FActInf.Oper = opGet) then begin
+      s := ',"request":{';
+      sPersDat := '';
+      sIN := '';
+
+      with InDS do begin
+        First;
+        if (FActInf.Act = akGetPersonIdentif) then begin
+        //Запрос на получение ИН (по ф.и.о.)
+          sR := Format('"surname":"%s","name":"%s","sname":"%s","bdate":"%s"', [FieldByName('').AsString, FieldByName('').AsString, FieldByName('').AsString, FieldByName('').AsString]);
+          Last;
+        end
+        else begin
+
+          iPD := 0;
+          iIN := 0;
+          while not Eof do begin
+            if (FieldByName('').AsBoolean = True) then begin
+            // Запрос персональных данных
+              iPD := iPD + 1;
+              if (iPD = 1) then
+                sPersDat := '"person_request":['
+              else
+                sPersDat := sPersDat + ',';
+              sPersDat := sPersDat + Format('{"request_id":"%s","identif_number":"%s"}', [FieldByName('').AsString, FieldByName('').AsString])
+            end
+            else begin
+            // Запрос ИН
+              iIN := iIN + 1;
+              if (iIN = 1) then
+                sIN := '"person_request":['
+              else
+                sIN := sIN + ',';
+              sIN := sIN + Format('{"request_id":"%s","sex":{"code":"%s","type":32},"birth_day":"%s"}', [FieldByName('').AsString, FieldByName('').AsString])
+            end;
+            Next;
+          end;
+
+          if (iPD > 0) then
+            sR := sPersDat;
+          if (iIN > 0) then begin
+            if (Length(sR) > 0) then
+              sR := sR + ',';
+            sR := sR + sIN;
+          end;
+
+        end;
+        s := s + sR + '}';
+      end;
+    end;
+
   except
   end;
+  Result := s;
 end;
 
-
-function TRestRequest.MakeReqRequestByIN(dsDoc: TDataSet; StreamDoc: TStringStream): string;
+// Сформировать тело запроса
+function TRestRequest.MakeBody(const InDS, Dokument: TDataSet; slPar:TStringList): TRestRequest;
 var
-  ReqId,
-  IdNum,
   s: string;
 begin
   try
-  ReqId := '1';
-  IdNum :=
-  MsgSrcCode  := '7689';
-  DSet        := '[15]';
-
-  Result := Format('{"request_id":"%s","identif_number":"%s"}', []);
-
+    Body   := MakeCover(InDS) + MakeReqInBody(InDS);
+    Result := Self;
   except
   end;
-
-end;
-
-function TRestRequest.MakeReqRequestByFIO(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
-var
-  SurName,
-  Name,
-  SName,
-  BDate,
-  s: string;
-begin
-  try
-  SurName := 'ИВАНОВ';
-  Name    := 'ИВАН';
-  SName   := 'ИВАНОВИЧ';
-  BDate   := '20120511';
-
-  Result := Format('"surname":"%s","name":"%s","sname":"%s","bdate":"%s"', [SurName, Name, SName, BDate]);
-
-  except
-  end;
-
-end;
-
-
-function TRestRequest.MakeReqRequest(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
-var
-  MsgTypeCode,
-  MsgSrcCode,
-  DSet,
-  s: string;
-begin
-  try
-  MsgTypeCode := '88';
-  MsgSrcCode  := '7689';
-  DSet        := '[15]';
-
-  Result := Format('"cover":{"message_type":{"code":"%s","type":-2},"message_source":{"code":"%s","type":80},%s,"dataset":%s}',
-    [MsgTypeCode, MsgSrcCode, MakeAgreement, Dset]);
-  except
-  end;
-
 end;
 
 
@@ -265,8 +312,17 @@ end;
 
 
 function TRestClient.CallApi(Req : TRestRequest) : TRestResponse;
+var
+  sUTF : UTF8String;
+  DocStream : TStringStream;
 begin
   Result := TRestResponse.Create;
+  FHTTP.Clear;
+  FHTTP.Headers.AddStrings(Req.FHeader);
+  sUTF := AnsiToUtf8(Req.Body);
+  DocStream.Create(sUTF);
+  FHTTP.Document.LoadFromStream(DocStream);
+  FHTTP.HTTPMethod('POST', Req.FFullURL);
 end;
 
 

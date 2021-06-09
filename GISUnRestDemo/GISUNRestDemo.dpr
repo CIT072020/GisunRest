@@ -6,7 +6,6 @@ uses
   Unit1 in 'Unit1.pas' {Form1},
   fPIN4Av in 'fPIN4Av.pas' {fPINGet},
   uRegIntX in '..\uRegIntX.pas',
-  uGetSrvX in '..\uGetSrvX.pas',
   uRestClient in '..\RestClient\uRestClient.pas',
   uUNDTO in '..\uUNDTO.pas';
 

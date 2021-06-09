@@ -11,7 +11,7 @@ uses
    {$IFDEF ADD_WS_LOCAL}
      mLocal, wsLocal,
    {$ENDIF}
-   uGetSrvX,
+   //uGetSrvX,
    kbmMemTable, mZags, wsZags, mGisun, wsGisun, XSBuiltIns;
 
 type

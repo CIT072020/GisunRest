@@ -1406,3 +1406,365 @@ Stack:               Memory Dump:
 
 
 
+EurekaLog 6.0.3
+
+Application:
+------------------------------------------------------
+  1.1 Start Date      : Wed, 9 Jun 2021 16:21:27 +0300
+  1.2 Name/Description: GISUNRestDemo.exe
+  1.3 Version Number  : 
+  1.4 Parameters      : 
+  1.5 Compilation Date: Wed, 9 Jun 2021 16:21:25 +0300
+  1.6 Up Time         : 7 minutes, 4 seconds
+
+Exception:
+-------------------------------------------------------------------------------------------------------------------
+  2.1 Date          : Wed, 9 Jun 2021 16:28:31 +0300
+  2.2 Address       : 009E2696
+  2.3 Module Name   : GISUNRestDemo.exe
+  2.4 Module Version: 
+  2.5 Type          : EAccessViolation
+  2.6 Message       : Нарушение доступа по адресу 009E2696 в модуле 'GISUNRestDemo.exe'. Чтение по адресу 00000034.
+  2.7 ID            : 5E8D
+  2.8 Count         : 1
+  2.9 Status        : New
+  2.10 Note         : 
+
+User:
+-----------------------------------------------------------------
+  3.1 ID        : Alex
+  3.2 Name      : PC
+  3.3 Email     : 
+  3.4 Company   : 
+  3.5 Privileges: SeIncreaseQuotaPrivilege        - OFF
+                  SeSecurityPrivilege             - OFF
+                  SeTakeOwnershipPrivilege        - OFF
+                  SeLoadDriverPrivilege           - OFF
+                  SeSystemProfilePrivilege        - OFF
+                  SeSystemtimePrivilege           - OFF
+                  SeProfileSingleProcessPrivilege - OFF
+                  SeIncreaseBasePriorityPrivilege - OFF
+                  SeCreatePagefilePrivilege       - OFF
+                  SeBackupPrivilege               - OFF
+                  SeRestorePrivilege              - OFF
+                  SeShutdownPrivilege             - OFF
+                  SeDebugPrivilege                - OFF
+                  SeSystemEnvironmentPrivilege    - OFF
+                  SeChangeNotifyPrivilege         - ON
+                  SeRemoteShutdownPrivilege       - OFF
+                  SeUndockPrivilege               - OFF
+                  SeManageVolumePrivilege         - OFF
+                  SeImpersonatePrivilege          - ON
+                  SeCreateGlobalPrivilege         - ON
+                  SeIncreaseWorkingSetPrivilege   - OFF
+                  SeTimeZonePrivilege             - OFF
+                  SeCreateSymbolicLinkPrivilege   - OFF
+                  SeDelegateSessionUserImpersonatePrivilege - OFF
+
+Active Controls:
+--------------------------------------------------------------
+  4.1 Form Class   : TForm1
+  4.2 Form Text    : Обмен с адресом: https://a.todes.by:13555
+  4.3 Control Class: TButton
+  4.4 Control Text : UN - GET IN (by FIO)
+
+Computer:
+-----------------------------------------------------------------------------
+  5.1 Name          : PAI
+  5.2 Total Memory  : 2048 Mb
+  5.3 Free Memory   : 2048 Mb
+  5.4 Total Disk    : 931,51 Gb
+  5.5 Free Disk     : 671,66 Gb
+  5.6 System Up Time: 3 hours, 51 minutes, 19 seconds
+  5.7 Processor     : AMD Ryzen 5 3400G with Radeon Vega Graphics
+  5.8 Display Mode  : 1920 x 1080, 32 bit
+  5.9 Display DPI   : 96
+  5.10 Video Card   : AMD 15D8:C8 (driver 27.20.1034.6 - RAM 2048 MB)
+  5.11 Printer      : Canon LBP6650/3470 Class Driver (driver 10.0.19041.906)
+
+Operating System:
+---------------------------------------
+  6.1 Type    : Microsoft Windows Vista
+  6.2 Build # : 9200
+  6.3 Update  : 
+  6.4 Language: Russian
+  6.5 Charset : 204
+
+Network:
+---------------------------------------------------------------------------------------
+  7.1 IP Address: 172.031.030.078 - 192.168.184.001 - 192.168.248.001 - 172.030.096.001
+  7.2 Submask   : 255.255.255.000 - 255.255.255.000 - 255.255.255.000 - 255.255.240.000
+  7.3 Gateway   : 172.031.030.001 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000
+  7.4 DNS 1     : 172.031.010.005 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000
+  7.5 DNS 2     : 000.000.000.000 - 000.000.000.000 - 000.000.000.000 - 000.000.000.000
+  7.6 DHCP      : OFF             - ON              - ON              - OFF            
+
+Call Stack Information:
+--------------------------------------------------------------------------------------------
+|Address |Module           |Unit             |Class   |Procedure/Method           |Line    |
+--------------------------------------------------------------------------------------------
+|*Exception Thread: ID=4012; Priority=0; Class=; [Main]                                    |
+|------------------------------------------------------------------------------------------|
+|009E2696|GISUNRestDemo.exe|uGisun.pas       |TGisun  |CheckLogon                 |1408[3] |
+|009E2674|GISUNRestDemo.exe|uGisun.pas       |TGisun  |CheckLogon                 |1405[0] |
+|00A1F815|GISUNRestDemo.exe|mRegInt.pas      |TRegInt |CheckLogon                 |2033[1] |
+|00A1F80C|GISUNRestDemo.exe|mRegInt.pas      |TRegInt |CheckLogon                 |2033[1] |
+|00A1DD3B|GISUNRestDemo.exe|mRegInt.pas      |TRegInt |Get                        |1158[10]|
+|00A1DCB8|GISUNRestDemo.exe|mRegInt.pas      |TRegInt |Get                        |1148[0] |
+|00A227B2|GISUNRestDemo.exe|uRegIntX.pas     |TRegIntX|Get                        |127[5]  |
+|00A22754|GISUNRestDemo.exe|uRegIntX.pas     |TRegIntX|Get                        |122[0]  |
+|00A23EAE|GISUNRestDemo.exe|Unit1.pas        |TForm1  |btnGetUNClick              |343[8]  |
+|77BF5DA0|ntdll.dll        |                 |        |RtlAllocateHeap            |        |
+|77C3719A|ntdll.dll        |                 |        |RtlGetNtGlobalFlags        |        |
+|77BF3C11|ntdll.dll        |                 |        |RtlFreeHeap                |        |
+|77BF3BD0|ntdll.dll        |                 |        |RtlFreeHeap                |        |
+|77BDBAA3|ntdll.dll        |                 |        |RtlDeleteBoundaryDescriptor|        |
+|77BDBA90|ntdll.dll        |                 |        |RtlDeleteBoundaryDescriptor|        |
+|77BF3BB2|ntdll.dll        |                 |        |RtlFreeUnicodeString       |        |
+|7770BA99|KERNEL32.DLL     |                 |        |FindAtomW                  |        |
+|75F15643|user32.dll       |                 |        |GetParent                  |        |
+|75F1389A|user32.dll       |                 |        |SendMessageW               |        |
+|75F02056|user32.dll       |                 |        |CallWindowProcA            |        |
+|75F02040|user32.dll       |                 |        |CallWindowProcA            |        |
+|77C38070|ntdll.dll        |                 |        |NtdllDefWindowProc_A       |        |
+|77BEE760|ntdll.dll        |                 |        |RtlLeaveCriticalSection    |        |
+|76EF100A|win32u.dll       |                 |        |NtUserGetThreadState       |        |
+|75F1D060|user32.dll       |                 |        |GetCapture                 |        |
+|75F1D050|user32.dll       |                 |        |GetCapture                 |        |
+|77C22A0A|ntdll.dll        |                 |        |NtCallbackReturn           |        |
+|75F05D6B|user32.dll       |                 |        |DispatchMessageA           |        |
+|75F05D60|user32.dll       |                 |        |DispatchMessageA           |        |
+|00A260E7|GISUNRestDemo.exe|GISUNRestDemo.dpr|        |                           |18[4]   |
+|7770FA27|KERNEL32.DLL     |                 |        |BaseThreadInitThunk        |        |
+--------------------------------------------------------------------------------------------
+
+Modules Information:
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|Handle  |Name                  |Description                                                        |Version            |Size    |Modified           |Path                                                                                                        |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|00400000|GISUNRestDemo.exe     |                                                                   |                   |12046848|2021-06-09 16:21:26|D:\Soft\Delphi\PopReg\GISUnRestDemo                                                                         |
+|04780000|LIBEAY32.dll          |OpenSSL Shared Library                                             |1.0.1.12           |1179648 |2016-09-14 15:36:34|D:\Soft\Delphi\PopReg\GISUnRestDemo                                                                         |
+|10000000|ssleay32.dll          |OpenSSL Shared Library                                             |1.0.1.12           |274432  |2016-09-14 15:36:28|D:\Soft\Delphi\PopReg\GISUnRestDemo                                                                         |
+|12170000|ACE32.DLL             |Advantage Client Engine DLL                                        |10.10.0.49         |1616200 |2013-07-19 10:10:50|D:\Soft\Delphi\PopReg\GISUnRestDemo                                                                         |
+|55410000|MSVCR90.dll           |Microsoft® C Runtime Library                                       |9.0.30729.9625     |656248  |2019-12-07 12:10:04|C:\WINDOWS\WinSxS\x86_microsoft.vc90.crt_1fc8b3b9a1e18e3b_9.0.30729.9625_none_508ef7e4bcbbe589              |
+|60380000|Msftedit.DLL          |Элемент управления "Поле ввода форматированного текста", версия 8.5|6.2.19041.789      |2735104 |2021-02-17 09:40:00|C:\WINDOWS\SYSTEM32                                                                                         |
+|60630000|HHCtrl.OCX            |Компонент отображения справки в формате HTML (Microsoft®)          |6.2.19041.746      |575488  |2021-01-14 13:59:18|C:\WINDOWS\SYSTEM32                                                                                         |
+|606D0000|RICHED32.DLL          |Wrapper Dll for Richedit 1.0                                       |6.2.19041.1        |8192    |2019-12-07 12:09:34|C:\WINDOWS\SYSTEM32                                                                                         |
+|606E0000|msls31.dll            |Microsoft Line Services library file                               |3.10.349.0         |183808  |2019-12-07 12:09:34|C:\WINDOWS\SYSTEM32                                                                                         |
+|60720000|RICHED20.dll          |Rich Text Edit Control, v3.1                                       |5.31.23.1231       |487424  |2019-12-07 12:09:34|C:\WINDOWS\SYSTEM32                                                                                         |
+|608F0000|olepro32.dll          |OLEPRO32.DLL                                                       |6.2.19041.84       |88576   |2020-11-19 05:51:14|C:\WINDOWS\SYSTEM32                                                                                         |
+|609F0000|oledlg.dll            |Поддержка интерфейса пользователя OLE                              |6.2.19041.746      |163328  |2021-01-14 13:58:48|C:\WINDOWS\SYSTEM32                                                                                         |
+|613B0000|TextShaping.dll       |                                                                   |                   |611952  |2021-03-24 10:32:12|C:\WINDOWS\SYSTEM32                                                                                         |
+|648A0000|dataexchange.dll      |Data exchange                                                      |6.2.19041.746      |183296  |2021-01-14 13:58:42|C:\WINDOWS\system32                                                                                         |
+|6D2B0000|CoreUIComponents.dll  |Microsoft Core UI Components Dll                                   |6.2.19041.546      |2621720 |2020-11-19 05:51:04|C:\WINDOWS\SYSTEM32                                                                                         |
+|6D530000|textinputframework.dll|"TextInputFramework.DYNLINK"                                       |6.2.19041.964      |753592  |2021-05-31 10:34:58|C:\WINDOWS\SYSTEM32                                                                                         |
+|6D6B0000|CoreMessaging.dll     |Microsoft CoreMessaging Dll                                        |6.2.19041.867      |630592  |2021-03-24 10:32:14|C:\WINDOWS\SYSTEM32                                                                                         |
+|6DB30000|dcomp.dll             |Microsoft DirectComposition Library                                |6.2.19041.1023     |1452864 |2021-06-09 12:23:54|C:\WINDOWS\system32                                                                                         |
+|6E1F0000|twinapi.appcore.dll   |twinapi.appcore                                                    |6.2.19041.746      |1634208 |2021-01-14 13:58:46|C:\WINDOWS\system32                                                                                         |
+|70C80000|dxgi.dll              |DirectX Graphics Infrastructure                                    |6.2.19041.964      |787624  |2021-05-31 10:34:58|C:\WINDOWS\system32                                                                                         |
+|70D50000|d3d11.dll             |Direct3D 11 Runtime                                                |6.2.19041.746      |1963736 |2021-01-14 13:58:44|C:\WINDOWS\system32                                                                                         |
+|70F30000|USP10.dll             |Uniscribe Unicode script processor                                 |6.2.19041.546      |77824   |2020-11-19 05:51:10|C:\WINDOWS\SYSTEM32                                                                                         |
+|711B0000|wintypes.dll          |Библиотека DLL основных типов Windows                              |6.2.19041.1052     |896064  |2021-06-09 12:23:54|C:\WINDOWS\SYSTEM32                                                                                         |
+|715D0000|comctl32.dll          |Библиотека элементов управления взаимодействия с пользователем     |6.10.19041.844     |2152248 |2021-02-10 02:37:48|C:\WINDOWS\WinSxS\x86_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.844_none_11adecdf30011423|
+|71DC0000|version.dll           |Version Checking and File Installation Libraries                   |6.2.19041.546      |27320   |2020-11-19 05:51:14|C:\WINDOWS\SYSTEM32                                                                                         |
+|71FA0000|kernel.appcore.dll    |AppModel API Host                                                  |6.2.19041.546      |52672   |2020-11-19 05:51:06|C:\WINDOWS\SYSTEM32                                                                                         |
+|71FB0000|MSASN1.dll            |ASN.1 Runtime APIs                                                 |6.2.19041.546      |50616   |2020-11-19 05:51:10|C:\WINDOWS\SYSTEM32                                                                                         |
+|73D90000|CRYPTBASE.dll         |Base cryptographic API DLL                                         |6.2.19041.546      |31528   |2020-11-19 05:51:00|C:\WINDOWS\SYSTEM32                                                                                         |
+|73DA0000|rsaenh.dll            |Microsoft Enhanced Cryptographic Provider                          |6.2.19041.1052     |184888  |2021-06-09 12:23:54|C:\WINDOWS\system32                                                                                         |
+|73DD0000|CRYPTSP.dll           |Cryptographic Service Provider API                                 |6.2.19041.546      |68192   |2020-11-19 05:51:10|C:\WINDOWS\SYSTEM32                                                                                         |
+|73F90000|ntmarta.dll           |Поставщик Windows NT MARTA                                         |6.2.19041.546      |152904  |2020-11-19 05:51:10|C:\WINDOWS\SYSTEM32                                                                                         |
+|746C0000|avsspc.dll            |                                                                   |6.1.3.1684         |434176  |2019-05-22 14:06:04|C:\Program Files (x86)\Common Files\Avest\Avest CSP                                                         |
+|748A0000|wsock32.dll           |Windows Socket 32-Bit DLL                                          |6.2.19041.1        |16384   |2019-12-07 12:09:16|C:\WINDOWS\SYSTEM32                                                                                         |
+|748B0000|AvCNG.dll             |                                                                   |6.1.3.724          |237568  |2019-05-22 14:05:56|C:\WINDOWS\SYSTEM32                                                                                         |
+|748F0000|MPR.dll               |Библиотека маршрутизации для нескольких служб доступа              |6.2.19041.546      |93488   |2020-11-19 05:51:10|C:\WINDOWS\SYSTEM32                                                                                         |
+|74910000|wininet.dll           |Расширения Интернета для Win32                                     |11.0.19041.1052    |4534272 |2021-06-09 12:23:54|C:\WINDOWS\SYSTEM32                                                                                         |
+|74F90000|winmm.dll             |MCI API DLL                                                        |6.2.19041.546      |149272  |2020-11-19 05:51:00|C:\WINDOWS\SYSTEM32                                                                                         |
+|751A0000|uxtheme.dll           |Библиотека тем UxTheme (Microsoft)                                 |6.2.19041.746      |453632  |2021-01-14 13:58:40|C:\WINDOWS\system32                                                                                         |
+|75220000|winspool.drv          |Драйвер диспетчера очереди Windows                                 |6.2.19041.1023     |423936  |2021-06-09 12:23:50|C:\WINDOWS\SYSTEM32                                                                                         |
+|75290000|iphlpapi.dll          |API вспомогательного приложения IP                                 |6.2.19041.546      |196784  |2020-11-19 05:51:10|C:\WINDOWS\SYSTEM32                                                                                         |
+|752D0000|msimg32.dll           |GDIEXT Client DLL                                                  |6.2.19041.546      |7168    |2020-11-19 05:51:10|C:\WINDOWS\SYSTEM32                                                                                         |
+|75A60000|imm32.dll             |Multi-User Windows IMM32 API Client DLL                            |6.2.19041.546      |143056  |2020-11-19 05:51:10|C:\WINDOWS\System32                                                                                         |
+|75A90000|combase.dll           |Microsoft COM для Windows                                          |6.2.19041.1052     |2636152 |2021-06-09 12:23:54|C:\WINDOWS\System32                                                                                         |
+|75D20000|MSCTF.dll             |Серверная библиотека MSCTF                                         |6.2.19041.964      |860464  |2021-05-31 10:34:58|C:\WINDOWS\System32                                                                                         |
+|75E00000|bcrypt.dll            |Библиотека криптографических примитивов Windows                    |6.2.19041.1023     |96032   |2021-06-09 12:23:54|C:\WINDOWS\System32                                                                                         |
+|75E80000|bcryptPrimitives.dll  |Windows Cryptographic Primitives Library                           |6.2.19041.1023     |383760  |2021-06-09 12:23:40|C:\WINDOWS\System32                                                                                         |
+|75EE0000|user32.dll            |Многопользовательская библиотека клиента USER API Windows          |6.2.19041.906      |1663656 |2021-04-14 16:55:52|C:\WINDOWS\System32                                                                                         |
+|76080000|advapi32.dll          |Расширенная библиотека API Windows 32                              |6.2.19041.1052     |489656  |2021-06-09 12:23:50|C:\WINDOWS\System32                                                                                         |
+|76280000|PSAPI.DLL             |Process Status Helper                                              |6.2.19041.546      |17016   |2020-11-19 05:51:10|C:\WINDOWS\System32                                                                                         |
+|76290000|KERNELBASE.dll        |Библиотека клиента Windows NT BASE API                             |6.2.19041.1023     |2179608 |2021-06-09 12:23:40|C:\WINDOWS\System32                                                                                         |
+|764B0000|comdlg32.dll          |Библиотека общих диалоговых окон                                   |6.2.19041.906      |688128  |2021-04-14 16:55:54|C:\WINDOWS\System32                                                                                         |
+|76560000|msvcrt.dll            |Windows NT CRT DLL                                                 |7.0.19041.546      |775256  |2020-11-19 05:51:00|C:\WINDOWS\System32                                                                                         |
+|76620000|ucrtbase.dll          |Microsoft® C Runtime Library                                       |6.2.19041.789      |1181208 |2021-02-17 09:40:00|C:\WINDOWS\System32                                                                                         |
+|76740000|SHLWAPI.dll           |Библиотека небольших программ оболочки                             |6.2.19041.1023     |275808  |2021-06-09 12:23:54|C:\WINDOWS\System32                                                                                         |
+|76790000|shcore.dll            |SHCORE                                                             |6.2.19041.1023     |548528  |2021-06-09 12:23:52|C:\WINDOWS\System32                                                                                         |
+|76C60000|oleaut32.dll          |OLEAUT32.DLL                                                       |6.2.19041.985      |606888  |2021-05-31 10:34:58|C:\WINDOWS\System32                                                                                         |
+|76D00000|sechost.dll           |Host for SCM/SDDL/LSA Lookup APIs                                  |6.2.19041.906      |475712  |2021-04-14 16:55:50|C:\WINDOWS\System32                                                                                         |
+|76D80000|CRYPT32.dll           |API32 криптографии                                                 |6.2.19041.844      |1044304 |2021-03-24 10:32:14|C:\WINDOWS\System32                                                                                         |
+|76EF0000|win32u.dll            |Win32u                                                             |6.2.19041.1052     |92960   |2021-06-09 12:23:52|C:\WINDOWS\System32                                                                                         |
+|76F70000|WINTRUST.dll          |Microsoft Trust Verification APIs                                  |6.2.19041.1052     |288664  |2021-06-09 12:23:52|C:\WINDOWS\System32                                                                                         |
+|76FD0000|shell32.dll           |Общая библиотека оболочки Windows                                  |6.2.19041.1023     |6002232 |2021-06-09 12:23:54|C:\WINDOWS\System32                                                                                         |
+|77590000|GDI32.dll             |GDI Client DLL                                                     |6.2.19041.746      |136328  |2021-01-14 13:58:44|C:\WINDOWS\System32                                                                                         |
+|775C0000|msvcp_win.dll         |Microsoft® C Runtime Library                                       |6.2.19041.789      |495840  |2021-02-17 09:40:00|C:\WINDOWS\System32                                                                                         |
+|776F0000|KERNEL32.DLL          |Библиотека клиента Windows NT BASE API                             |6.2.19041.1023     |632552  |2021-06-09 12:23:50|C:\WINDOWS\System32                                                                                         |
+|77820000|RPCRT4.dll            |Библиотека удаленного вызова процедур                              |6.2.19041.1052     |785584  |2021-06-09 12:23:50|C:\WINDOWS\System32                                                                                         |
+|778E0000|WS2_32.dll            |32-разрядная библиотека Windows Socket 2.0                         |6.2.19041.546      |397728  |2020-11-19 05:51:00|C:\WINDOWS\System32                                                                                         |
+|77950000|gdi32full.dll         |GDI Client DLL                                                     |6.2.19041.928      |895072  |2021-04-14 16:55:52|C:\WINDOWS\System32                                                                                         |
+|77A30000|clbcatq.dll           |COM+ Configuration Catalog                                         |2001.12.10941.16384|504552  |2020-11-19 05:51:10|C:\WINDOWS\System32                                                                                         |
+|77AB0000|ole32.dll             |Microsoft OLE для Windows                                          |6.2.19041.746      |924528  |2021-01-14 13:58:48|C:\WINDOWS\System32                                                                                         |
+|77BB0000|ntdll.dll             |Системная библиотека NT                                            |6.2.19041.1023     |1696752 |2021-06-09 12:23:50|C:\WINDOWS\SYSTEM32                                                                                         |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Processes Information:
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|ID   |Name                       |Description                                |Version          |Memory    |Priority    |Threads|Path                                                                             |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+|228  |Postman.exe                |Postman                                    |8.6.1.0          |208244736 |Normal      |26     |C:\Users\Alex\AppData\Local\Postman\app-8.6.1                                    |
+|520  |svchost.exe                |Хост-процесс для служб Windows             |6.2.19041.546    |19509248  |Normal      |10     |C:\Windows\System32                                                              |
+|700  |ctfmon.exe                 |CTF-загрузчик                              |6.2.19041.1      |22667264  |High        |12     |C:\Windows\System32                                                              |
+|1060 |svchost.exe                |Хост-процесс для служб Windows             |6.2.19041.546    |30154752  |Normal      |5      |C:\Windows\System32                                                              |
+|1492 |RuntimeBroker.exe          |Runtime Broker                             |10.0.19041.746   |17313792  |Normal      |2      |C:\Windows\System32                                                              |
+|1580 |SearchApp.exe              |Search application                         |6.2.19041.1023   |80203776  |Normal      |41     |C:\Windows\SystemApps\Microsoft.Windows.Search_cw5n1h2txyewy                     |
+|2128 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |51576832  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|2264 |svchost.exe                |Хост-процесс для служб Windows             |6.2.19041.546    |22396928  |Normal      |6      |C:\Windows\System32                                                              |
+|2324 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |18014208  |Normal      |8      |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|2336 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |17698816  |Normal      |8      |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|2456 |UserOOBEBroker.exe         |User OOBE Broker                           |10.0.19041.746   |10285056  |Normal      |3      |C:\Windows\System32\oobe                                                         |
+|2604 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |65245184  |Low         |20     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|3200 |vmware-tray.exe            |VMware Tray Process                        |15.5.6.58036     |15933440  |Normal      |3      |C:\Program Files (x86)\VMware\VMware Workstation                                 |
+|3432 |taskhostw.exe              |Хост-процесс для задач Windows             |10.0.19041.906   |17444864  |Normal      |8      |C:\Windows\System32                                                              |
+|3772 |thunderbird.exe            |Thunderbird                                |78.10.1.7803     |169140224 |Normal      |72     |C:\Program Files (x86)\Mozilla Thunderbird                                       |
+|3960 |RuntimeBroker.exe          |Runtime Broker                             |10.0.19041.746   |25182208  |Normal      |6      |C:\Windows\System32                                                              |
+|4256 |RuntimeBroker.exe          |Runtime Broker                             |10.0.19041.746   |27463680  |Normal      |5      |C:\Windows\System32                                                              |
+|5128 |Postman.exe                |Postman                                    |8.6.1.0          |69509120  |Normal      |20     |C:\Users\Alex\AppData\Local\Postman\app-8.6.1                                    |
+|5236 |RtkAudUService64.exe       |Realtek HD Audio Universal Service         |1.0.191.1        |8839168   |Normal      |6      |C:\Windows\System32                                                              |
+|5368 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |67833856  |Low         |23     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|5500 |GISUNRestDemo.exe          |                                           |                 |28200960  |Normal      |6      |D:\Soft\Delphi\PopReg\GISUnRestDemo                                              |
+|5628 |ClassicStartMenu.exe       |Classic Start Menu                         |4.3.1.0          |12513280  |Normal      |1      |C:\Program Files\Classic Shell                                                   |
+|5920 |Postman.exe                |Postman                                    |8.6.1.0          |135467008 |Above-Normal|21     |C:\Users\Alex\AppData\Local\Postman\app-8.6.1                                    |
+|5928 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |232652800 |Normal      |31     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|5964 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |27217920  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|6056 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |46260224  |Normal      |12     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|6488 |sihost.exe                 |Shell Infrastructure Host                  |10.0.19041.746   |27193344  |Normal      |11     |C:\Windows\System32                                                              |
+|6524 |delphi32.exe               |Delphi-32 Development Environment          |7.0.8.1          |162541568 |Normal      |15     |C:\Program Files (x86)\Borland\Delphi7\Bin                                       |
+|6600 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |50049024  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|6752 |Postman.exe                |Postman                                    |8.6.1.0          |79564800  |Normal      |20     |C:\Users\Alex\AppData\Local\Postman\app-8.6.1                                    |
+|7036 |StartMenuExperienceHost.exe|                                           |                 |71479296  |Normal      |17     |C:\Windows\SystemApps\Microsoft.Windows.StartMenuExperienceHost_cw5n1h2txyewy    |
+|7100 |svchost.exe                |Хост-процесс для служб Windows             |6.2.19041.546    |26775552  |Normal      |5      |C:\Windows\System32                                                              |
+|7116 |explorer.exe               |Проводник                                  |6.2.19041.1023   |140296192 |Normal      |70     |C:\Windows                                                                       |
+|7204 |Postman.exe                |Postman                                    |8.6.1.0          |102703104 |Normal      |28     |C:\Users\Alex\AppData\Local\Postman\app-8.6.1                                    |
+|7244 |YourPhone.exe              |YourPhone                                  |1.21042.137.0    |11833344  |Normal      |18     |C:\Program Files\WindowsApps\Microsoft.YourPhone_1.21042.137.0_x64__8wekyb3d8bbwe|
+|7260 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |153673728 |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|7392 |Telegram.exe               |Telegram Desktop                           |2.7.4.0          |55373824  |Normal      |25     |D:\Progs\Telegram                                                                |
+|7460 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |90996736  |Normal      |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|7528 |SearchFilterHost.exe       |Microsoft Windows Search Filter Host       |7.0.19041.1023   |8273920   |Low         |4      |C:\Windows\System32                                                              |
+|7884 |PSPad.exe                  |PSPad                                      |5.0.6.589        |31023104  |Normal      |5      |D:\Progs\pspad503en                                                              |
+|7888 |RuntimeBroker.exe          |Runtime Broker                             |10.0.19041.746   |18317312  |Normal      |1      |C:\Windows\System32                                                              |
+|8004 |TOTALCMD64.EXE             |Total Commander                            |9.5.1.0          |45907968  |Normal      |10     |D:\Progs\Total Commander                                                         |
+|8036 |RuntimeBroker.exe          |Runtime Broker                             |10.0.19041.746   |14012416  |Normal      |3      |C:\Windows\System32                                                              |
+|8116 |Lightshot.exe              |Lightshot                                  |5.5.0.4          |15024128  |Normal      |6      |C:\Program Files (x86)\Skillbrains\lightshot\5.5.0.4                             |
+|8188 |Postman.exe                |Postman                                    |8.6.1.0          |42971136  |Normal      |9      |C:\Users\Alex\AppData\Local\Postman\app-8.6.1                                    |
+|8304 |Postman.exe                |Postman                                    |8.6.1.0          |55365632  |Normal      |20     |C:\Users\Alex\AppData\Local\Postman\app-8.6.1                                    |
+|8496 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |158343168 |Above-Normal|20     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|8528 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |8019968   |Normal      |8      |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|8612 |ShellExperienceHost.exe    |Windows Shell Experience Host              |6.2.19041.610    |43307008  |Normal      |17     |C:\Windows\SystemApps\ShellExperienceHost_cw5n1h2txyewy                          |
+|9000 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |32423936  |Normal      |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|9264 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |54734848  |Normal      |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|9272 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |79949824  |Normal      |18     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|9280 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |31969280  |Normal      |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|9288 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |58200064  |Normal      |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|9492 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |66019328  |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|9592 |chrome.exe                 |Google Chrome                              |91.0.4472.77     |50659328  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|9708 |Viber.exe                  |Viber                                      |13.3.1.21        |161124352 |Normal      |39     |D:\Progs\Viber\app                                                               |
+|9748 |rundll32.exe               |Хост-процесс Windows (Rundll32)            |6.2.19041.746    |11898880  |Normal      |11     |C:\Windows\SysWOW64                                                              |
+|9800 |notepad++.exe              |Notepad++ : a free (GPL) source code editor|7.9.5.0          |39215104  |Normal      |4      |D:\Progs\Notepad++64                                                             |
+|10052|vmware.exe                 |VMware Workstation                         |15.5.6.58036     |65441792  |Normal      |18     |C:\Program Files (x86)\VMware\VMware Workstation                                 |
+|10072|TOTALCMD64.EXE             |Total Commander                            |9.5.1.0          |44744704  |Normal      |13     |D:\Progs\Total Commander                                                         |
+|10092|chrome.exe                 |Google Chrome                              |91.0.4472.77     |51683328  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|10096|chrome.exe                 |Google Chrome                              |91.0.4472.77     |82857984  |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|10272|chrome.exe                 |Google Chrome                              |91.0.4472.77     |103927808 |Low         |17     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|10316|dllhost.exe                |COM Surrogate                              |6.2.19041.546    |11591680  |Normal      |2      |C:\Windows\SysWOW64                                                              |
+|10344|chrome.exe                 |Google Chrome                              |91.0.4472.77     |51486720  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|10692|vmware-unity-helper.exe    |VMware Unity Helper                        |15.5.6.58036     |17432576  |Normal      |2      |C:\Program Files (x86)\VMware\VMware Workstation                                 |
+|10788|TextInputHost.exe          |                                           |2001.22012.0.2020|44449792  |Normal      |16     |C:\Windows\SystemApps\MicrosoftWindows.Client.CBS_cw5n1h2txyewy\InputApp         |
+|10800|svchost.exe                |Хост-процесс для служб Windows             |6.2.19041.546    |9007104   |Normal      |4      |C:\Windows\System32                                                              |
+|10892|chrome.exe                 |Google Chrome                              |91.0.4472.77     |102719488 |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|10900|chrome.exe                 |Google Chrome                              |91.0.4472.77     |51978240  |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|10908|chrome.exe                 |Google Chrome                              |91.0.4472.77     |60534784  |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|11156|chrome.exe                 |Google Chrome                              |91.0.4472.77     |52604928  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|11256|vmware-vmx.exe             |VMware Workstation VMX                     |15.5.6.58036     |4294967295|Normal      |18     |C:\Program Files (x86)\VMware\VMware Workstation\x64                             |
+|11268|chrome.exe                 |Google Chrome                              |91.0.4472.77     |74625024  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|11300|chrome.exe                 |Google Chrome                              |91.0.4472.77     |87465984  |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|11324|splwow64.exe               |Print driver host for applications         |6.2.19041.1052   |11202560  |Normal      |6      |C:\Windows                                                                       |
+|11344|chrome.exe                 |Google Chrome                              |91.0.4472.77     |60874752  |Low         |16     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|11512|chrome.exe                 |Google Chrome                              |91.0.4472.77     |56090624  |Low         |16     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|11624|chrome.exe                 |Google Chrome                              |91.0.4472.77     |49766400  |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|11712|chrome.exe                 |Google Chrome                              |91.0.4472.77     |66781184  |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|11820|vprintproxy.exe            |VMware VPrint Proxy                        |15.5.6.58036     |9560064   |Normal      |1      |C:\Program Files (x86)\VMware\VMware Workstation                                 |
+|11824|chrome.exe                 |Google Chrome                              |91.0.4472.77     |90275840  |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|11912|conhost.exe                |Хост окна консоли                          |10.0.19041.964   |5525504   |Normal      |2      |C:\Windows\System32                                                              |
+|11936|chrome.exe                 |Google Chrome                              |91.0.4472.77     |84025344  |Low         |15     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|12072|chrome.exe                 |Google Chrome                              |91.0.4472.77     |59006976  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+|12156|ViberLoader.exe            |yet another Portablizer                    |0.5.0.488        |2088960   |Normal      |1      |D:\Progs\Viber                                                                   |
+|12172|chrome.exe                 |Google Chrome                              |91.0.4472.77     |50954240  |Low         |14     |C:\Program Files (x86)\Google\Chrome\Application                                 |
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Assembler Information:
+---------------------------------------------------------------------------------------
+; uGisun.TGisun.CheckLogon (Line=1405 - Offset=0)
+; -----------------------------------------------
+009E267E  push    esi
+009E267F  push    edi
+009E2680  mov     ebx, edx
+009E2682  mov     edi, eax
+009E2684  xor     eax, eax
+009E2686  push    ebp
+009E2687  push    $009E27B9                             ; 'йК#ўяллЉEя_^[‹е]Г‹АЉ@>ГЎ$¤'
+009E268C  push    dword ptr fs:[eax]
+009E268F  mov     fs:[eax], esp
+;
+; Line=1406 - Offset=1
+; --------------------
+009E2692  mov     byte ptr [ebp-$01], $01
+;
+; Line=1408 - Offset=3
+; --------------------
+009E2696  cmp     byte ptr [edi+$34], $00               ; <-- EXCEPTION
+009E269A  jz      uGisun.TGisun.CheckLogon (Line=1408)
+009E269C  mov     esi, [edi+$0C]
+009E269F  cmp     dword ptr [esi+$38], +$00
+009E26A3  jz      uGisun.TGisun.CheckLogon (Line=1410)
+009E26A5  cmp     dword ptr [esi+$3C], +$00
+009E26A9  jz      uGisun.TGisun.CheckLogon (Line=1410)
+009E26AB  cmp     byte ptr [edi+$36], $00
+009E26AF  jz      uGisun.TGisun.CheckLogon (Line=1428)
+009E26B5  cmp     dword ptr [edi+$38], +$01
+009E26B9  jnz     uGisun.TGisun.CheckLogon (Line=1428)
+
+Registers:
+-----------------------------
+EAX: 00000000   EDI: 00000000
+EBX: 00000000   ESI: 00000000
+ECX: 00000000   ESP: 0019F288
+EDX: 00000000   EIP: 009E2696
+
+Stack:               Memory Dump:
+------------------   ---------------------------------------------------------------------------
+0019F288: 0019F2BC   009E2696: 80 7F 34 00 74 0F 8B 77 0C 83 7E 38 00 74 35 83  ..4.t..w..~8.t5.
+0019F28C: 00404BB8   009E26A6: 7E 3C 00 74 2F 80 7F 36 00 0F 84 E9 00 00 00 83  ~<.t/..6........
+0019F290: 0019F2B0   009E26B6: 7F 38 01 0F 85 DF 00 00 00 84 DB 74 0A 80 7F 3F  .8.........t...?
+0019F294: 03520DCC   009E26C6: 00 0F 84 D1 00 00 00 8B 47 0C 83 78 40 00 0F 85  ........G..x@...
+0019F298: 00000000   009E26D6: C4 00 00 00 8D 45 F8 8B 57 0C 8B 52 38 E8 E0 2C  .....E..W..R8..,
+0019F29C: 00A21A01   009E26E6: A2 FF 8D 45 F4 8B 57 0C 8B 52 3C E8 D2 2C A2 FF  ...E..W..R<..,..
+0019F2A0: 00000000   009E26F6: 8D 45 F0 8B 57 0C 8B 52 40 E8 C4 2C A2 FF 80 7F  .E..W..R@..,....
+0019F2A4: 00000000   009E2706: 36 00 74 23 84 DB 74 06 80 7F 3F 00 74 19 8B C7  6.t#..t...?.t...
+0019F2A8: 00000000   009E2716: E8 B1 00 00 00 84 C0 74 07 BB 04 00 00 00 EB 0C  .......t........
+0019F2AC: 01000000   009E2726: BB 02 00 00 00 EB 05 BB 01 00 00 00 6A FF 6A FF  ............j.j.
+0019F2B0: 0019F388   009E2736: 53 8B 87 90 00 00 00 50 8D 4D F0 8D 55 F4 8D 45  S......P.M..U..E
+0019F2B4: 00A1F81A   009E2746: F8 E8 98 6F 02 00 84 C0 74 38 8B 47 0C 83 C0 38  ...o....t8.G...8
+0019F2B8: 00A1DD40   009E2756: 8B 55 F8 E8 26 2C A2 FF 8B 47 0C 83 C0 3C 8B 55  .U..&,...G...<.U
+0019F2BC: 0019F3A4   009E2766: F4 E8 18 2C A2 FF 8B 55 F0 8B 47 0C E8 81 D0 03  ...,...U..G.....
+0019F2C0: 00404BB8   009E2776: 00 A1 F0 28 A4 00 8B 00 8B 55 F8 E8 92 9F C4 FF  ...(.....U......
+0019F2C4: 0019F388   009E2786: EB 04 C6 45 FF 00 8B 47 0C 8B 50 38 A1 1C 21 A4  ...E...G..P8..!.
+
+
+

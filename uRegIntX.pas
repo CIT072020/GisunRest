@@ -21,7 +21,15 @@ uses
 
 const
 //=== *** === === *** === === *** === === *** === =>
-  UN_INI_NAME = '..\GISUN\GISUN.ini';
+  UN_INI_NAME  = '..\GISUN\GISUN.ini';
+  UN_IN_FILES  = '..\GISUN\GISUN_Input.ini';
+  UN_OUT_FILES = '..\GISUN\GISUN_Output.ini';
+
+  // Секции INI-файла
+  SCT_REST = 'REST';
+
+
+
 //=== *** === === *** === === *** === === *** === <=
 
   // Режимы обмена с регистром населения
@@ -47,9 +55,6 @@ type
     FIni : TSasaIniFile;
     FRestClient : TRestClient;
 
-    // Подготовка тела запроса
-    function MakeBody(ActKind: TActKind; MessageType: string; const Input, Dokument : TDataSet; slPar:TStringList) : string;
-
     //function SetTypeAndIDMsg(ActKind: TActKind; var MessageType: string; const PCount : Integer = -1; const INCount : Integer = -1) : TObject;
     function GetRestIN(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument:TDataSet; slPar:TStringList): TRestResponse;
 
@@ -64,7 +69,7 @@ type
     slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRestResponse;
 
     // версия для работы с REST-сервисами
-    function GetRest(ActKind: TActKind; MessageType: string; const Input, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestResponse;
+    function GetRest(ActKind: TActKind; MessageType: string; const InDS, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestResponse;
 
     // Передача документов в регистр
     function Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet;
@@ -98,9 +103,10 @@ begin
   FIni := Ini;
   FExchMode := EM_SOAP;
   if (Assigned(Ini)) then
-    FExchMode := Ini.ReadInteger(SCT_ADMIN, 'EXCHG_MODE', EM_SOAP);
+    FExchMode := Ini.ReadInteger(SCT_REST, 'EXCHG_MODE', EM_SOAP);
 
   Config := TRestConfig.Create;
+  Config.BasePath := Ini.ReadString(SCT_REST, 'BASE_URI', '');
   ApiClient := TRestClient.Create;
 
   //FGetSrv := TGetSrvX.Create;
@@ -654,37 +660,8 @@ end;
 *)
 
 
-
-// Подготовка объекта COVER (тело запроса)
-function TRegIntX.MakeReqCover(ActKind: TActKind; MessageType: string; const Input, Dokument : TDataSet; slPar:TStringList) : string;
-var
-  s : string;
-begin
-  Result := s;
-end;
-
-
-// Подготовка объекта REQUEST (тело запроса)
-function TRegIntX.MakeReqRequest(ActKind: TActKind; MessageType: string; const Input, Dokument : TDataSet; slPar:TStringList) : string;
-var
-  s : string;
-begin
-  Result := s;
-end;
-
-
-
-// Подготовка тела запроса
-function TRegIntX.MakeBody(ActKind: TActKind; MessageType: string; const Input, Dokument : TDataSet; slPar:TStringList) : string;
-var
-  s : string;
-begin
-  Result := s;
-end;
-
-
 // Получение персональных данных, ИН, резервирование ИН через REST-сервис
-function TRegIntX.GetRest(ActKind: TActKind; MessageType: string; const Input, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestResponse;
+function TRegIntX.GetRest(ActKind: TActKind; MessageType: string; const InDS, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestResponse;
 var
   i : Integer;
   s : string;
@@ -693,12 +670,12 @@ var
 begin
   Result := TRestResponse.Create;
   // Формирование запроса на сервер
-  Req := TRestRequest.Create(Self.Config.DefHeader);
+  Req := TRestRequest.Create(Self.Config);
 
-  s := Req.MakeReqLine('POST', slPar);
+  Req.MakeReqLine('POST', slPar);
 
   // Формирование тела запроса
-  Req.Body := MakeBody(ActKind, MessageType, Input, Dokument, slPar);
+  Req.MakeBody(InDS, Dokument, slPar);
 
   Result := ApiClient.CallApi(Req);
 end;

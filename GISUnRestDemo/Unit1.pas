@@ -5,7 +5,6 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, DateUtils,
   nativexml,
-  funcpr,
   superdate, superobject,
   StdCtrls, Mask,
   DBCtrlsEh,
@@ -13,7 +12,11 @@ uses
   adsdata, adsfunc, adstable, adscnnct,
   HTTPSend,
   ssl_openssl, ssl_openssl_lib,
+  funcpr,
+  mRegInt,
+  uGisun,
   uROCExchg,
+  uRestClient,
   uRegIntX;
 
 type
@@ -56,11 +59,13 @@ type
     lblChilds: TLabel;
     lblNSI: TLabel;
     btnGetUN: TButton;
+    btnGetPersData: TButton;
     procedure btnGetActualClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnGetDocsClick(Sender: TObject);
     procedure btnGetNSIClick(Sender: TObject);
+    procedure btnGetPersDataClick(Sender: TObject);
     procedure btnGetUNClick(Sender: TObject);
     procedure btnPostDocClick(Sender: TObject);
   private
@@ -95,7 +100,7 @@ var
 begin
   Ini := TSasaIniFile.Create(UN_INI_NAME);
   RegInt := TRegIntX.Create('1', Ini);
-
+  RegInt.ReadMetaInfo(UN_IN_FILES, UN_OUT_FILES);
 end;
 
 
@@ -305,15 +310,37 @@ begin
   end;
 end;
 
-// GET для регистра населения
+// GET Personal Data
+procedure TForm1.btnGetPersDataClick(Sender: TObject);
+var
+  i : Integer;
+  s : string;
+  r,
+  e,
+  d : TDataSet;
+begin
+  d['IS_PERSON'] := False;
+
+end;
+
+// GET IN by FIO
 procedure TForm1.btnGetUNClick(Sender: TObject);
 var
   i : Integer;
   s : string;
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  r : TRestResponse;
 begin
-  i := 58 + 0;
-  s := (TButton(Sender)).Caption + ' ' + IntToStr(i);
-  (TButton(Sender)).Caption := s;
+  d := RegInt.CreateInputTable(akGetPersonIdentif, opGet);
+  d.Append;
+  d['FAMILIA'] := 'ИВАНОВ';
+  d['NAME']    := 'ИВАН';
+  d['OTCH']    := 'ИВАНОВИЧ';
+  d['DATER']   := '20120511';
+  d.Post;
+  r := RegInt.Get(akGetPersonIdentif, QUERY_INFO, d, dsOut, dsErr);
 end;
 
 

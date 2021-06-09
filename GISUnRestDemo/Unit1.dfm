@@ -342,12 +342,21 @@ object Form1: TForm1
   end
   object btnGetUN: TButton
     Left = 16
-    Top = 651
+    Top = 627
     Width = 119
     Height = 25
-    Caption = 'GET - '#1056#1077#1075#1080#1089#1090#1088#1053#1072#1089
+    Caption = 'UN - GET IN (by FIO)'
     TabOrder = 22
     OnClick = btnGetUNClick
+  end
+  object btnGetPersData: TButton
+    Left = 16
+    Top = 668
+    Width = 119
+    Height = 25
+    Caption = 'UN - GET PersData'
+    TabOrder = 23
+    OnClick = btnGetPersDataClick
   end
   object DataSource1: TDataSource
     Left = 664
