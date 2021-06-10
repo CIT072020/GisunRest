@@ -72,8 +72,8 @@ type
     function GetRest(ActKind: TActKind; MessageType: string; const InDS, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestResponse;
 
     // Передача документов в регистр
-    function Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet;
-      var Error: TDataSet; EMode : Integer = EM_SOAP): TRequestResult;
+    function Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet; var Error: TDataSet; ExchMode: Integer = EM_DEFLT): TRestResponse;
+    function PostRest(RequestMessageId: string; ActKind: TActKind; MessageType: string; const InDS : TDataSet; var Error: TDataSet): TRestResponse;
 
     constructor Create(MessageSource: string; Ini : TSasaIniFile = nil);
     destructor Destroy;
@@ -98,15 +98,21 @@ uses
 constructor TRegIntX.Create(MessageSource: string; Ini : TSasaIniFile = nil);
 var
   i : Integer;
+  DefH : TStringList;
 begin
   inherited Create(MessageSource);
+
+  DefH := TStringList.Create;
+  DefH.Add('Reg-auth-username:PASSPORT_USER');
+  DefH.Add('Reg-auth-password:user_password');
+  Config := TRestConfig.Create(DefH);
   FIni := Ini;
   FExchMode := EM_SOAP;
-  if (Assigned(Ini)) then
+  if (Assigned(Ini)) then begin
     FExchMode := Ini.ReadInteger(SCT_REST, 'EXCHG_MODE', EM_SOAP);
-
-  Config := TRestConfig.Create;
-  Config.BasePath := Ini.ReadString(SCT_REST, 'BASE_URI', '');
+    Config.BasePath := Ini.ReadString(SCT_REST, 'BASE_URI', '');
+  end;
+  Config.Organ := MessageSource;
   ApiClient := TRestClient.Create;
 
   //FGetSrv := TGetSrvX.Create;
@@ -127,16 +133,15 @@ function TRegIntX.Get(ActKind: TActKind; MessageType: string; const Input: TData
 var
   ResObs : TRequestResult;
 begin
-  Result := TRestResponse.Create;
   if (ExchMode = EM_DEFLT) then
     ExchMode := FExchMode;
   if (ExchMode = EM_SOAP) then begin
     ResObs := inherited Get(ActKind, MessageType, Input, Output, Error, Dokument, slPar);
+    Result := TRestResponse.Create;
+    Result.RetAsSOAP := ResObs;
   end
   else begin
     // Через REST-сервис
-    // Подготовка Body
-    // Подготовка Headers
     Result := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar);
 
 
@@ -144,9 +149,21 @@ begin
 end;
 
 // Запись в регистр документов
-function TRegIntX.Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet; var Error: TDataSet; EMode : Integer = EM_SOAP): TRequestResult;
+function TRegIntX.Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet; var Error: TDataSet; ExchMode: Integer = EM_DEFLT): TRestResponse;
+var
+  ResObs : TRequestResult;
 begin
-  Result := rrFault;
+  if (ExchMode = EM_DEFLT) then
+    ExchMode := FExchMode;
+  if (ExchMode = EM_SOAP) then begin
+    ResObs := inherited Post(RequestMessageId, ActKind, MessageType, Input, Error);
+    Result := TRestResponse.Create;
+    Result.RetAsSOAP := ResObs;
+  end
+  else begin
+    // Через REST-сервис
+    Result := PostRest(RequestMessageId, ActKind, MessageType, Input, Error);
+  end;
 end;
 
 
@@ -668,18 +685,36 @@ var
   Req : TRestRequest;
 
 begin
-  Result := TRestResponse.Create;
   // Формирование запроса на сервер
   Req := TRestRequest.Create(Self.Config);
+  Req.SetActInf(ActKind, MessageType, InDS, slPar);
 
   Req.MakeReqLine('POST', slPar);
 
   // Формирование тела запроса
-  Req.MakeBody(InDS, Dokument, slPar);
+  Req.MakeBody(InDS);
 
   Result := ApiClient.CallApi(Req);
 end;
 
+// Отправка данных через REST-сервис
+function TRegIntX.PostRest(RequestMessageId: string; ActKind: TActKind; MessageType: string; const InDS : TDataSet; var Error: TDataSet): TRestResponse;
+var
+  i : Integer;
+  s : string;
+  Req : TRestRequest;
+begin
+  // Формирование запроса на сервер
+  Req := TRestRequest.Create(Self.Config);
+  Req.SetActInf(ActKind, MessageType, InDS);
+
+  Req.MakeReqLine('POST');
+
+  // Формирование тела запроса
+  Req.MakeBody(InDS);
+
+  Result := ApiClient.CallApi(Req);
+end;
 
 
 

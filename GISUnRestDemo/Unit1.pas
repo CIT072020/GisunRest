@@ -60,6 +60,7 @@ type
     lblNSI: TLabel;
     btnGetUN: TButton;
     btnGetPersData: TButton;
+    btnPostMarr: TButton;
     procedure btnGetActualClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -68,6 +69,7 @@ type
     procedure btnGetPersDataClick(Sender: TObject);
     procedure btnGetUNClick(Sender: TObject);
     procedure btnPostDocClick(Sender: TObject);
+    procedure btnPostMarrClick(Sender: TObject);
   private
     { Private declarations }
   public
@@ -315,12 +317,35 @@ procedure TForm1.btnGetPersDataClick(Sender: TObject);
 var
   i : Integer;
   s : string;
-  r,
-  e,
+  dsOut,
+  dsErr,
   d : TDataSet;
+  r : TRestResponse;
 begin
-  d['IS_PERSON'] := False;
-
+  d := RegInt.CreateInputTable(akGetPersonalData, opGet);
+  d.Append;
+  d['IS_PERSON']  := True;
+  d['IDENTIF']    := '7120691A001PB3';
+  d['REQUEST_ID'] := NewGUID;
+  d.Post;
+  d.Append;
+  d['IS_PERSON']  := True;
+  d['IDENTIF']    := '7146694A001PB8';
+  d['REQUEST_ID'] := NewGUID;
+  d.Post;
+  d.Append;
+  d['IS_PERSON']  := False;
+  d['POL']        := 'F';
+  d['DATER']      := '20010511';
+  d['REQUEST_ID'] := NewGUID;
+  d.Post;
+  d.Append;
+  d['IS_PERSON']  := False;
+  d['POL']        := 'M';
+  d['DATER']      := '20020612';
+  d['REQUEST_ID'] := NewGUID;
+  d.Post;
+  r := RegInt.Get(akGetPersonalData, QUERY_INFO, d, dsOut, dsErr);
 end;
 
 // GET IN by FIO
@@ -341,6 +366,26 @@ begin
   d['DATER']   := '20120511';
   d.Post;
   r := RegInt.Get(akGetPersonIdentif, QUERY_INFO, d, dsOut, dsErr);
+end;
+
+procedure TForm1.btnPostMarrClick(Sender: TObject);
+var
+  i : Integer;
+  s : string;
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  r : TRestResponse;
+begin
+  d := RegInt.CreateInputTable(akMarriage, opPost);
+  d.Append;
+  d['FAMILIA'] := 'ÈÂÀÍÎÂ';
+  d['NAME']    := 'ÈÂÀÍ';
+  d['OTCH']    := 'ÈÂÀÍÎÂÈ×';
+  d['DATER']   := '20120511';
+  d.Post;
+  s := NewGUID;
+  r := RegInt.Post(s, akGetPersonIdentif, QUERY_INFO, d, dsErr);
 end;
 
 

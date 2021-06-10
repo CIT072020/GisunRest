@@ -342,7 +342,7 @@ object Form1: TForm1
   end
   object btnGetUN: TButton
     Left = 16
-    Top = 627
+    Top = 626
     Width = 119
     Height = 25
     Caption = 'UN - GET IN (by FIO)'
@@ -357,6 +357,15 @@ object Form1: TForm1
     Caption = 'UN - GET PersData'
     TabOrder = 23
     OnClick = btnGetPersDataClick
+  end
+  object btnPostMarr: TButton
+    Left = 162
+    Top = 626
+    Width = 119
+    Height = 25
+    Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1073#1088#1072#1082#1072
+    TabOrder = 24
+    OnClick = btnPostMarrClick
   end
   object DataSource1: TDataSource
     Left = 664
