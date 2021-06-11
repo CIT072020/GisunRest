@@ -13,6 +13,67 @@ uses
   uROCService;
 
 type
+
+  // Классификатор
+  TClassifier = class
+  private
+    FJObjName : string;
+    FInDS     : TDataSet;
+  public
+    CodeC : string;
+    TypeC : Integer;
+
+    property JObjName : string read FJObjName write FJObjName;
+
+    function GetFI(sField: String): Integer;
+    function GetFS(sField: String): String;
+    function GetFD(sField: String): TDateTime;
+    function GetFB(sField: String): String;
+
+
+    constructor Create(JN : string);
+    destructor Destroy;
+  end;
+
+
+  // Базовый набор для преобразований JSON <-> DataSet
+  TJ2DS = class
+  private
+    FJObjName : string;
+    FInDS     : TDataSet;
+  public
+    property JObjName : string read FJObjName write FJObjName;
+
+    function GetFI(sField: String): Integer;
+
+    constructor Create(JN : string);
+    destructor Destroy;
+  end;
+
+  // Базовый набор реквизитов персональных данных
+  TPersDataBase = class
+  private
+    FJObjName : string;
+    FInPfx    : string;
+    FInDS     : TDataSet;
+  public
+    property JObjName : string read FJObjName write FJObjName;
+    function DS2Json1Obj(InP : string = ''; IDS : TDataSet = nil) : string;
+    function DS2Json(InP : string = ''; IDS : TDataSet = nil) : string;
+
+    constructor Create(JN : string; FInDS : TDataSet);
+    destructor Destroy;
+  end;
+
+  // Свидетельство о браке
+  TActMarr = class(TPersDataBase)
+  private
+  public
+    function DS2Json(InP : string = ''; IDS : TDataSet = nil) : string;
+  end;
+
+
+
   // Чтение/Запись актов и персональных данных
   TPersDataDTO = class
   private
@@ -70,6 +131,82 @@ type
 
 implementation
 
+
+class function TClassifier.SetJson(ACode: string; AType: integer; IsBraces: Boolean = False): string;
+begin
+  Result := Format('"code":"%s","type":%s', [ACode, AType]);
+  if (IsBraces) then
+    Result := '{' + Result + '}';
+end;
+
+//
+constructor TPersDataBase.Create(JN : string; InP : string = '');
+begin
+  inherited Create;
+  JObjName := JN;
+  FInPfx   := InP;
+end;
+
+//
+destructor TPersDataBase.Destroy;
+begin
+  inherited;
+end;
+
+
+function TPersDataBase.DS2Json1Obj(InP: string = ''; IDS: TDataSet = nil): string;
+var
+  s: string;
+begin
+  if (not Assigned(IDS)) then
+    IDS := FInDS;
+  with IDS do begin
+    s :=     '"identif":"'    + FieldByName(FInPfx + 'IDENTIF').AsString + '",';
+    s := s + '"last_name":"'  + FieldByName(FInPfx + 'FAMILIA').AsString + '",';
+    s := s + '"name":"'       + FieldByName(FInPfx + 'NAME').AsString + '",';
+    s := s + '"patronymic":"' + FieldByName(FInPfx + 'OTCH').AsString + '",';
+
+    Result := s + '"birth_day":"' + FieldByName(FInPfx + 'DATER').AsString + '"';
+  end;
+end;
+
+function TPersDataBase.DS2Json(InP : string = ''; IDS : TDataSet = nil) : string;
+var
+  r,
+  s : string;
+begin
+  if (not Assigned(IDS)) then
+    IDS := FInDS;
+  Result := Format('"%s":{%s}', [JObjName, DS2Json1Obj(InP, IDS)]);
+end;
+
+// Свидетельство о браке
+function TActMarr.MarrDS2Json(InP : string = ''; IDS : TDataSet = nil) : string;
+var
+  r,
+  s : string;
+begin
+  if (not Assigned(IDS)) then
+    IDS := FInDS;
+  s := '"mrg_cert_data":{"bride":{';
+  s := s + '"bride_data":{' + DS2Json1Obj('ONA_', IDS) +
+               '"status":' + TClassifier.SetJson('1', -18) + '}},';
+  s := s + '"bridegroom":{' +
+           '"bridegroom_data":{' + DS2Json1Obj('ON_', IDS) +
+               '"status":' + TClassifier.SetJson('1', -18) + '}},';
+  s := s + '"mrg_act_data":{' +
+               '"act_type":' + TClassifier.SetJson('0300', 82) + ',' +
+               '"authority":' + TClassifier.SetJson('617', 80) + ',' +
+               '"date":' +  ',' +
+               '"number":' + '},';
+  s := s + '"mrg_certificate_data":{' +
+               '"document_type":' + TClassifier.SetJson('54100006', 37) + ',' +
+               '"authority":' + TClassifier.SetJson('617', 80) + ',' +
+			         '"date_of_issue":"2013-06-11",' +
+			         '"series": "I-??",' +
+			         '"number": "0221734"}}'
+
+end;
 
 
 // Числовое целое из MemTable
