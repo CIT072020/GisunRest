@@ -25,6 +25,7 @@ type
     Oper     : TOperation;
     ResPath  : string;
     MsgType  : string;
+    ActFun   : TActPostBoby;
     Method   : string;
   end;
 
@@ -61,6 +62,7 @@ type
     function MakeAgreement : string;
     function MakeCover(const MsgSrcCode : string; MsgTypeCode : string = uGisun.QUERY_INFO; DSet : string = '[15]') : string;
     function MakeReqInBody(const InDS: TDataSet): string;
+    function MakeBody4Post(const InDS: TDataSet) : string;
   public
     property Params : TStringList read FParams write FParams;
     property Header : TStringList read FHeader write FHeader;
@@ -180,6 +182,11 @@ begin
       end;
     akGetPersonIdentif:
       FActInf.ResPath := 'common/person-identif';
+    akMarriage : begin
+      FActInf.ResPath := 'zags/marriage-certificate';
+      //FActInf.ActFun := TActMarr.MarrDS2Json;
+      FActInf.ActFun := Marr2Json;
+      end;
   end;
   Result := Self;
 end;
@@ -239,6 +246,16 @@ begin
 end;
 
 
+function TRestRequest.MakeBody4Post(const InDS: TDataSet) : string;
+begin
+  Result := '';
+  try
+    Result := FActInf.ActFun(InDS);
+  except
+  end;
+end;
+
+
 function TRestRequest.MakeReqInBody(const InDS: TDataSet): string;
 var
   iIN, iPD: Integer;
@@ -247,7 +264,7 @@ begin
   s := '';
   try
     if (FActInf.Oper = opGet) then begin
-      s := ',"request":{';
+      s := '"request":{';
       sPersDat := '';
       sIN := '';
 
@@ -291,7 +308,9 @@ begin
         end;
         s := s + sR + '}';
       end;
-    end;
+    end
+    else
+      s := MakeBody4Post(InDS);
 
   except
   end;
@@ -304,7 +323,16 @@ var
   s: string;
 begin
   try
-    Body   := '{' + MakeCover(FCfg.Organ, FActInf.MsgType) + MakeReqInBody(InDS) + '}';
+(*
+    Body   := '{' +
+      MakeCover(FCfg.Organ, FActInf.MsgType) + ',' +
+      MakeReqInBody(InDS) + '}';
+*)
+    Body := '{' +
+      MakeCover(FCfg.Organ, FActInf.MsgType) + ',';
+    s := MakeReqInBody(InDS) + '}';
+    Body := Body + s;
+
     Result := Self;
   except
   end;

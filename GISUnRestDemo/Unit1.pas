@@ -379,13 +379,29 @@ var
 begin
   d := RegInt.CreateInputTable(akMarriage, opPost);
   d.Append;
-  d['FAMILIA'] := 'хбюмнб';
-  d['NAME']    := 'хбюм';
-  d['OTCH']    := 'хбюмнбхв';
-  d['DATER']   := '20120511';
+
+  d['ONA_IDENTIF'] := '7172252A001PB3';
+  d['ONA_FAMILIA'] := 'ярюмйебхв';
+  d['ONA_NAME'] := 'яберкюмю';
+  d['ONA_OTCH'] := 'оерпнбмю';
+  d['ONA_DATER']   := '20120511';
+
+  d['ON_IDENTIF'] := '3010182A132PB7';
+  d['ON_FAMILIA'] := 'чпвемйн';
+  d['ON_NAME'] := 'мхйнкюи';
+  d['ON_OTCH'] := 'мхйнкюебхв';
+  d['ON_DATER']   := '20120511';
+
+ d['ACT_DATE']   := StrToDate('08.08.2013');
+ d['ACT_NOMER']  := '12';
+
+ d['DOC_DATE']   := StrToDate('11.06.2013');
+ d['DOC_SERIA']  := 'I-юк';
+ d['DOC_NOMER']  := '0221734';
+
   d.Post;
   s := NewGUID;
-  r := RegInt.Post(s, akGetPersonIdentif, QUERY_INFO, d, dsErr);
+  r := RegInt.Post(s, akMarriage, '0300', d, dsErr);
 end;
 
 

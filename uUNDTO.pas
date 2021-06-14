@@ -13,29 +13,16 @@ uses
   uROCService;
 
 type
+  TActPostBoby = function(IDS : TDataSet) : string;
 
   // Классификатор
   TClassifier = class
   private
-    FJObjName : string;
-    FInDS     : TDataSet;
   public
-    CodeC : string;
-    TypeC : Integer;
-
-    property JObjName : string read FJObjName write FJObjName;
-
-    function GetFI(sField: String): Integer;
-    function GetFS(sField: String): String;
-    function GetFD(sField: String): TDateTime;
-    function GetFB(sField: String): String;
-
-
-    constructor Create(JN : string);
-    destructor Destroy;
+    class function SetCT(ACode: string; AType: integer; IsBraces: Boolean = True): string;
   end;
 
-
+(*
   // Базовый набор для преобразований JSON <-> DataSet
   TJ2DS = class
   private
@@ -49,27 +36,26 @@ type
     constructor Create(JN : string);
     destructor Destroy;
   end;
+*)  
 
   // Базовый набор реквизитов персональных данных
-  TPersDataBase = class
+  TPersDataMin = class
   private
-    FJObjName : string;
-    FInPfx    : string;
     FInDS     : TDataSet;
   public
-    property JObjName : string read FJObjName write FJObjName;
-    function DS2Json1Obj(InP : string = ''; IDS : TDataSet = nil) : string;
-    function DS2Json(InP : string = ''; IDS : TDataSet = nil) : string;
+    property InDS : TDataSet read FInDS write FInDS;
 
-    constructor Create(JN : string; FInDS : TDataSet);
+    constructor Create(IDS : TDataSet = nil);
     destructor Destroy;
+
+    class function DS2Json(IDS : TDataSet; InP: string = ''): string;
   end;
 
   // Свидетельство о браке
-  TActMarr = class(TPersDataBase)
+  TActMarr = class(TPersDataMin)
   private
   public
-    function DS2Json(InP : string = ''; IDS : TDataSet = nil) : string;
+    class function MarrDS2Json(IDS : TDataSet) : string;
   end;
 
 
@@ -128,84 +114,103 @@ type
     //class function GetNsi(SOArr: ISuperObject; Nsi: TkbmMemTable; EmpTbl: Boolean = True): Integer;
   end;
 
+function Marr2Json(IDS : TDataSet) : string;
 
 implementation
 
 
-class function TClassifier.SetJson(ACode: string; AType: integer; IsBraces: Boolean = False): string;
+class function TClassifier.SetCT(ACode: string; AType: integer; IsBraces: Boolean = True): string;
 begin
-  Result := Format('"code":"%s","type":%s', [ACode, AType]);
+  Result := Format('"code":"%s","type":%d', [ACode, AType]);
   if (IsBraces) then
     Result := '{' + Result + '}';
 end;
 
 //
-constructor TPersDataBase.Create(JN : string; InP : string = '');
+constructor TPersDataMin.Create(IDS : TDataSet = nil);
 begin
   inherited Create;
-  JObjName := JN;
-  FInPfx   := InP;
+  FInDS := IDS;
 end;
 
 //
-destructor TPersDataBase.Destroy;
+destructor TPersDataMin.Destroy;
 begin
   inherited;
 end;
 
 
-function TPersDataBase.DS2Json1Obj(InP: string = ''; IDS: TDataSet = nil): string;
+class function TPersDataMin.DS2Json(IDS : TDataSet; InP: string = ''): string;
 var
   s: string;
 begin
-  if (not Assigned(IDS)) then
-    IDS := FInDS;
   with IDS do begin
-    s :=     '"identif":"'    + FieldByName(FInPfx + 'IDENTIF').AsString + '",';
-    s := s + '"last_name":"'  + FieldByName(FInPfx + 'FAMILIA').AsString + '",';
-    s := s + '"name":"'       + FieldByName(FInPfx + 'NAME').AsString + '",';
-    s := s + '"patronymic":"' + FieldByName(FInPfx + 'OTCH').AsString + '",';
+    s :=     '"identif":"'    + FieldByName(InP + 'IDENTIF').AsString + '",';
+    s := s + '"last_name":"'  + FieldByName(InP + 'FAMILIA').AsString + '",';
+    s := s + '"name":"'       + FieldByName(InP + 'NAME').AsString + '",';
+    s := s + '"patronymic":"' + FieldByName(InP + 'OTCH').AsString + '",';
 
-    Result := s + '"birth_day":"' + FieldByName(FInPfx + 'DATER').AsString + '"';
+    Result := s + '"birth_day":"' + FieldByName(InP + 'DATER').AsString + '"';
   end;
 end;
 
-function TPersDataBase.DS2Json(InP : string = ''; IDS : TDataSet = nil) : string;
+
+
+// Свидетельство о браке
+function Marr2Json(IDS : TDataSet) : string;
 var
   r,
   s : string;
 begin
-  if (not Assigned(IDS)) then
-    IDS := FInDS;
-  Result := Format('"%s":{%s}', [JObjName, DS2Json1Obj(InP, IDS)]);
+  s := '"mrg_cert_data":{"bride":{';
+  s := s + '"bride_data":{' + TPersDataMin.DS2Json(IDS, 'ONA_');
+
+  s := s + ',' +
+               '"status":' + TClassifier.SetCT('1', -18) + '}},';
+  s := s + '"bridegroom":{' +
+           '"bridegroom_data":{' + TPersDataMin.DS2Json(IDS, 'ON_') + ',' +
+
+               '"status":' + TClassifier.SetCT('1', -18) + '}},';
+  s := s + '"mrg_act_data":{' +
+               '"act_type":' + TClassifier.SetCT('0300', 82) + ',' +
+               '"authority":' + TClassifier.SetCT('617', 80) + ',' +
+               Format('"date":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('ACT_DATE').AsDateTime) ]) +
+               Format('"number":"%s"},', [ IDS.FieldByName('ACT_NOMER').AsString ]);
+  s := s + '"mrg_certificate_data":{' +
+               '"document_type":' + TClassifier.SetCT('54100006', 37) + ',' +
+               '"authority":' + TClassifier.SetCT('617', 80) + ',' +
+               Format('"date_of_issue":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('DOC_DATE').AsDateTime) ]) +
+               Format('"series":"%s",', [ IDS.FieldByName('DOC_SERIA').AsString ]);
+               Format('"number":"%s"}}}', [ IDS.FieldByName('DOC_NOMER').AsString ]);
+  Result := s;
 end;
 
 // Свидетельство о браке
-function TActMarr.MarrDS2Json(InP : string = ''; IDS : TDataSet = nil) : string;
+class function TActMarr.MarrDS2Json(IDS : TDataSet) : string;
 var
   r,
   s : string;
 begin
-  if (not Assigned(IDS)) then
-    IDS := FInDS;
   s := '"mrg_cert_data":{"bride":{';
-  s := s + '"bride_data":{' + DS2Json1Obj('ONA_', IDS) +
-               '"status":' + TClassifier.SetJson('1', -18) + '}},';
-  s := s + '"bridegroom":{' +
-           '"bridegroom_data":{' + DS2Json1Obj('ON_', IDS) +
-               '"status":' + TClassifier.SetJson('1', -18) + '}},';
-  s := s + '"mrg_act_data":{' +
-               '"act_type":' + TClassifier.SetJson('0300', 82) + ',' +
-               '"authority":' + TClassifier.SetJson('617', 80) + ',' +
-               '"date":' +  ',' +
-               '"number":' + '},';
-  s := s + '"mrg_certificate_data":{' +
-               '"document_type":' + TClassifier.SetJson('54100006', 37) + ',' +
-               '"authority":' + TClassifier.SetJson('617', 80) + ',' +
-			         '"date_of_issue":"2013-06-11",' +
-			         '"series": "I-??",' +
-			         '"number": "0221734"}}'
+  s := s + '"bride_data":{' + DS2Json(IDS, 'ONA_') +
 
+               '"status":' + TClassifier.SetCT('1', -18) + '}},';
+  s := s + '"bridegroom":{' +
+           '"bridegroom_data":{' + DS2Json(IDS, 'ON_') +
+
+               '"status":' + TClassifier.SetCT('1', -18) + '}},';
+  s := s + '"mrg_act_data":{' +
+               '"act_type":' + TClassifier.SetCT('0300', 82) + ',' +
+               '"authority":' + TClassifier.SetCT('617', 80) + ',' +
+               Format('"date":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('ACT_DATE').AsDateTime) ]) +
+               Format('"number":"%s"},', [ IDS.FieldByName('ACT_NOMER').AsString ]);
+  s := s + '"mrg_certificate_data":{' +
+               '"document_type":' + TClassifier.SetCT('54100006', 37) + ',' +
+               '"authority":' + TClassifier.SetCT('617', 80) + ',' +
+               Format('"date_of_issue":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('DOC_DATE').AsDateTime) ]) +
+               Format('"series":"%s",', [ IDS.FieldByName('DOC_SERIA').AsString ]);
+               Format('"number":"%s"}}}', [ IDS.FieldByName('DOC_NOMER').AsString ]);
+  Result := s;
 end;
 
 
