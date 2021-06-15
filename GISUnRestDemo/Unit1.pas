@@ -392,12 +392,17 @@ begin
   d['ON_OTCH'] := 'Õ» ŒÀ¿≈¬»◊';
   d['ON_DATER']   := '20120511';
 
- d['ACT_DATE']   := StrToDate('08.08.2013');
- d['ACT_NOMER']  := '12';
+  d['ACT_TIP']       := '0300';
+  d['ACT_ORGAN']     := '617';
+  d['ACT_ORGAN_LEX'] := '«¿√— ‡ÈÓÌÌ˚È';
+  d['ACT_DATE']      := StrToDate('08.08.2013');
+  d['ACT_NOMER']     := '12';
 
- d['DOC_DATE']   := StrToDate('11.06.2013');
- d['DOC_SERIA']  := 'I-¿À';
- d['DOC_NOMER']  := '0221734';
+  d['DOC_TIP']       := '54100006';
+  d['DOC_ORGAN']     := '617';
+  d['DOC_DATE']      := StrToDate('11.08.2013');
+  d['DOC_SERIA']     := 'I-¿À';
+  d['DOC_NOMER']     := '0221734';
 
   d.Post;
   s := NewGUID;
