@@ -1,0 +1,12 @@
+				"last_name_bel": "ярюмйеб╡в",
+				"name": "яберкюмю",
+				"name_bel": "ябъркюмю",
+				"patronymic": "оерпнбмю",
+				"patronymic_bel": "оърпн║мю",
+
+				"last_name": "чпвемйн",
+				"last_name_bel": "чпвюмйю",
+				"name": "мхйнкюи",
+				"name_bel": "л╡йюкюи",
+				"patronymic": "мхйнкюебхв",
+				"patronymic_bel": "л╡йюкюеб╡в",

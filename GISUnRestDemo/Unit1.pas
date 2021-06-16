@@ -380,17 +380,50 @@ begin
   d := RegInt.CreateInputTable(akMarriage, opPost);
   d.Append;
 
-  d['ONA_IDENTIF'] := '7172252A001PB3';
-  d['ONA_FAMILIA'] := 'СТАНКЕВИЧ';
-  d['ONA_NAME'] := 'СВЕТЛАНА';
-  d['ONA_OTCH'] := 'ПЕТРОВНА';
-  d['ONA_DATER']   := '20120511';
+  d['ONA_IDENTIF']   := '7172252A001PB3';
+  d['ONA_FAMILIA']   := 'СТАНКЕВИЧ';
+  d['ONA_NAME']      := 'СВЕТЛАНА';
+  d['ONA_OTCH']      := 'ПЕТРОВНА';
+  d['ONA_FAMILIA_B'] := 'СТАНКЕВІЧ';
+  d['ONA_NAME_B']    := 'СВЯТЛАНА';
+  d['ONA_OTCH_B']    := 'ПЯТРОЎНА';
+  d['ONA_POL']       := 'F';
+  d['ONA_DATER']     := '20120511';
 
-  d['ON_IDENTIF'] := '3010182A132PB7';
-  d['ON_FAMILIA'] := 'ЮРЧЕНКО';
-  d['ON_NAME'] := 'НИКОЛАЙ';
-  d['ON_OTCH'] := 'НИКОЛАЕВИЧ';
-  d['ON_DATER']   := '20120511';
+  d['ONA_GRAJD']     := 'BLR';
+  d['ONA_STATUS']    := '1';
+
+  d['ONA_GOSUD']    := 'BLR';
+  d['ONA_OBL']      := 'Минская';
+  d['ONA_OBL_B']    := 'Мiнская';
+  d['ONA_RAION']    := 'Узденский';
+  d['ONA_RAION_B']  := 'Узденскi';
+  d['ONA_TIP_GOROD'] := '11100001';
+  d['ONA_GOROD']    := 'Брест';
+  d['ONA_GOROD_B']  := 'Брэст';
+
+  d['ON_IDENTIF']   := '3010182A132PB7';
+  d['ON_FAMILIA']   := 'ЮРЧЕНКО';
+  d['ON_NAME']      := 'НИКОЛАЙ';
+  d['ON_OTCH']      := 'НИКОЛАЕВИЧ';
+  d['ON_FAMILIA_B'] := 'ЮРЧАНКА';
+  d['ON_NAME_B']    := 'МIКАЛАЙ';
+  d['ON_OTCH_B']    := 'МIКАЛАЕВIЧ';
+  d['ON_POL']       := 'M';
+  d['ON_DATER']     := '20120511';
+
+  d['ON_GRAJD']     := 'BLR';
+  d['ON_STATUS']    := '1';
+
+  d['ON_GOSUD']   := 'BLR';
+  d['ON_OBL']     := 'Минская';
+  d['ON_OBL_B']   := 'Мiнская';
+  d['ON_RAION']   := 'Узденский';
+  d['ON_RAION_B'] := 'Узденскi';
+  d['ON_TIP_GOROD'] := '11100001';
+  d['ON_GOROD']   := 'Брест';
+  d['ON_GOROD_B'] := 'Брэст';
+
 
   d['ACT_TIP']       := '0300';
   d['ACT_ORGAN']     := '617';

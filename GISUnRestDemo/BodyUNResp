@@ -1,2 +1,7 @@
-{"error": "BadRequestException", "data": "Could not resolve type id 'document_type' as a subtype of 'by.agatsystem.gisun.common.types.Document': known type ids = [document] (for POJO property 'mrg_certificate_data')
- at [Source: (ByteArrayInputStream); line: 1, column: 1145] (through reference chain: by.agatsystem.gisun.zags.types.MarriageAct['mrg_cert_data']->by.agatsystem.gisun.zags.types.MarriageAct$MrgCertData['mrg_certificate_data'])", "error_description": "The request could not be understood by the server due to malformed syntax. SHOULD NOT repeat the request without modifications"}
+<html>
+<head><title>504 Gateway Time-out</title></head>
+<body>
+<center><h1>504 Gateway Time-out</h1></center>
+<hr><center>nginx/1.18.0</center>
+</body>
+</html>

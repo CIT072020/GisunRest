@@ -25,7 +25,8 @@ type
     Oper     : TOperation;
     ResPath  : string;
     MsgType  : string;
-    ActFun   : TActPostBoby;
+    //ActFun   : TActPostBoby;
+    MakeBody : TMakePostBoby;
     Method   : string;
   end;
 
@@ -122,7 +123,7 @@ implementation
 
 
 
-// Создание запроса к REST-серверу
+// Конфиг запроса к REST-серверу
 constructor TRestConfig.Create(DefH : TStringList = nil);
 begin
   inherited Create;
@@ -132,7 +133,7 @@ begin
     DefHeader := TStringList.Create;
 end;
 
-// Запрос к REST-серверу
+//
 destructor TRestConfig.Destroy;
 begin
   FreeAndNil(FDefHeader);
@@ -184,8 +185,9 @@ begin
       FActInf.ResPath := 'common/person-identif';
     akMarriage : begin
       FActInf.ResPath := 'zags/marriage-certificate';
-      //FActInf.ActFun := TActMarr.MarrDS2Json;
-      FActInf.ActFun := Marr2Json;
+
+      //FActInf.ActFun := Marr2Json;
+      FActInf.MakeBody := TActMarr.MarrDS2Json;
       end;
   end;
   Result := Self;
@@ -235,12 +237,22 @@ end;
 
 function TRestRequest.MakeCover(const MsgSrcCode : string; MsgTypeCode : string = QUERY_INFO; DSet : string = '[15]') : string;
 var
+  MsgT,
+  Agree,
   MsgId : string;
 begin
   Result := '';
   try
     MsgId := NewGUID;
-    Result := Format('"cover":{"message_id":"%s","message_type":{"code":"%s","type":-2},"message_source":{"code":"%s","type":80},%s,"dataset":%s}', [MsgId, MsgTypeCode, MsgSrcCode, MakeAgreement, DSet]);
+    MsgT  := FormatDateTime('yyyy-MM-dd"T"HH:mm:ss.SSS', Now);
+    //MsgT  := DateTimeToStr(Now);
+    if (FActInf.Oper = opGet) then begin
+      Agree := Format(',%s,"dataset":%s}', [MakeAgreement, DSet]);
+    end else begin
+      Agree := '';
+    end;
+    //Result := Format('"cover":{"message_id":"%s","message_type":{"code":"%s","type":-2},"message_source":{"code":"%s","type":80},%s,"dataset":%s}', [MsgId, MsgTypeCode, MsgSrcCode, MakeAgreement, DSet]);
+    Result := Format('"cover":{"message_id":"%s","message_type":{"code":"%s","type":-2},"message_time":"%s","message_source":{"code":"%s","type":80}%s}', [MsgId, MsgTypeCode, MsgT, MsgSrcCode, Agree]);
   except
   end;
 end;
@@ -250,7 +262,7 @@ function TRestRequest.MakeBody4Post(const InDS: TDataSet) : string;
 begin
   Result := '';
   try
-    Result := FActInf.ActFun(InDS);
+    Result := FActInf.MakeBody(InDS);
   except
   end;
 end;
