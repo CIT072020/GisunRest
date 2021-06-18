@@ -199,17 +199,29 @@ end;
 // Свидетельство о браке для одного супруга
 class function TActMarr.MarrDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string) : string;
 var
+  sF,
+  sD,
   s : string;
 begin
-  s := Format('"%s":{%s,' +
-         '"birth_place":{%s},' +
-         '"citizenship":%s,' +
-         '"status":%s},' +
-         '"old_last_name":"%s"', [DS2Json(IDS,Pfx),
-           TDS2JSON.MakeBirthPlace(IDS, Pfx),
-           TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
-           TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18),
-           IDS.FieldByName(Pfx + 'FAMILIA_OLD').AsString]);
+
+  sF := '"%s":{%s,' +
+        '"birth_place":{%s},' +
+        '"citizenship":%s,' +
+        '"status":%s},' +
+        '"old_last_name":"%s"';
+  sD := ObjName + DS2Json(IDS,Pfx);
+  sD := sD + TDS2JSON.MakeBirthPlace(IDS, Pfx);
+  sD := sD + TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8);
+  sD := sD + TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18);
+  sD := sD + IDS.FieldByName(Pfx + 'FAMILIA_OLD').AsString;
+
+  s := Format(sF,
+    [ObjName,
+     DS2Json(IDS,Pfx),
+     TDS2JSON.MakeBirthPlace(IDS, Pfx),
+     TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
+     TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18),
+     IDS.FieldByName(Pfx + 'FAMILIA_OLD').AsString]);
   Result := s;
 end;
 
@@ -256,8 +268,10 @@ var
   r,
   s : string;
 begin
-  s := '"mrg_cert_data":{"bride":{' +
-    MarrDS2JsonOne(IDS, 'ONA_', 'bride_data') + '},' +
+  s := '"mrg_cert_data":{' +
+    '"bride":{' +
+    MarrDS2JsonOne(IDS, 'ONA_', 'bride_data') +
+    '},"bridegroom":{' +
     MarrDS2JsonOne(IDS, 'ON_', 'bridegroom_data') + '},';
 
   s := s + '"mrg_act_data":{' +

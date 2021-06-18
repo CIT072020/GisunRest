@@ -61,6 +61,7 @@ type
     btnGetUN: TButton;
     btnGetPersData: TButton;
     btnPostMarr: TButton;
+    btnPostBirth: TButton;
     procedure btnGetActualClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -68,6 +69,7 @@ type
     procedure btnGetNSIClick(Sender: TObject);
     procedure btnGetPersDataClick(Sender: TObject);
     procedure btnGetUNClick(Sender: TObject);
+    procedure btnPostBirthClick(Sender: TObject);
     procedure btnPostDocClick(Sender: TObject);
     procedure btnPostMarrClick(Sender: TObject);
   private
@@ -368,6 +370,83 @@ begin
   r := RegInt.Get(akGetPersonIdentif, QUERY_INFO, d, dsOut, dsErr);
 end;
 
+procedure TForm1.btnPostBirthClick(Sender: TObject);
+var
+  i : Integer;
+  s : string;
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  r : TRestResponse;
+begin
+  d := RegInt.CreateInputTable(akBirth, opPost);
+  d.Append;
+
+  d['ONA_IDENTIF']   := '7172252A001PB3';
+  d['ONA_FAMILIA']   := 'СТАНКЕВИЧ';
+  d['ONA_NAME']      := 'СВЕТЛАНА';
+  d['ONA_OTCH']      := 'ПЕТРОВНА';
+  d['ONA_FAMILIA_B'] := 'СТАНКЕВІЧ';
+  d['ONA_NAME_B']    := 'СВЯТЛАНА';
+  d['ONA_OTCH_B']    := 'ПЯТРОЎНА';
+  d['ONA_POL']       := 'F';
+  d['ONA_DATER']     := '20120511';
+
+  d['ONA_GRAJD']     := 'BLR';
+  d['ONA_STATUS']    := '1';
+
+  d['ONA_GOSUD']    := 'BLR';
+  d['ONA_OBL']      := 'Минская';
+  d['ONA_OBL_B']    := 'Мiнская';
+  d['ONA_RAION']    := 'Узденский';
+  d['ONA_RAION_B']  := 'Узденскi';
+  d['ONA_TIP_GOROD'] := '11100001';
+  d['ONA_GOROD']    := 'Брест';
+  d['ONA_GOROD_B']  := 'Брэст';
+
+  d['ONA_FAMILIA_OLD'] := 'RERE';
+
+  d['ON_IDENTIF']   := '3010182A132PB7';
+  d['ON_FAMILIA']   := 'ЮРЧЕНКО';
+  d['ON_NAME']      := 'НИКОЛАЙ';
+  d['ON_OTCH']      := 'НИКОЛАЕВИЧ';
+  d['ON_FAMILIA_B'] := 'ЮРЧАНКА';
+  d['ON_NAME_B']    := 'МІКАЛАЙ';
+  d['ON_OTCH_B']    := 'МІКАЛАЕВІЧ';
+  d['ON_POL']       := 'M';
+  d['ON_DATER']     := '20120511';
+
+  d['ON_GRAJD']     := 'BLR';
+  d['ON_STATUS']    := '1';
+
+  d['ON_GOSUD']   := 'BLR';
+  d['ON_OBL']     := 'Минская';
+  d['ON_OBL_B']   := 'Мiнская';
+  d['ON_RAION']   := 'Узденский';
+  d['ON_RAION_B'] := 'Узденскi';
+  d['ON_TIP_GOROD'] := '11100001';
+  d['ON_GOROD']   := 'Брест';
+  d['ON_GOROD_B'] := 'Брэст';
+
+  d['ON_FAMILIA_OLD'] := '---';
+
+  d['ACT_TIP']       := '0300';
+  d['ACT_ORGAN']     := '617';
+  d['ACT_ORGAN_LEX'] := 'ЗАГС районный';
+  d['ACT_DATE']      := StrToDate('08.08.2013');
+  d['ACT_NOMER']     := '12';
+
+  d['DOC_TIP']       := '54100006';
+  d['DOC_ORGAN']     := '617';
+  d['DOC_DATE']      := StrToDate('11.08.2013');
+  d['DOC_SERIA']     := 'I-АЛ';
+  d['DOC_NOMER']     := '0221734';
+
+  d.Post;
+  s := NewGUID;
+  r := RegInt.Post(s, akBirth, '0100', d, dsErr);
+end;
+
 procedure TForm1.btnPostMarrClick(Sender: TObject);
 var
   i : Integer;
@@ -402,13 +481,15 @@ begin
   d['ONA_GOROD']    := 'Брест';
   d['ONA_GOROD_B']  := 'Брэст';
 
+  d['ONA_FAMILIA_OLD'] := 'RERE';
+
   d['ON_IDENTIF']   := '3010182A132PB7';
   d['ON_FAMILIA']   := 'ЮРЧЕНКО';
   d['ON_NAME']      := 'НИКОЛАЙ';
   d['ON_OTCH']      := 'НИКОЛАЕВИЧ';
   d['ON_FAMILIA_B'] := 'ЮРЧАНКА';
-  d['ON_NAME_B']    := 'МIКАЛАЙ';
-  d['ON_OTCH_B']    := 'МIКАЛАЕВIЧ';
+  d['ON_NAME_B']    := 'МІКАЛАЙ';
+  d['ON_OTCH_B']    := 'МІКАЛАЕВІЧ';
   d['ON_POL']       := 'M';
   d['ON_DATER']     := '20120511';
 
@@ -424,6 +505,7 @@ begin
   d['ON_GOROD']   := 'Брест';
   d['ON_GOROD_B'] := 'Брэст';
 
+  d['ON_FAMILIA_OLD'] := '---';
 
   d['ACT_TIP']       := '0300';
   d['ACT_ORGAN']     := '617';

@@ -279,19 +279,6 @@ begin
 end;
 
 
-// В качестве ответа может свалиться XML
-function IsJSON(const s: string): Boolean;
-var
-  l: Integer;
-begin
-  l := Length(s);
-  if (l > 2) AND (LeftStr(s, 1) = '{') AND (RightStr(s, 1) = '}') then
-    Result := True
-  else
-    Result := False;
-end;
-
-
 // Установка кодов возврата после HTTPSend
 function TROCExchg.SetRetCode(Ret: Boolean; var sErr: string): integer;
 var

@@ -97,6 +97,8 @@ uses
 
 constructor TRegIntX.Create(MessageSource: string; Ini : TSasaIniFile = nil);
 var
+  IsOAIS : Boolean;
+  SecMode : string;
   i : Integer;
   DefH : TStringList;
 begin
@@ -106,11 +108,14 @@ begin
   DefH.Add('Reg-auth-username:PASSPORT_USER');
   DefH.Add('Reg-auth-password:user_password');
   Config := TRestConfig.Create(DefH);
+  Config.Secure.UseOAIS := False;
   FIni := Ini;
   FExchMode := EM_SOAP;
   if (Assigned(Ini)) then begin
     FExchMode := Ini.ReadInteger(SCT_REST, 'EXCHG_MODE', EM_SOAP);
     Config.BasePath := Ini.ReadString(SCT_REST, 'BASE_URI', '');
+    SecMode := Ini.ReadString(SCT_REST, 'SECURE_MODE', SECURE_OAIS);
+    Config.Secure.UseOAIS := Iif(SecMode = SECURE_OAIS, True, False);
   end;
   Config.Organ := MessageSource;
   ApiClient := TRestClient.Create;
@@ -693,6 +698,8 @@ begin
 
   // Формирование тела запроса
   Req.MakeBody(InDS);
+
+
 
   Result := ApiClient.CallApi(Req);
 end;

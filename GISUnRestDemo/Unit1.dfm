@@ -367,6 +367,15 @@ object Form1: TForm1
     TabOrder = 24
     OnClick = btnPostMarrClick
   end
+  object btnPostBirth: TButton
+    Left = 162
+    Top = 659
+    Width = 119
+    Height = 25
+    Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1088#1086#1078#1076'.'
+    TabOrder = 25
+    OnClick = btnPostBirthClick
+  end
   object DataSource1: TDataSource
     Left = 664
     Top = 74

@@ -7,6 +7,7 @@ uses
   SysUtils,
   DB,
   {$IFDEF SYNA} httpsend,  {$ENDIF}
+  superobject,
   FuncPr,
   mRegInt,
   uGisun,
@@ -14,8 +15,42 @@ uses
   uUNDTO
   ;
 
+const
+  SECURE_TODES = 'SEC_TODES';
+  SECURE_OAIS  = 'SEC_OAIS';
+
 type
-  TRestConfig = class;
+  TSecure = class;
+
+  // Настройки обращений к ресурсу, предоставляющему REST-сервисы
+  TRestConfig = class
+  private
+    FBasePath : string;
+    FDefHeader : TStringList;
+    FOrgan     : string;
+    FSec : TSecure;
+  public
+    property BasePath : string read FBasePath write FBasePath;
+    // Заголовок по-умолчанию
+    property DefHeader : TStringList read FDefHeader write FDefHeader;
+    // Код сельсовета
+    property Organ : string read FOrgan write FOrgan;
+    property Secure : TSecure read FSec write FSec;
+
+    constructor Create(DefH : TStringList = nil);
+    destructor Destroy;
+  end;
+
+  // Параметры защищенного обмена
+  TSecure = class
+  private
+  public
+    UseOAIS : Boolean;
+    User : string;
+    Pass : string;
+
+
+  end;
 
   // Соответствие типов документов методам и параметрам HTTP-запросов
   TActInf = class
@@ -25,7 +60,6 @@ type
     Oper     : TOperation;
     ResPath  : string;
     MsgType  : string;
-    //ActFun   : TActPostBoby;
     MakeBody : TMakePostBoby;
     Method   : string;
   end;
@@ -34,6 +68,8 @@ type
   TRestRequest = class
   private
     FCfg    : TRestConfig;
+    // Параметры каждого запроса
+    FActInf   : TActInf;
     FMethod : string;
     FFullURL : string;
     // Summary:
@@ -57,7 +93,6 @@ type
     // Remarks:
     //     This number is incremented each time the RestClient sends the request.
     FAttempts : integer;
-    FActInf   : TActInf;
     FPersDataDTO : TPersDataDTO;
 
     function MakeAgreement : string;
@@ -85,6 +120,9 @@ type
     FRetAsSOAP : TRequestResult;
     FRetData : TMemoryStream;
     FRetCode : Integer;
+    FRetMsg  : string;
+    // объект response из ответа сервера
+    FSupObj  : ISuperObject;
   public
     property RetAsSOAP : TRequestResult read FRetAsSOAP write FRetAsSOAP;
   end;
@@ -94,6 +132,8 @@ type
   private
     FHTTP   : THTTPSend;
 
+    procedure SecReq(Req : TRestRequest; var URL : string; var Head : TStringList; var HTTPDoc : TStringStream);
+    procedure SetRetData(const Meth, URL : string; Resp : TRestResponse);
   public
     function CallApi(Req : TRestRequest) : TRestResponse;
 
@@ -101,42 +141,22 @@ type
     destructor Destroy;
   end;
 
-  // Настройки обращений к ресурсу, предоставляющему REST-сервисы
-  TRestConfig = class
-  private
-    FBasePath : string;
-    FDefHeader : TStringList;
-    FOrgan     : string;
-  public
-    property BasePath : string read FBasePath write FBasePath;
-    property DefHeader : TStringList read FDefHeader write FDefHeader;
-    property Organ : string read FOrgan write FOrgan;
-
-    constructor Create(DefH : TStringList = nil);
-    destructor Destroy;
-  end;
 
 
 implementation
-
-
-
-
 
 // Конфиг запроса к REST-серверу
 constructor TRestConfig.Create(DefH : TStringList = nil);
 begin
   inherited Create;
-  if (Assigned(DefH)) then
-    DefHeader := DefH
-  else
-    DefHeader := TStringList.Create;
+  DefHeader := DefH;
+  Secure := TSecure.Create;
 end;
 
 //
 destructor TRestConfig.Destroy;
 begin
-  FreeAndNil(FDefHeader);
+  FreeAndNil(FSec);
   inherited;
 end;
 
@@ -147,7 +167,8 @@ begin
   inherited Create;
   FCfg := Cfg;
   FHeader := TStringList.Create;
-  FHeader.AddStrings(Cfg.DefHeader);
+  if (Assigned(Cfg.DefHeader)) then
+    FHeader.AddStrings(Cfg.DefHeader);
   FActInf := TActInf.Create;
   FPersDataDTO := TPersDataDTO.Create;
   FAttempts := 0;
@@ -159,6 +180,23 @@ begin
   FreeAndNil(FActInf);
   FreeAndNil(FPersDataDTO);
   FreeAndNil(FHeader);
+  inherited;
+end;
+
+// Клиент для вызова API (REST-Full)
+constructor TRestClient.Create;
+var
+  i : Integer;
+begin
+  inherited;
+  FHTTP := THTTPSend.Create;
+  FHTTP.Protocol := '1.1';
+end;
+
+// Клиент для вызова API (REST-Full)
+destructor TRestClient.Destroy;
+begin
+  FreeAndNil(FHTTP);
   inherited;
 end;
 
@@ -184,9 +222,8 @@ begin
     akGetPersonIdentif:
       FActInf.ResPath := 'common/person-identif';
     akMarriage : begin
-      FActInf.ResPath := 'zags/marriage-certificate';
-
-      //FActInf.ActFun := Marr2Json;
+      FActInf.ResPath  := 'zags/marriage-certificate';
+      FActInf.MsgType  := '0300';
       FActInf.MakeBody := TActMarr.MarrDS2Json;
       end;
   end;
@@ -352,53 +389,137 @@ end;
 
 
 
-// Клиент для вызова API (REST-Full)
-constructor TRestClient.Create;
+
+procedure TRestClient.SecReq(Req : TRestRequest; var URL : string; var Head : TStringList; var HTTPDoc : TStringStream);
 var
-  i : Integer;
+  sUTF : UTF8String;
 begin
-  inherited;
-  FHTTP := THTTPSend.Create;
+  URL := Req.FFullURL;
+  Head := TStringList.Create;
+  Head.AddStrings(Req.FHeader);
+  sUTF := AnsiToUtf8(Req.Body);
+
+  if (Req.FCfg.Secure.UseOAIS = True) then begin
+
+
+  end else begin
+
+  end;
+  HTTPDoc := TStringStream.Create(sUTF);
+
 end;
 
-// Клиент для вызова API (REST-Full)
-destructor TRestClient.Destroy;
+
+// Установка кодов возврата после HTTPSend
+procedure TRestClient.SetRetData(const Meth, URL: string; Resp: TRestResponse);
+var
+  IsGet, Ret: Boolean;
+  nErr: Integer;
+  sErr: string;
+  ErrList, SOErr: ISuperObject;
+  StreamDoc: TStringStream;
 begin
-  FreeAndNil(FHTTP);
-  inherited;
+  sErr := '';
+  IsGet := Iif(Resp.FRestReq.FActInf.Oper = opGet, True, False);
+
+  Ret := FHTTP.HTTPMethod(Meth, URL);
+  FHTTP.Document.SaveToFile('BodyUNResp');
+  try
+    if (Ret = True) then begin
+      nErr := FHTTP.ResultCode;
+      if (IsGet) then begin
+      // если все хорошо, должен прийти 200
+        if (FHTTP.ResultCode = 200) then
+          nErr := 0;
+
+      end
+      else begin
+      // если все хорошо, должен прийти 201
+        if (FHTTP.ResultCode = 201) then
+          nErr := 0;
+
+      end;
+
+    // JSON-ответ должен быть всегда
+
+      if (nErr = 0) then begin
+          // пока все хорошо
+        StreamDoc := TStringStream.Create('');
+        try
+          StreamDoc.Seek(0, soBeginning);
+          StreamDoc.CopyFrom(FHTTP.Document, 0);
+          if (IsJSON(StreamDoc.DataString) = True) then begin
+            SOErr := SO(Utf8Decode(StreamDoc.DataString));
+            if (IsGet) then begin
+              Resp.FSupObj := SOErr.O['response'];
+
+            end
+            else begin
+              // Даже для 201 возможны ошибочные данные
+              ErrList := SOErr.O['error_list'];
+              if (Assigned(ErrList) and (Not ErrList.IsType(stNull))) then begin
+                nErr := 300;
+
+
+              end;
+
+            end;
+
+          end
+          else begin
+          // скорее всего, XML свалился вместо JSON
+            sErr := FHTTP.ResultString;
+            raise Exception.Create(sErr);
+          end;
+        finally
+          StreamDoc.Free;
+        end;
+      end
+      else begin
+        // HTTP-error, Что-то не так с данными из запроса
+
+      end;
+
+    Resp.FRetAsSOAP := rrOk;
+
+    end
+    else begin
+      // Какая-то сетевая проблема
+      nErr := FHTTP.sock.LastError;
+      sErr := FHTTP.sock.LastErrorDesc;
+      raise Exception.Create(sErr);
+    end;
+  except
+    on E: Exception do begin
+      if (sErr <> '') then
+        sErr := E.Message;
+    end;
+  end;
+    Resp.FRetCode   := nErr;
+    Resp.FRetMsg    := sErr;
+    Resp.FRetData   := FHTTP.Document;
 end;
-
-
-
-
-
-
-
 
 function TRestClient.CallApi(Req : TRestRequest) : TRestResponse;
 var
   Ret : Boolean;
+  sURL : string;
   sUTF : UTF8String;
+  SecHead : TStringList;
   DocStream : TStringStream;
 begin
   Result := TRestResponse.Create;
   FHTTP.Clear;
-  FHTTP.Headers.AddStrings(Req.FHeader);
   FHTTP.MimeType := 'application/json;charset=UTF-8';
 
-  sUTF := AnsiToUtf8(Req.Body);
-  DocStream := TStringStream.Create(sUTF);
-  MemoWrite('BodyUN', sUTF);
-
+  SecReq(Req, sURL, SecHead, DocStream);
+  FHTTP.Headers.AddStrings(SecHead);
   FHTTP.Document.LoadFromStream(DocStream);
-  Ret := FHTTP.HTTPMethod('POST', Req.FFullURL);
-  if (Ret = True) then begin
-    Result.FRetAsSOAP := rrOk;
-    Result.FRetCode   := 0;
-    Result.FRetAsSOAP := rrOk;
-    Result.FRetData   := FHTTP.Document;
-    FHTTP.Document.SaveToFile('BodyUNResp');
-  end;
+
+  FHTTP.Document.SaveToFile('BodyUN');
+
+  Result.FRestReq := Req;
+  SetRetData('POST', sURL, Result);
 end;
 
 
