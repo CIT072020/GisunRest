@@ -376,6 +376,24 @@ object Form1: TForm1
     TabOrder = 25
     OnClick = btnPostBirthClick
   end
+  object btnPostAffil: TButton
+    Left = 162
+    Top = 695
+    Width = 119
+    Height = 25
+    Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1086#1090#1094#1086#1074#1089#1090#1074#1072
+    TabOrder = 26
+    OnClick = btnPostAffilClick
+  end
+  object btnPostDecease: TButton
+    Left = 162
+    Top = 732
+    Width = 119
+    Height = 25
+    Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1089#1084#1077#1088#1090#1080
+    TabOrder = 27
+    OnClick = btnPostDeceaseClick
+  end
   object DataSource1: TDataSource
     Left = 664
     Top = 74

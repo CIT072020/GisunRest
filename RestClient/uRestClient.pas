@@ -221,6 +221,18 @@ begin
       end;
     akGetPersonIdentif:
       FActInf.ResPath := 'common/person-identif';
+    akBirth : begin
+    // Свидетельство о рождении
+      FActInf.ResPath  := 'zags/birth-certificate';
+      FActInf.MsgType  := '0160';
+      FActInf.MakeBody := TActBirth.BirthDS2Json;
+      end;
+    akAffiliation : begin
+    // Свидетельство о рождении
+      FActInf.ResPath  := 'zags/affiliation-certificate';
+      FActInf.MsgType  := '0200';
+      FActInf.MakeBody := TActAffil.AffilDS2Json;
+      end;
     akMarriage : begin
       FActInf.ResPath  := 'zags/marriage-certificate';
       FActInf.MsgType  := '0300';

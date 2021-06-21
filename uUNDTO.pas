@@ -44,7 +44,7 @@ type
   TDS2JSON = class
   private
   public
-    class function MakeBirthPlace(IDS : TDataSet; Pfx : string = '') : string;
+    class function MakeBirthPlace(IDS : TDataSet; Pfx : string = ''; Mode : integer = 1) : string;
   end;
 
 
@@ -61,6 +61,22 @@ type
     class function DS2Json(IDS: TDataSet; Pfx: string = ''): string;
   end;
 
+  // Свидетельство о рождении
+  TActBirth = class(TPersDataMin)
+  private
+    class function BirthDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
+  public
+    class function BirthDS2Json(IDS : TDataSet) : string;
+  end;
+
+  // Свидетельство об установлении отцовства
+  TActAffil = class(TPersDataMin)
+  private
+    class function AffilDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
+  public
+    class function AffilDS2Json(IDS : TDataSet) : string;
+  end;
+
   // Свидетельство о браке
   TActMarr = class(TPersDataMin)
   private
@@ -68,6 +84,14 @@ type
   public
     class function MarrDS2Json(IDS : TDataSet) : string;
   end;
+// Свидетельство о смерти
+  TActDecease = class(TPersDataMin)
+  private
+    class function DeceaseDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
+  public
+    class function DeceaseDS2Json(IDS : TDataSet) : string;
+  end;
+
 
 
 
@@ -147,17 +171,25 @@ end;
 
 
 // Место рождения
-class function TDS2JSON.MakeBirthPlace(IDS : TDataSet; Pfx : string = '') : string;
+// 1 - использовать By, 2 - только русский
+class function TDS2JSON.MakeBirthPlace(IDS : TDataSet; Pfx : string = ''; Mode : integer = 1) : string;
 var
   s : string;
 begin
   s := '"country_b":' +
     TClassifier.SetCT(IDS.FieldByName(Pfx + 'GOSUD').AsString, 8);
-  s := s + Format(',"area_b":"%s","area_b_bel":"%s","region_b":"%s","region_b_bel":"%s",',
-    [IDS.FieldByName(Pfx + 'OBL').AsString, IDS.FieldByName(Pfx + 'OBL_B').AsString, IDS.FieldByName(Pfx + 'RAION').AsString, IDS.FieldByName(Pfx + 'RAION_B').AsString]);
+  s := s + Format(',"area_b":"%s","region_b":"%s","city_b":"%s",',
+    [IDS.FieldByName(Pfx + 'OBL').AsString,
+     IDS.FieldByName(Pfx + 'RAION').AsString,
+     IDS.FieldByName(Pfx + 'GOROD').AsString]);
+
+  if (Mode = 1) then
+    s := s + Format('"area_b_bel":"%s","region_b_bel":"%s","city_b_bel":"%s",',
+      [IDS.FieldByName(Pfx + 'OBL_B').AsString,
+       IDS.FieldByName(Pfx + 'RAION_B').AsString,
+       IDS.FieldByName(Pfx + 'GOROD_B').AsString]);
+
   s := s + '"type_city_b":' + TClassifier.SetCT(IDS.FieldByName(Pfx + 'TIP_GOROD').AsString, 68);
-  s := s + Format(',"city_b":"%s","city_b_bel":"%s"',
-    [IDS.FieldByName(Pfx + 'GOROD').AsString, IDS.FieldByName(Pfx + 'GOROD_B').AsString]);
   Result := s;
 end;
 
@@ -196,6 +228,126 @@ begin
 end;
 
 
+
+// Свидетельство о рождении (ребенок или родитель)
+class function TActBirth.BirthDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
+var
+  sF,
+  sD,
+  s : string;
+begin
+
+  sF := '"%s":{%s,' +
+        '"birth_place":{%s},' +
+        '"citizenship":%s,' +
+        '"status":%s}';
+(*
+  sD := ObjName + DS2Json(IDS,Pfx);
+  sD := sD + TDS2JSON.MakeBirthPlace(IDS, Pfx);
+  sD := sD + TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8);
+  sD := sD + TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18);
+  sD := sD + IDS.FieldByName(Pfx + 'FAMILIA_OLD').AsString;
+*)
+  s := Format(sF,
+    [ObjName,
+     DS2Json(IDS,Pfx),
+     TDS2JSON.MakeBirthPlace(IDS, Pfx, Mode),
+     TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
+     TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18)]);
+  Result := s;
+end;
+
+
+// Свидетельство о рождении
+class function TActBirth.BirthDS2Json(IDS : TDataSet) : string;
+var
+  org,
+  r,
+  s : string;
+begin
+  s := '"birth_cert_data":{' +
+    BirthDS2JsonOne(IDS, '', 'child_data') + ',';
+  s := s +
+    BirthDS2JsonOne(IDS, 'ONA_', 'mother_data', 2) + ',';
+  s := s +
+    BirthDS2JsonOne(IDS, 'ON_', 'father_data', 2) + ',';
+
+  s := s + '"birth_act_data":{' +
+               '"act_type":' + TClassifier.SetCT(IDS.FieldByName('ACT_TIP').AsString, 82) + ',';
+  org := IDS.FieldByName('ACT_ORGAN').AsString;
+  org := Iif( StrToInt(org) > 0, TClassifier.SetCT(org, 80), TClassifier.SetCTL('', 80, IDS.FieldByName('ACT_ORGAN_LEX').AsString) );
+  s := s + '"authority":' + org + ',';
+               r := Format('"date":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('ACT_DATE').AsDateTime) ]);
+               s := s + r;
+               r := Format('"number":"%s"},', [ IDS.FieldByName('ACT_NOMER').AsString ]);
+               s := s + r;
+  s := s + '"birth_certificate_data":{"document":{' +
+               '"document_type":' + TClassifier.SetCT('54100005', 37) + ',' +
+               '"authority":' + TClassifier.SetCT(IDS.FieldByName('DOC_ORGAN').AsString, 80) + ',' +
+               Format('"date_of_issue":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('DOC_DATE').AsDateTime) ]) +
+               Format('"series":"%s",', [ IDS.FieldByName('DOC_SERIA').AsString ]) +
+               Format('"number":"%s"}}}', [ IDS.FieldByName('DOC_NOMER').AsString ]);
+  Result := s;
+end;
+
+
+// Свидетельство об установлении отцовства
+class function TActAffil.AffilDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
+var
+  sF,
+  sD,
+  s : string;
+begin
+
+  sF := '"%s":{%s,' +
+        '"birth_place":{%s},' +
+        '"citizenship":%s,' +
+        '"status":%s}';
+
+  s := Format(sF,
+    [ObjName,
+     DS2Json(IDS,Pfx),
+     TDS2JSON.MakeBirthPlace(IDS, Pfx, Mode),
+     TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
+     TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18)]);
+  Result := s;
+end;
+
+
+// Свидетельство об установлении отцовства
+class function TActAffil.AffilDS2Json(IDS : TDataSet) : string;
+var
+  org,
+  r,
+  s : string;
+begin
+  s := '"birth_cert_data":{' +
+    AffilDS2JsonOne(IDS, '', 'child_data') + ',';
+  s := s +
+    AffilDS2JsonOne(IDS, 'ONA_', 'mother_data', 2) + ',';
+  s := s +
+    AffilDS2JsonOne(IDS, 'ON_', 'father_data', 2) + ',';
+
+  s := s + '"birth_act_data":{' +
+               '"act_type":' + TClassifier.SetCT(IDS.FieldByName('ACT_TIP').AsString, 82) + ',';
+  org := IDS.FieldByName('ACT_ORGAN').AsString;
+  org := Iif( StrToInt(org) > 0, TClassifier.SetCT(org, 80), TClassifier.SetCTL('', 80, IDS.FieldByName('ACT_ORGAN_LEX').AsString) );
+  s := s + '"authority":' + org + ',';
+               r := Format('"date":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('ACT_DATE').AsDateTime) ]);
+               s := s + r;
+               r := Format('"number":"%s"},', [ IDS.FieldByName('ACT_NOMER').AsString ]);
+               s := s + r;
+  s := s + '"birth_certificate_data":{"document":{' +
+               '"document_type":' + TClassifier.SetCT('54100005', 37) + ',' +
+               '"authority":' + TClassifier.SetCT(IDS.FieldByName('DOC_ORGAN').AsString, 80) + ',' +
+               Format('"date_of_issue":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('DOC_DATE').AsDateTime) ]) +
+               Format('"series":"%s",', [ IDS.FieldByName('DOC_SERIA').AsString ]) +
+               Format('"number":"%s"}}}', [ IDS.FieldByName('DOC_NOMER').AsString ]);
+  Result := s;
+end;
+
+
+
 // Свидетельство о браке для одного супруга
 class function TActMarr.MarrDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string) : string;
 var
@@ -209,12 +361,13 @@ begin
         '"citizenship":%s,' +
         '"status":%s},' +
         '"old_last_name":"%s"';
+(*
   sD := ObjName + DS2Json(IDS,Pfx);
   sD := sD + TDS2JSON.MakeBirthPlace(IDS, Pfx);
   sD := sD + TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8);
   sD := sD + TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18);
   sD := sD + IDS.FieldByName(Pfx + 'FAMILIA_OLD').AsString;
-
+*)
   s := Format(sF,
     [ObjName,
      DS2Json(IDS,Pfx),
@@ -225,41 +378,6 @@ begin
   Result := s;
 end;
 
-(*
-// Свидетельство о браке
-function Marr2Json(IDS : TDataSet) : string;
-var
-  org,
-  r,
-  s : string;
-begin
-  s := '"mrg_cert_data":{"bride":{';
-  s := s + '"bride_data":{' + TPersDataMin.DS2Json(IDS, 'ONA_');
-
-  s := s + ',' +
-               '"status":' + TClassifier.SetCT('1', -18) + '}},';
-  s := s + '"bridegroom":{' +
-           '"bridegroom_data":{' + TPersDataMin.DS2Json(IDS, 'ON_') + ',' +
-
-               '"status":' + TClassifier.SetCT('1', -18) + '}},';
-  s := s + '"mrg_act_data":{' +
-               '"act_type":' + TClassifier.SetCT(IDS.FieldByName('ACT_TIP').AsString, 82) + ',';
-  org := IDS.FieldByName('ACT_ORGAN').AsString;
-  org := Iif( StrToInt(org) > 0, TClassifier.SetCT(org, 80), TClassifier.SetCTL('', 80, IDS.FieldByName('ACT_ORGAN_LEX').AsString) );
-  s := s + '"authority":' + org + ',';
-               r := Format('"date":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('ACT_DATE').AsDateTime) ]);
-               s := s + r;
-               r := Format('"number":"%s"},', [ IDS.FieldByName('ACT_NOMER').AsString ]);
-               s := s + r;
-  s := s + '"mrg_certificate_data":{' +
-               '"document_type":' + TClassifier.SetCT('54100006', 37) + ',' +
-               '"authority":' + TClassifier.SetCT(IDS.FieldByName('DOC_ORGAN').AsString, 80) + ',' +
-               Format('"date_of_issue":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('DOC_DATE').AsDateTime) ]) +
-               Format('"series":"%s",', [ IDS.FieldByName('DOC_SERIA').AsString ]) +
-               Format('"number":"%s"}}', [ IDS.FieldByName('DOC_NOMER').AsString ]);
-  Result := s;
-end;
-*)
 
 // Свидетельство о браке
 class function TActMarr.MarrDS2Json(IDS : TDataSet) : string;
@@ -285,6 +403,62 @@ begin
                s := s + r;
   s := s + '"mrg_certificate_data":{"document":{' +
                '"document_type":' + TClassifier.SetCT('54100006', 37) + ',' +
+               '"authority":' + TClassifier.SetCT(IDS.FieldByName('DOC_ORGAN').AsString, 80) + ',' +
+               Format('"date_of_issue":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('DOC_DATE').AsDateTime) ]) +
+               Format('"series":"%s",', [ IDS.FieldByName('DOC_SERIA').AsString ]) +
+               Format('"number":"%s"}}}', [ IDS.FieldByName('DOC_NOMER').AsString ]);
+  Result := s;
+end;
+
+
+
+// Свидетельство о смерти
+class function TActDecease.DeceaseDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
+var
+  sF,
+  sD,
+  s : string;
+begin
+
+  sF := '"%s":{%s,' +
+        '"birth_place":{%s},' +
+        '"citizenship":%s,' +
+        '"status":%s}';
+
+  s := Format(sF,
+    [ObjName,
+     DS2Json(IDS,Pfx),
+     TDS2JSON.MakeBirthPlace(IDS, Pfx, Mode),
+     TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
+     TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18)]);
+  Result := s;
+end;
+
+// Свидетельство о смерти
+class function TActDecease.DeceaseDS2Json(IDS : TDataSet) : string;
+var
+  org,
+  r,
+  s : string;
+begin
+  s := '"birth_cert_data":{' +
+    DeceaseDS2JsonOne(IDS, '', 'child_data') + ',';
+  s := s +
+    DeceaseDS2JsonOne(IDS, 'ONA_', 'mother_data', 2) + ',';
+  s := s +
+    DeceaseDS2JsonOne(IDS, 'ON_', 'father_data', 2) + ',';
+
+  s := s + '"birth_act_data":{' +
+               '"act_type":' + TClassifier.SetCT(IDS.FieldByName('ACT_TIP').AsString, 82) + ',';
+  org := IDS.FieldByName('ACT_ORGAN').AsString;
+  org := Iif( StrToInt(org) > 0, TClassifier.SetCT(org, 80), TClassifier.SetCTL('', 80, IDS.FieldByName('ACT_ORGAN_LEX').AsString) );
+  s := s + '"authority":' + org + ',';
+               r := Format('"date":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('ACT_DATE').AsDateTime) ]);
+               s := s + r;
+               r := Format('"number":"%s"},', [ IDS.FieldByName('ACT_NOMER').AsString ]);
+               s := s + r;
+  s := s + '"birth_certificate_data":{"document":{' +
+               '"document_type":' + TClassifier.SetCT('54100005', 37) + ',' +
                '"authority":' + TClassifier.SetCT(IDS.FieldByName('DOC_ORGAN').AsString, 80) + ',' +
                Format('"date_of_issue":"%s",', [ FormatDateTime('yyyy-mm-dd', IDS.FieldByName('DOC_DATE').AsDateTime) ]) +
                Format('"series":"%s",', [ IDS.FieldByName('DOC_SERIA').AsString ]) +

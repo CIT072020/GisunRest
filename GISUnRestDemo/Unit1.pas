@@ -62,6 +62,8 @@ type
     btnGetPersData: TButton;
     btnPostMarr: TButton;
     btnPostBirth: TButton;
+    btnPostAffil: TButton;
+    btnPostDecease: TButton;
     procedure btnGetActualClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -69,7 +71,9 @@ type
     procedure btnGetNSIClick(Sender: TObject);
     procedure btnGetPersDataClick(Sender: TObject);
     procedure btnGetUNClick(Sender: TObject);
+    procedure btnPostAffilClick(Sender: TObject);
     procedure btnPostBirthClick(Sender: TObject);
+    procedure btnPostDeceaseClick(Sender: TObject);
     procedure btnPostDocClick(Sender: TObject);
     procedure btnPostMarrClick(Sender: TObject);
   private
@@ -370,6 +374,108 @@ begin
   r := RegInt.Get(akGetPersonIdentif, QUERY_INFO, d, dsOut, dsErr);
 end;
 
+// Установление отцовства
+procedure TForm1.btnPostAffilClick(Sender: TObject);
+var
+  i : Integer;
+  s : string;
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  r : TRestResponse;
+begin
+  d := RegInt.CreateInputTable(akAffiliation, opPost);
+  d.Append;
+
+  // ребенок
+  d['IDENTIF']       := '7027566A001PB8';
+  d['FAMILIA']       := 'ИВАНОВА';
+  d['NAME']          := 'ИНГА';
+  d['OTCH']          := 'ВИКТОРОВНА';
+  d['FAMILIA_B']     := 'ІВАНОВА';
+  d['NAME_B']        := 'ІНГА';
+  d['OTCH_B']        := 'ВІКТАРАЎНА';
+  d['POL']           := 'F';
+  d['DATER']         := '20130621';
+
+  d['GRAJD']     := 'BLR';
+  d['STATUS']    := '1';
+
+  d['GOSUD']    := 'BLR';
+  d['OBL']      := 'БРЕСТСКАЯ';
+  d['OBL_B']    := 'БРЭСЦКАЯ';
+  d['RAION']    := 'ВОЛОЖИНСКИй';
+  d['RAION_B']  := 'ВАЛОЖЫНСКІ';
+  d['TIP_GOROD'] := '11100002';
+  d['GOROD']    := 'Брест';
+  d['GOROD_B']  := 'Брэст';
+
+  d['K_ATE_R'] := '111000';
+
+  // мать
+  d['ONA_IDENTIF']   := '7310278A001PB3';
+  d['ONA_FAMILIA']   := 'ДЗИЧКОВСКАЯ';
+  d['ONA_NAME']      := 'АНАСТАСИЯ';
+  d['ONA_OTCH']      := 'ГЕОРГИЕВНА';
+  d['ONA_FAMILIA_B'] := 'ДЗІЧКОЎСКАЯ';
+  d['ONA_NAME_B']    := 'АНАСТАСІЯ';
+  d['ONA_OTCH_B']    := 'ГЕОРГІЕЎНА';
+  d['ONA_POL']       := 'F';
+  d['ONA_DATER']     := '19830909';
+
+  d['ONA_GRAJD']     := 'BLR';
+  d['ONA_STATUS']    := '1';
+
+  d['ONA_GOSUD']    := 'BLR';
+  d['ONA_OBL']      := 'Минская';
+  //d['ONA_OBL_B']    := 'Мiнская';
+  d['ONA_RAION']    := 'Узденский';
+  //d['ONA_RAION_B']  := 'Узденскi';
+  d['ONA_TIP_GOROD'] := '11100001';
+  d['ONA_GOROD']    := 'ГОМЕЛЬ';
+  //d['ONA_GOROD_B']  := 'ГОМЕЛЬ';
+
+  // отец
+  d['ON_IDENTIF']   := '3021285A031PB5';
+  d['ON_FAMILIA']   := 'ГРОМОВИЧ';
+  d['ON_NAME']      := 'ПАВЕЛ';
+  d['ON_OTCH']      := 'ИГОРЕВИЧ';
+  d['ON_FAMILIA_B'] := 'ГРАМОВІЧ';
+  d['ON_NAME_B']    := 'ПАВЕЛ';
+  d['ON_OTCH_B']    := 'ІГАРАВІЧ';
+  d['ON_POL']       := 'M';
+  d['ON_DATER']     := '19851202';
+
+  d['ON_GRAJD']     := 'BLR';
+  d['ON_STATUS']    := '4';
+
+  d['ON_GOSUD']   := 'BLR';
+  d['ON_OBL']     := 'Минская';
+  //d['ON_OBL_B']   := 'Мiнская';
+  d['ON_RAION']   := 'Узденский';
+  //d['ON_RAION_B'] := 'Узденскi';
+  d['ON_TIP_GOROD'] := '11100001';
+  d['ON_GOROD']   := 'МИНСК';
+  //d['ON_GOROD_B'] := 'МІНСК';
+
+  d['ACT_TIP']       := '0100';
+  d['ACT_ORGAN']     := '18108';
+  d['ACT_ORGAN_LEX'] := 'ЗАГС районный';
+  d['ACT_DATE']      := StrToDate('22.06.2013');
+  d['ACT_NOMER']     := '1243';
+
+  d['DOC_TIP']       := '54100005';
+  d['DOC_ORGAN']     := '18108';
+  d['DOC_DATE']      := StrToDate('23.06.2013');
+  d['DOC_SERIA']     := 'I-АЛ';
+  d['DOC_NOMER']     := '2222225';
+
+  d.Post;
+  s := NewGUID;
+  r := RegInt.Post(s, akAffiliation, '0200', d, dsErr);
+end;
+
+// Свидетельство о рождении
 procedure TForm1.btnPostBirthClick(Sender: TObject);
 var
   i : Integer;
@@ -382,71 +488,96 @@ begin
   d := RegInt.CreateInputTable(akBirth, opPost);
   d.Append;
 
-  d['ONA_IDENTIF']   := '7172252A001PB3';
-  d['ONA_FAMILIA']   := 'СТАНКЕВИЧ';
-  d['ONA_NAME']      := 'СВЕТЛАНА';
-  d['ONA_OTCH']      := 'ПЕТРОВНА';
-  d['ONA_FAMILIA_B'] := 'СТАНКЕВІЧ';
-  d['ONA_NAME_B']    := 'СВЯТЛАНА';
-  d['ONA_OTCH_B']    := 'ПЯТРОЎНА';
+  // ребенок
+  d['IDENTIF']       := '7027566A001PB8';
+  d['FAMILIA']       := 'ИВАНОВА';
+  d['NAME']          := 'ИНГА';
+  d['OTCH']          := 'ВИКТОРОВНА';
+  d['FAMILIA_B']     := 'ІВАНОВА';
+  d['NAME_B']        := 'ІНГА';
+  d['OTCH_B']        := 'ВІКТАРАЎНА';
+  d['POL']           := 'F';
+  d['DATER']         := '20130621';
+
+  d['GRAJD']     := 'BLR';
+  d['STATUS']    := '1';
+
+  d['GOSUD']    := 'BLR';
+  d['OBL']      := 'БРЕСТСКАЯ';
+  d['OBL_B']    := 'БРЭСЦКАЯ';
+  d['RAION']    := 'ВОЛОЖИНСКИй';
+  d['RAION_B']  := 'ВАЛОЖЫНСКІ';
+  d['TIP_GOROD'] := '11100002';
+  d['GOROD']    := 'Брест';
+  d['GOROD_B']  := 'Брэст';
+
+  d['K_ATE_R'] := '111000';
+
+  // мать
+  d['ONA_IDENTIF']   := '7310278A001PB3';
+  d['ONA_FAMILIA']   := 'ДЗИЧКОВСКАЯ';
+  d['ONA_NAME']      := 'АНАСТАСИЯ';
+  d['ONA_OTCH']      := 'ГЕОРГИЕВНА';
+  d['ONA_FAMILIA_B'] := 'ДЗІЧКОЎСКАЯ';
+  d['ONA_NAME_B']    := 'АНАСТАСІЯ';
+  d['ONA_OTCH_B']    := 'ГЕОРГІЕЎНА';
   d['ONA_POL']       := 'F';
-  d['ONA_DATER']     := '20120511';
+  d['ONA_DATER']     := '19830909';
 
   d['ONA_GRAJD']     := 'BLR';
   d['ONA_STATUS']    := '1';
 
   d['ONA_GOSUD']    := 'BLR';
   d['ONA_OBL']      := 'Минская';
-  d['ONA_OBL_B']    := 'Мiнская';
+  //d['ONA_OBL_B']    := 'Мiнская';
   d['ONA_RAION']    := 'Узденский';
-  d['ONA_RAION_B']  := 'Узденскi';
+  //d['ONA_RAION_B']  := 'Узденскi';
   d['ONA_TIP_GOROD'] := '11100001';
-  d['ONA_GOROD']    := 'Брест';
-  d['ONA_GOROD_B']  := 'Брэст';
+  d['ONA_GOROD']    := 'ГОМЕЛЬ';
+  //d['ONA_GOROD_B']  := 'ГОМЕЛЬ';
 
-  d['ONA_FAMILIA_OLD'] := 'RERE';
-
-  d['ON_IDENTIF']   := '3010182A132PB7';
-  d['ON_FAMILIA']   := 'ЮРЧЕНКО';
-  d['ON_NAME']      := 'НИКОЛАЙ';
-  d['ON_OTCH']      := 'НИКОЛАЕВИЧ';
-  d['ON_FAMILIA_B'] := 'ЮРЧАНКА';
-  d['ON_NAME_B']    := 'МІКАЛАЙ';
-  d['ON_OTCH_B']    := 'МІКАЛАЕВІЧ';
+  // отец
+  d['ON_IDENTIF']   := '3021285A031PB5';
+  d['ON_FAMILIA']   := 'ГРОМОВИЧ';
+  d['ON_NAME']      := 'ПАВЕЛ';
+  d['ON_OTCH']      := 'ИГОРЕВИЧ';
+  d['ON_FAMILIA_B'] := 'ГРАМОВІЧ';
+  d['ON_NAME_B']    := 'ПАВЕЛ';
+  d['ON_OTCH_B']    := 'ІГАРАВІЧ';
   d['ON_POL']       := 'M';
-  d['ON_DATER']     := '20120511';
+  d['ON_DATER']     := '19851202';
 
   d['ON_GRAJD']     := 'BLR';
-  d['ON_STATUS']    := '1';
+  d['ON_STATUS']    := '4';
 
   d['ON_GOSUD']   := 'BLR';
   d['ON_OBL']     := 'Минская';
-  d['ON_OBL_B']   := 'Мiнская';
+  //d['ON_OBL_B']   := 'Мiнская';
   d['ON_RAION']   := 'Узденский';
-  d['ON_RAION_B'] := 'Узденскi';
+  //d['ON_RAION_B'] := 'Узденскi';
   d['ON_TIP_GOROD'] := '11100001';
-  d['ON_GOROD']   := 'Брест';
-  d['ON_GOROD_B'] := 'Брэст';
+  d['ON_GOROD']   := 'МИНСК';
+  //d['ON_GOROD_B'] := 'МІНСК';
 
-  d['ON_FAMILIA_OLD'] := '---';
-
-  d['ACT_TIP']       := '0300';
-  d['ACT_ORGAN']     := '617';
+  d['ACT_TIP']       := '0100';
+  d['ACT_ORGAN']     := '18108';
   d['ACT_ORGAN_LEX'] := 'ЗАГС районный';
-  d['ACT_DATE']      := StrToDate('08.08.2013');
-  d['ACT_NOMER']     := '12';
+  d['ACT_DATE']      := StrToDate('22.06.2013');
+  d['ACT_NOMER']     := '1243';
 
-  d['DOC_TIP']       := '54100006';
-  d['DOC_ORGAN']     := '617';
-  d['DOC_DATE']      := StrToDate('11.08.2013');
+  d['DOC_TIP']       := '54100005';
+  d['DOC_ORGAN']     := '18108';
+  d['DOC_DATE']      := StrToDate('23.06.2013');
   d['DOC_SERIA']     := 'I-АЛ';
-  d['DOC_NOMER']     := '0221734';
+  d['DOC_NOMER']     := '2222225';
 
   d.Post;
   s := NewGUID;
-  r := RegInt.Post(s, akBirth, '0100', d, dsErr);
+  r := RegInt.Post(s, akBirth, '0160', d, dsErr);
 end;
 
+
+// Свидетельство о браке
 procedure TForm1.btnPostMarrClick(Sender: TObject);
 var
   i : Integer;
@@ -524,6 +655,106 @@ begin
   r := RegInt.Post(s, akMarriage, '0300', d, dsErr);
 end;
 
+// Свидетельство о смерти
+procedure TForm1.btnPostDeceaseClick(Sender: TObject);
+var
+  i : Integer;
+  s : string;
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  r : TRestResponse;
+begin
+  d := RegInt.CreateInputTable(akDecease, opPost);
+  d.Append;
+
+  // ребенок
+  d['IDENTIF']       := '7027566A001PB8';
+  d['FAMILIA']       := 'ИВАНОВА';
+  d['NAME']          := 'ИНГА';
+  d['OTCH']          := 'ВИКТОРОВНА';
+  d['FAMILIA_B']     := 'ІВАНОВА';
+  d['NAME_B']        := 'ІНГА';
+  d['OTCH_B']        := 'ВІКТАРАЎНА';
+  d['POL']           := 'F';
+  d['DATER']         := '20130621';
+
+  d['GRAJD']     := 'BLR';
+  d['STATUS']    := '1';
+
+  d['GOSUD']    := 'BLR';
+  d['OBL']      := 'БРЕСТСКАЯ';
+  d['OBL_B']    := 'БРЭСЦКАЯ';
+  d['RAION']    := 'ВОЛОЖИНСКИй';
+  d['RAION_B']  := 'ВАЛОЖЫНСКІ';
+  d['TIP_GOROD'] := '11100002';
+  d['GOROD']    := 'Брест';
+  d['GOROD_B']  := 'Брэст';
+
+  d['K_ATE_R'] := '111000';
+
+  // мать
+  d['ONA_IDENTIF']   := '7310278A001PB3';
+  d['ONA_FAMILIA']   := 'ДЗИЧКОВСКАЯ';
+  d['ONA_NAME']      := 'АНАСТАСИЯ';
+  d['ONA_OTCH']      := 'ГЕОРГИЕВНА';
+  d['ONA_FAMILIA_B'] := 'ДЗІЧКОЎСКАЯ';
+  d['ONA_NAME_B']    := 'АНАСТАСІЯ';
+  d['ONA_OTCH_B']    := 'ГЕОРГІЕЎНА';
+  d['ONA_POL']       := 'F';
+  d['ONA_DATER']     := '19830909';
+
+  d['ONA_GRAJD']     := 'BLR';
+  d['ONA_STATUS']    := '1';
+
+  d['ONA_GOSUD']    := 'BLR';
+  d['ONA_OBL']      := 'Минская';
+  //d['ONA_OBL_B']    := 'Мiнская';
+  d['ONA_RAION']    := 'Узденский';
+  //d['ONA_RAION_B']  := 'Узденскi';
+  d['ONA_TIP_GOROD'] := '11100001';
+  d['ONA_GOROD']    := 'ГОМЕЛЬ';
+  //d['ONA_GOROD_B']  := 'ГОМЕЛЬ';
+
+  // отец
+  d['ON_IDENTIF']   := '3021285A031PB5';
+  d['ON_FAMILIA']   := 'ГРОМОВИЧ';
+  d['ON_NAME']      := 'ПАВЕЛ';
+  d['ON_OTCH']      := 'ИГОРЕВИЧ';
+  d['ON_FAMILIA_B'] := 'ГРАМОВІЧ';
+  d['ON_NAME_B']    := 'ПАВЕЛ';
+  d['ON_OTCH_B']    := 'ІГАРАВІЧ';
+  d['ON_POL']       := 'M';
+  d['ON_DATER']     := '19851202';
+
+  d['ON_GRAJD']     := 'BLR';
+  d['ON_STATUS']    := '4';
+
+  d['ON_GOSUD']   := 'BLR';
+  d['ON_OBL']     := 'Минская';
+  //d['ON_OBL_B']   := 'Мiнская';
+  d['ON_RAION']   := 'Узденский';
+  //d['ON_RAION_B'] := 'Узденскi';
+  d['ON_TIP_GOROD'] := '11100001';
+  d['ON_GOROD']   := 'МИНСК';
+  //d['ON_GOROD_B'] := 'МІНСК';
+
+  d['ACT_TIP']       := '0100';
+  d['ACT_ORGAN']     := '18108';
+  d['ACT_ORGAN_LEX'] := 'ЗАГС районный';
+  d['ACT_DATE']      := StrToDate('22.06.2013');
+  d['ACT_NOMER']     := '1243';
+
+  d['DOC_TIP']       := '54100005';
+  d['DOC_ORGAN']     := '18108';
+  d['DOC_DATE']      := StrToDate('23.06.2013');
+  d['DOC_SERIA']     := 'I-АЛ';
+  d['DOC_NOMER']     := '2222225';
+
+  d.Post;
+  s := NewGUID;
+  r := RegInt.Post(s, akDecease, '0160', d, dsErr);
+end;
 
 //
 end.
