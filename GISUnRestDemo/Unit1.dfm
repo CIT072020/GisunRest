@@ -361,7 +361,7 @@ object Form1: TForm1
   object btnPostMarr: TButton
     Left = 162
     Top = 626
-    Width = 119
+    Width = 127
     Height = 25
     Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1073#1088#1072#1082#1072
     TabOrder = 24
@@ -370,7 +370,7 @@ object Form1: TForm1
   object btnPostBirth: TButton
     Left = 162
     Top = 659
-    Width = 119
+    Width = 127
     Height = 25
     Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1088#1086#1078#1076'.'
     TabOrder = 25
@@ -379,7 +379,7 @@ object Form1: TForm1
   object btnPostAffil: TButton
     Left = 162
     Top = 695
-    Width = 119
+    Width = 127
     Height = 25
     Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1086#1090#1094#1086#1074#1089#1090#1074#1072
     TabOrder = 26
@@ -388,11 +388,28 @@ object Form1: TForm1
   object btnPostDecease: TButton
     Left = 162
     Top = 732
-    Width = 119
+    Width = 127
     Height = 25
     Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1089#1084#1077#1088#1090#1080
     TabOrder = 27
     OnClick = btnPostDeceaseClick
+  end
+  object btnPostDivr: TButton
+    Left = 295
+    Top = 626
+    Width = 127
+    Height = 25
+    Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1088#1072#1089#1090#1086#1088#1078'.'
+    TabOrder = 28
+    OnClick = btnPostDivrClick
+  end
+  object btnPostChgFIO: TButton
+    Left = 295
+    Top = 659
+    Width = 127
+    Height = 25
+    Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1089#1084#1077#1085#1072' '#1060#1048#1054
+    TabOrder = 29
   end
   object DataSource1: TDataSource
     Left = 664

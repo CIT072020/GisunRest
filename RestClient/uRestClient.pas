@@ -228,15 +228,28 @@ begin
       FActInf.MakeBody := TActBirth.BirthDS2Json;
       end;
     akAffiliation : begin
-    // Свидетельство о рождении
+    // Свидетельство об установлении отцовства
       FActInf.ResPath  := 'zags/affiliation-certificate';
       FActInf.MsgType  := '0200';
       FActInf.MakeBody := TActAffil.AffilDS2Json;
       end;
     akMarriage : begin
+    // Свидетельство о браке
       FActInf.ResPath  := 'zags/marriage-certificate';
       FActInf.MsgType  := '0300';
       FActInf.MakeBody := TActMarr.MarrDS2Json;
+      end;
+    akDecease : begin
+    // Свидетельство о смерти
+      FActInf.ResPath  := 'zags/decease-certificate';
+      FActInf.MsgType  := '0400';
+      FActInf.MakeBody := TActDecease.DeceaseDS2Json;
+      end;
+    akDivorce : begin
+    // Свидетельство о расторжении брака
+      FActInf.ResPath  := 'zags/divorce-certificate';
+      FActInf.MsgType  := '0500';
+      FActInf.MakeBody := TActDvrc.DvrcDS2Json;
       end;
   end;
   Result := Self;
