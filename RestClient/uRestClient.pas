@@ -123,8 +123,12 @@ type
     FRetMsg  : string;
     // объект response из ответа сервера
     FSupObj  : ISuperObject;
+    FOut     : TDataSet;
   public
+    property Req : TRestRequest read FRestReq write FRestReq;
     property RetAsSOAP : TRequestResult read FRetAsSOAP write FRetAsSOAP;
+    property RetSO : ISuperObject read FSupObj write FSupObj;
+    property RetDS : TDataSet read FOut write FOut;
   end;
 
   // Клиент для вызова API (REST-Full)
@@ -250,6 +254,12 @@ begin
       FActInf.ResPath  := 'zags/divorce-certificate';
       FActInf.MsgType  := '0500';
       FActInf.MakeBody := TActDvrc.DvrcDS2Json;
+      end;
+    akNameChange : begin
+    // Свидетельство о смене ФИО
+      FActInf.ResPath  := 'zags/name-change-certificate';
+      FActInf.MsgType  := '0700';
+      FActInf.MakeBody := TActChgName.ChgNameDS2Json;
       end;
   end;
   Result := Self;
@@ -477,6 +487,7 @@ begin
             SOErr := SO(Utf8Decode(StreamDoc.DataString));
             if (IsGet) then begin
               Resp.FSupObj := SOErr.O['response'];
+              Resp.FRetAsSOAP := rrOk;
 
             end
             else begin
@@ -486,7 +497,11 @@ begin
                 nErr := 300;
 
 
+              end else begin
+              Resp.FRetAsSOAP := rrOk;
+
               end;
+
 
             end;
 
@@ -505,7 +520,6 @@ begin
 
       end;
 
-    Resp.FRetAsSOAP := rrOk;
 
     end
     else begin

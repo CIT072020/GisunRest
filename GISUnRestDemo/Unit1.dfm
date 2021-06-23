@@ -410,6 +410,7 @@ object Form1: TForm1
     Height = 25
     Caption = 'UN - '#1056#1077#1075#1080#1089#1090#1088'. '#1089#1084#1077#1085#1072' '#1060#1048#1054
     TabOrder = 29
+    OnClick = btnPostChgFIOClick
   end
   object DataSource1: TDataSource
     Left = 664

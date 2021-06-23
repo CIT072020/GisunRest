@@ -57,6 +57,7 @@ type
 
     //function SetTypeAndIDMsg(ActKind: TActKind; var MessageType: string; const PCount : Integer = -1; const INCount : Integer = -1) : TObject;
     function GetRestIN(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument:TDataSet; slPar:TStringList): TRestResponse;
+    function SetOutDS(const Act : TActKind; Resp : TRestResponse) : Integer;
 
     ///----!!!!
     //FGetSrv : TGetSrvX;
@@ -132,10 +133,31 @@ begin
 end;
 
 
+
+function TRegIntX.SetOutDS(const Act : TActKind; Resp : TRestResponse) : Integer;
+var
+  SOArr: ISuperObject;
+begin
+  if (Assigned(Resp.RetSO) and (Not Resp.RetSO.IsType(stNull))) then begin
+  if (Act = akGetPersonIdentif) then begin
+    // Должен вернуть запрошенный по ФИО ИН
+
+  end else begin
+
+
+  end;
+  end else begin
+
+  end;
+
+end;
+
+
 // Получение из регистра
 function TRegIntX.Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument: TDataSet = nil;
     slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRestResponse;
 var
+  nErr : Integer;
   ResObs : TRequestResult;
 begin
   if (ExchMode = EM_DEFLT) then
@@ -148,6 +170,12 @@ begin
   else begin
     // Через REST-сервис
     Result := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar);
+    if (Result.RetAsSOAP = rrOk) then begin
+       Output := CreateOutputTable(akGetPersonalData);
+       Result.RetDS := Output;
+       nErr := SetOutDS(ActKind, Result);
+
+    end;
 
 
   end;

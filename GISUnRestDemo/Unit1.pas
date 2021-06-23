@@ -75,6 +75,7 @@ type
     procedure btnGetUNClick(Sender: TObject);
     procedure btnPostAffilClick(Sender: TObject);
     procedure btnPostBirthClick(Sender: TObject);
+    procedure btnPostChgFIOClick(Sender: TObject);
     procedure btnPostDeceaseClick(Sender: TObject);
     procedure btnPostDivrClick(Sender: TObject);
     procedure btnPostDocClick(Sender: TObject);
@@ -617,6 +618,7 @@ begin
 end;
 
 
+
 // Свидетельство о браке
 procedure TForm1.btnPostMarrClick(Sender: TObject);
 var
@@ -787,12 +789,12 @@ begin
 
   d['ONA_GOSUD']    := 'BLR';
   d['ONA_OBL']      := 'Минская';
-  d['ONA_OBL_B']    := 'Мiнская';
+  //d['ONA_OBL_B']    := 'Мiнская';
   d['ONA_RAION']    := 'Узденский';
-  d['ONA_RAION_B']  := 'Узденскi';
+  //d['ONA_RAION_B']  := 'Узденскi';
   d['ONA_TIP_GOROD'] := '11100001';
   d['ONA_GOROD']    := 'Брест';
-  d['ONA_GOROD_B']  := 'Брэст';
+  //d['ONA_GOROD_B']  := 'Брэст';
 
   d['ONA_FAMILIA_OLD'] := 'RERE';
 
@@ -811,14 +813,24 @@ begin
 
   d['ON_GOSUD']   := 'BLR';
   d['ON_OBL']     := 'Минская';
-  d['ON_OBL_B']   := 'Мiнская';
+  //d['ON_OBL_B']   := 'Мiнская';
   d['ON_RAION']   := 'Узденский';
-  d['ON_RAION_B'] := 'Узденскi';
+  //d['ON_RAION_B'] := 'Узденскi';
   d['ON_TIP_GOROD'] := '11100001';
   d['ON_GOROD']   := 'Брест';
-  d['ON_GOROD_B'] := 'Брэст';
+  //d['ON_GOROD_B'] := 'Брэст';
 
   d['ON_FAMILIA_OLD'] := '---';
+
+  d['BRAK_TIP']       := '0300';
+  d['BRAK_ORGAN']     := '617';
+  d['BRAK_DATE']      := StrToDate('08.08.2013');
+  d['BRAK_NOMER']     := '7712';
+
+  // Решение суда
+  d['SUD_NAME']     := 'Просто суд';
+  d['SUD_DATE']      := '19851202';
+  d['SUD_COMM']     := '18108';
 
   d['ACT_TIP']       := '0300';
   d['ACT_ORGAN']     := '617';
@@ -826,17 +838,86 @@ begin
   d['ACT_DATE']      := StrToDate('08.08.2013');
   d['ACT_NOMER']     := '12';
 
-  d['DOC_TIP']       := '54100006';
-  d['DOC_ORGAN']     := '617';
-  d['DOC_DATE']      := StrToDate('11.08.2013');
-  d['DOC_SERIA']     := 'I-АЛ';
-  d['DOC_NOMER']     := '0221734';
+  d['ONA_TIP']       := '54100007';
+  d['ONA_ORGAN']     := '617';
+  d['ONA_DATE']      := StrToDate('11.08.2013');
+  d['ONA_SERIA']     := 'I-АЛ';
+  d['ONA_NOMER']     := '0221734';
+
+  d['ON_TIP']       := '54100008';
+  d['ON_ORGAN']     := '617';
+  d['ON_DATE']      := StrToDate('11.08.2013');
+  d['ON_SERIA']     := 'I-АЛ';
+  d['ON_NOMER']     := '0221734';
 
   d.Post;
   s := NewGUID;
   r := RegInt.Post(s, akDivorce, '0500', d, dsErr);
 end;
 
+procedure TForm1.btnPostChgFIOClick(Sender: TObject);
+var
+  i : Integer;
+  s : string;
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  r : TRestResponse;
+begin
+  d := RegInt.CreateInputTable(akNameChange, opPost);
+  d.Append;
+
+  //
+  d['IDENTIF']       := '7027566A001PB8';
+  d['FAMILIA']       := 'ИВАНОВА';
+  d['NAME']          := 'ИНГА';
+  d['OTCH']          := 'ВИКТОРОВНА';
+  d['FAMILIA_B']     := 'ІВАНОВА';
+  d['NAME_B']        := 'ІНГА';
+  d['OTCH_B']        := 'ВІКТАРАЎНА';
+  d['POL']           := 'F';
+  d['DATER']         := '20130621';
+
+  d['GRAJD']     := 'BLR';
+  d['STATUS']    := '1';
+
+  d['GOSUD']    := 'BLR';
+  d['OBL']      := 'БРЕСТСКАЯ';
+  d['OBL_B']    := 'БРЭСЦКАЯ';
+  d['RAION']    := 'ВОЛОЖИНСКИй';
+  d['RAION_B']  := 'ВАЛОЖЫНСКІ';
+  d['TIP_GOROD'] := '11100002';
+  d['GOROD']    := 'Брест';
+  d['GOROD_B']  := 'Брэст';
+
+  // Предыдущее
+  d['DO_FAMILIA']   := 'ДЗИЧКОВСКАЯ';
+  d['DO_NAME']      := 'АНАСТАСИЯ';
+  d['DO_OTCH']      := 'ГЕОРГИЕВНА';
+
+  d['R_TIP']       := '0100';
+  d['R_ORGAN']     := '0';
+  d['R_DATE']      := StrToDate('09.12.2015');
+  d['R_NOMER']     := '12';
+
+  d['OSNOV']     := '12';
+
+  d['ACT_TIP']       := '0100';
+  d['ACT_ORGAN']     := '18108';
+  d['ACT_ORGAN_LEX'] := 'ЗАГС районный';
+  d['ACT_DATE']      := StrToDate('22.06.2013');
+  d['ACT_NOMER']     := '1243';
+
+  d['DOC_TIP']       := '54100005';
+  d['DOC_ORGAN']     := '18108';
+  d['DOC_DATE']      := StrToDate('23.06.2013');
+  d['DOC_SERIA']     := 'I-АЛ';
+  d['DOC_NOMER']     := '2222225';
+
+  d.Post;
+  s := NewGUID;
+  r := RegInt.Post(s, akNameChange, '0700', d, dsErr);
+end;
 
 //
 end.
