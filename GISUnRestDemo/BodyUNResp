@@ -1,1 +1,489 @@
-{"cover":{"message_id":"{45EF2752-FA9D-47DF-98CB-4989D6C05B87}","message_type":{"code":"0300","type":-2},"message_time":"2021-06-23 17:28:08","message_source":{"code":"1","type":80},"parent_message_id":"{4297488E-F9F7-4B2B-9B0E-6B4AC259836B}"}}
+{
+  "cover" : {
+    "message_id" : "{030C153A-DCC5-452B-A90B-C06ED45516B0}",
+    "message_type" : {
+      "code" : "88",
+      "type" : -2
+    },
+    "message_time" : "2021-06-24T17:29:02.318+03:00",
+    "message_source" : {
+      "code" : "1",
+      "type" : 80
+    },
+    "parent_message_id" : "{0BB556A4-E2A7-4B92-AF04-3A7A66D4672E}",
+    "dataset" : [ 15 ],
+    "agreement" : {
+      "target" : "верификация персональных данных",
+      "rights" : [ 201, 703, 208, 480, 481, 482, 490, 491, 527, 528, 252, 465, 466, 516, 517 ],
+      "operator_info" : "Организация адрес",
+      "issue_date" : "2021-06-07T13:22:09.619+03:00",
+      "expiry_date" : "2023-06-07T13:22:09.619+03:00",
+      "assignee_persons" : [ "инспектор Иванов", "начальник инспектора Петров" ]
+    }
+  },
+  "response" : {
+    "personal_data" : [ {
+      "request_id" : "{D444008E-3203-4824-8F8C-4374513A8D0C}",
+      "data" : {
+        "identif" : "7120691A001PB3",
+        "last_name" : "ТРИГУБОВИЧ",
+        "last_name_bel" : "ТРЫГУБОВІЧ",
+        "name" : "АРТЕМ",
+        "name_bel" : "АРЦЕМ",
+        "patronymic" : "МИХАЙЛОВИЧ",
+        "patronymic_bel" : "МІХАЙЛАВІЧ",
+        "sex" : {
+          "code" : "M",
+          "type" : 32,
+          "lexema" : {
+            "value" : [ {
+              "value" : "МУЖСКОЙ",
+              "lang" : "ru"
+            }, {
+              "value" : "М",
+              "lang" : "be"
+            } ]
+          }
+        },
+        "birth_day" : "20120523",
+        "birth_place" : {
+          "country_b" : {
+            "code" : "BLR",
+            "type" : 8,
+            "lexema" : {
+              "value" : [ {
+                "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
+                "lang" : "ru"
+              }, {
+                "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
+                "lang" : "be"
+              } ]
+            }
+          },
+          "area_b" : "БРЕСТСКАЯ ОБЛАСТЬ",
+          "area_bbel" : " ВОБЛАCЦЬ",
+          "type_city_b" : {
+            "code" : "11100001",
+            "type" : 68,
+            "lexema" : {
+              "value" : [ {
+                "value" : "Г",
+                "lang" : "ru"
+              }, {
+                "value" : "Г",
+                "lang" : "be"
+              } ]
+            }
+          },
+          "city_b" : "БРЕСТ",
+          "city_bbel" : "БРЭСТ"
+        },
+        "citizenship" : {
+          "code" : "BLR",
+          "type" : 8,
+          "lexema" : {
+            "value" : [ {
+              "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
+              "lang" : "ru"
+            }, {
+              "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
+              "lang" : "be"
+            } ]
+          }
+        },
+        "courts" : {
+          "deaths" : [ {
+            "death_info" : {
+              "documents" : [ {
+                "document" : {
+                  "access" : {
+                    "code" : "10",
+                    "type" : -3,
+                    "lexema" : {
+                      "value" : [ {
+                        "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                        "lang" : "ru"
+                      } ]
+                    }
+                  },
+                  "active" : true
+                }
+              } ],
+              "death_data" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "death_date" : "2018-07-17T00:00:00.000+03:00",
+                "decission" : {
+                  "code" : "2",
+                  "type" : 99
+                }
+              }
+            }
+          } ]
+        },
+        "pensions" : [ {
+          "pensions_info" : {
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "active" : true
+              }
+            } ],
+            "pension_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "pension_type" : {
+                "code" : "3",
+                "type" : 89,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ПО СЛУЧАЮ ПОТЕРИ КОРМИЛЬЦА",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "pension_awarding_date" : "1941-05-06T00:00:00.000+03:00"
+            }
+          }
+        }, {
+          "pensions_info" : {
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "active" : true
+              }
+            } ],
+            "pension_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "pension_type" : {
+                "code" : "3",
+                "type" : 89,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ПО СЛУЧАЮ ПОТЕРИ КОРМИЛЬЦА",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "pension_awarding_date" : "1941-05-06T00:00:00.000+03:00"
+            }
+          }
+        }, {
+          "pensions_info" : {
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "active" : true
+              }
+            } ],
+            "pension_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "pension_type" : {
+                "code" : "72",
+                "type" : 89,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "Пенсия по возрасту на льготных основаниях (перенесшим лучевую болезнь, инвалидам вследствие катастрофы на Чернобыльской АЭС, других радиационных аварий)",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "pension_awarding_date" : "2016-05-02T00:00:00.000+03:00"
+            }
+          }
+        }, {
+          "pensions_info" : {
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "active" : true
+              }
+            } ],
+            "pension_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "pension_type" : {
+                "code" : "72",
+                "type" : 89,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "Пенсия по возрасту на льготных основаниях (перенесшим лучевую болезнь, инвалидам вследствие катастрофы на Чернобыльской АЭС, других радиационных аварий)",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "pension_awarding_date" : "2017-05-11T00:00:00.000+03:00"
+            }
+          }
+        } ],
+        "insurances" : [ {
+          "insurances_info" : {
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "active" : true
+              }
+            } ],
+            "insurance_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "insurance_awarding_date" : "2016-03-11T00:00:00.000+03:00",
+              "insurance_suspension_date" : "2016-04-02T00:00:00.000+03:00"
+            }
+          }
+        } ],
+        "employments" : [ {
+          "employment_info" : {
+            "employment_data" : {
+              "employment_organization" : "790466336",
+              "employment_organization_name" : "Корсаков Вячеслав Михайлович",
+              "employment_period" : [ {
+                "employment_begin_date" : "2004-08-01T00:00:00.000+03:00",
+                "employment_end_date" : "2005-12-31T01:00:00.000+03:00"
+              }, {
+                "employment_begin_date" : "2015-08-01T00:00:00.000+03:00",
+                "employment_end_date" : "2015-11-20T00:00:00.000+03:00"
+              } ]
+            }
+          }
+        } ],
+        "unemplyment_info" : {
+          "documents" : [ {
+            "document" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "active" : true
+            }
+          } ],
+          "unemplyment_data" : {
+            "access" : {
+              "code" : "10",
+              "type" : -3,
+              "lexema" : {
+                "value" : [ {
+                  "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                  "lang" : "ru"
+                } ]
+              }
+            },
+            "unemployment_begin_data" : "2016-02-12T00:00:00.000+03:00",
+            "unemployment_end_data" : "2016-05-05T00:00:00.000+03:00"
+          }
+        },
+        "salary_info" : {
+          "documents" : [ {
+            "document" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "active" : true
+            }
+          } ],
+          "salary_data" : {
+            "access" : {
+              "code" : "10",
+              "type" : -3,
+              "lexema" : {
+                "value" : [ {
+                  "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                  "lang" : "ru"
+                } ]
+              }
+            },
+            "salary_awarding_date" : "2016-04-02T00:00:00.000+03:00",
+            "salary_suspension_date" : "2017-04-02T00:00:00.000+03:00"
+          }
+        }
+      }
+    }, {
+      "request_id" : "{11502E7C-0393-4747-BD1D-B94FF2FAF7A6}",
+      "data" : {
+        "identif" : "7146694A001PB8",
+        "last_name" : "ИВАНОВ",
+        "last_name_bel" : "ІВАНОЎ",
+        "name" : "ИВАН",
+        "name_bel" : "ІВАН",
+        "patronymic" : "ИВАНОВИЧ",
+        "patronymic_bel" : "ІВАНАВІЧ",
+        "sex" : {
+          "code" : "M",
+          "type" : 32,
+          "lexema" : {
+            "value" : [ {
+              "value" : "МУЖСКОЙ",
+              "lang" : "ru"
+            }, {
+              "value" : "М",
+              "lang" : "be"
+            } ]
+          }
+        },
+        "birth_day" : "20120511",
+        "birth_place" : {
+          "country_b" : {
+            "code" : "BLR",
+            "type" : 8,
+            "lexema" : {
+              "value" : [ {
+                "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
+                "lang" : "ru"
+              }, {
+                "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
+                "lang" : "be"
+              } ]
+            }
+          },
+          "area_b" : "МИНСКАЯ ОБЛАСТЬ",
+          "area_bbel" : "МIНСКАЯ ВОБЛАCЦЬ",
+          "region_b" : "УЗДЕНСКИЙ",
+          "region_bbel" : "УЗДЕНСКІ",
+          "type_city_b" : {
+            "code" : "11100001",
+            "type" : 68,
+            "lexema" : {
+              "value" : [ {
+                "value" : "Г",
+                "lang" : "ru"
+              }, {
+                "value" : "Г",
+                "lang" : "be"
+              } ]
+            }
+          },
+          "city_b" : "ЛИДА",
+          "city_bbel" : "ЛІДА"
+        },
+        "citizenship" : {
+          "code" : "BLR",
+          "type" : 8,
+          "lexema" : {
+            "value" : [ {
+              "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
+              "lang" : "ru"
+            }, {
+              "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
+              "lang" : "be"
+            } ]
+          }
+        }
+      }
+    } ],
+    "identif_number" : [ {
+      "request_id" : "{3918D8D9-E5B9-4ADF-95C2-1E371E5FD190}",
+      "data" : "7712268A001PB8"
+    }, {
+      "request_id" : "{1B7A629B-28E8-4CC7-8A94-19386FF8485C}",
+      "data" : "7817947A001PB8"
+    } ]
+  }
+}

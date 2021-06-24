@@ -25,8 +25,13 @@ type
   TClassifier = class
   private
   public
+    // Для конвертации DataSet -> String(JSON)
     class function SetCT(const ACode: string; AType: integer; IsBraces: Boolean = True): string;
     class function SetCTL(const ACode: string; AType: integer; const Lex : string; Lang : string = 'ru'; IsBraces: Boolean = True): string;
+
+    // Для конвертации SuperObject -> DataSet
+    class function FindRUName(LexValArr: ISuperObject; const ALang: string = 'RU'): string;
+    class procedure SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx : string);
   end;
 
 (*
@@ -57,7 +62,7 @@ type
 
 
   // Базовый набор реквизитов персональных данных
-  TPersDataMin = class
+  TPersData = class
   private
     FInDS     : TDataSet;
   public
@@ -66,11 +71,13 @@ type
     constructor Create(IDS : TDataSet = nil);
     destructor Destroy;
 
-    class function DS2Json(IDS: TDataSet; Pfx: string = ''): string;
+    class function DS2JsonMin(IDS: TDataSet; Pfx: string = ''): string;
+    class procedure SObj2DSMin(SOPersData: ISuperObject; IDS: TDataSet);
+    class procedure SObj2DSFull(SOPersData: ISuperObject; IDS: TDataSet);
   end;
 
   // Свидетельство о рождении
-  TActBirth = class(TPersDataMin)
+  TActBirth = class(TPersData)
   private
     class function BirthDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
   public
@@ -78,7 +85,7 @@ type
   end;
 
   // Свидетельство об установлении отцовства
-  TActAffil = class(TPersDataMin)
+  TActAffil = class(TPersData)
   private
     class function AffilDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
   public
@@ -86,14 +93,14 @@ type
   end;
 
   // Свидетельство о браке
-  TActMarr = class(TPersDataMin)
+  TActMarr = class(TPersData)
   private
     class function MarrDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string) : string;
   public
     class function MarrDS2Json(IDS : TDataSet) : string;
   end;
 // Свидетельство о смерти
-  TActDecease = class(TPersDataMin)
+  TActDecease = class(TPersData)
   private
     class function DeceaseDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
     class function DeceaseDS2JsonDCD(IDS : TDataSet) : string;
@@ -101,7 +108,7 @@ type
     class function DeceaseDS2Json(IDS : TDataSet) : string;
   end;
 // Свидетельство о расторжении брака
-  TActDvrc = class(TPersDataMin)
+  TActDvrc = class(TPersData)
   private
     class function DvrcDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string) : string;
   public
@@ -109,7 +116,7 @@ type
   end;
 
   // Свидетельство о смене ФИО
-  TActChgName = class(TPersDataMin)
+  TActChgName = class(TPersData)
   private
     class function ChgNameDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string) : string;
   public
@@ -193,6 +200,36 @@ begin
 end;
 
 
+// Поиск среди символьных наименований нужного языка
+class function TClassifier.FindRUName(LexValArr: ISuperObject; const ALang: string = 'RU'): string;
+var
+  i, iMax: Integer;
+  x: ISuperObject;
+begin
+  Result := '';
+  iMax := LexValArr.AsArray.Length - 1;
+  for i := 0 to iMax do begin
+    x := LexValArr.AsArray.O[i];
+    if (UpperCase(x.S['lang']) = ALang) then begin
+      Result := x.S['value'];
+      Break;
+    end;
+  end;
+end;
+
+class procedure TClassifier.SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx : string);
+var
+  s: string;
+  x: ISuperObject;
+begin
+  with ODS do begin
+    FieldByName('K_' + Pfx).AsString := SOClsf.S['code'];
+    FieldByName('T_' + Pfx).AsString := IntToStr(SOClsf.I['type']);
+    FieldByName('N_' + Pfx).AsString := FindRUName(SOClsf.O['lexema'].O['value']);
+  end;
+end;
+
+
 // Место рождения
 // 1 - использовать By, 2 - только русский
 class function TDS2JSON.MakeBirthPlace(IDS : TDataSet; Pfx : string = ''; Mode : integer = BPLC_WITH_BY) : string;
@@ -241,27 +278,9 @@ begin
     Format('"number":"%s"}', [IDS.FieldByName(Pfx + 'NOMER').AsString]);
 end;
 
-
-
-
 // Описание подтверждающего документа-сертификата
 class function TDS2JSON.MakeDocCertif(IDS : TDataSet; const DocName, DocType : string; Pfx : string = 'DOC_') : string;
-var
-  s1,
-  s : string;
 begin
-
-
-
-  s := TClassifier.SetCT(DocType, 37);
-  s1 := TClassifier.SetCT(IDS.FieldByName(Pfx + 'ORGAN').AsString, 80);
-
-  s := Format('"%s":{"document":{"document_type":%s,"authority":%s,', [DocName, s, s1]);
-
-  s := s + Format('"date_of_issue":"%s",', [FormatDateTime('yyyy-mm-dd', IDS.FieldByName(Pfx + 'DATE').AsDateTime) ]);
-  s := s + Format('"series":"%s",', [ IDS.FieldByName(Pfx + 'SERIA').AsString ]);
-  s1 := s + Format('"number":"%s"}', [ IDS.FieldByName(Pfx + 'NOMER').AsString ]);
-
   Result := Format('"%s":{"document":{"document_type":%s,"authority":%s,', [DocName,
     TClassifier.SetCT(DocType, 37), TClassifier.SetCT(IDS.FieldByName(Pfx + 'ORGAN').AsString, 80)]) +
     Format('"date_of_issue":"%s",', [FormatDateTime('yyyy-mm-dd', IDS.FieldByName(Pfx + 'DATE').AsDateTime) ]) +
@@ -287,20 +306,20 @@ end;
 
 
 //
-constructor TPersDataMin.Create(IDS : TDataSet = nil);
+constructor TPersData.Create(IDS : TDataSet = nil);
 begin
   inherited Create;
   FInDS := IDS;
 end;
 
 //
-destructor TPersDataMin.Destroy;
+destructor TPersData.Destroy;
 begin
   inherited;
 end;
 
 
-class function TPersDataMin.DS2Json(IDS: TDataSet; Pfx: string = ''): string;
+class function TPersData.DS2JsonMin(IDS: TDataSet; Pfx: string = ''): string;
 var
   Mode : Integer;
   s: string;
@@ -315,6 +334,33 @@ begin
       [FieldByName(Pfx + 'FAMILIA_B').AsString, FieldByName(Pfx + 'NAME_B').AsString, FieldByName(Pfx + 'OTCH_B').AsString]);
   end;
   Result := s;
+end;
+
+class procedure TPersData.SObj2DSMin(SOPersData: ISuperObject; IDS: TDataSet);
+var
+  s: string;
+begin
+  with IDS do begin
+    FieldByName('IDENTIF').AsString := SOPersData.S['identif'];
+    FieldByName('FAMILIA').AsString := SOPersData.S['last_name'];
+    FieldByName('NAME').AsString    := SOPersData.S['name'];
+    FieldByName('OTCH').AsString    := SOPersData.S['patronymic'];
+    FieldByName('DATER').AsString   := SOPersData.S['birth_day'];
+  end;
+end;
+
+
+class procedure TPersData.SObj2DSFull(SOPersData: ISuperObject; IDS: TDataSet);
+var
+  s: string;
+begin
+  with IDS do begin
+    FieldByName('FAMILIA_B').AsString := SOPersData.S[CT('last_name_bel')];
+    FieldByName('NAME_B').AsString    := SOPersData.S[CT('name_bel')];
+    FieldByName('OTCH_B').AsString    := SOPersData.S[CT('patronymic_bel')];
+
+    TClassifier.SObj2DSSetTKN(SOPersData.O['sex'], IDS, 'POL');
+  end;
 end;
 
 
@@ -333,7 +379,7 @@ begin
         '"status":%s}';
   s := Format(sF,
     [ObjName,
-     DS2Json(IDS,Pfx),
+     DS2JsonMin(IDS,Pfx),
      TDS2JSON.MakeBirthPlace(IDS, Pfx, Mode),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18)]);
@@ -394,7 +440,7 @@ begin
 
   s := Format(sF,
     [ObjName,
-     DS2Json(IDS,Pfx),
+     DS2JsonMin(IDS,Pfx),
      TDS2JSON.MakeBirthPlace(IDS, Pfx, Mode),
      TClassifier.SetCT(sCtz, 8),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18)]);
@@ -461,7 +507,7 @@ begin
     '"birth_place":{%s},' +
     '"citizenship":%s,' +
     '"status":%s},' +
-    '"old_last_name":"%s"', [ObjName, DS2Json(IDS,Pfx),
+    '"old_last_name":"%s"', [ObjName, DS2JsonMin(IDS,Pfx),
      TDS2JSON.MakeBirthPlace(IDS, Pfx),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18),
@@ -507,7 +553,7 @@ begin
         '"birth_place":{%s},' +
         '"citizenship":%s,' +
         '"status":%s}', [
-     ObjName, DS2Json(IDS,Pfx),
+     ObjName, DS2JsonMin(IDS,Pfx),
      s,
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18)]);
@@ -587,7 +633,7 @@ begin
     '"citizenship":%s,' +
     '"status":%s},' +
     '"old_last_name":"%s"',
-    [ObjName, DS2Json(IDS,Pfx),
+    [ObjName, DS2JsonMin(IDS,Pfx),
      TDS2JSON.MakeBirthPlace(IDS, Pfx, BPLC_RU_ONLY),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18),
@@ -628,7 +674,7 @@ var
   s : string;
 begin
 
-s := DS2Json(IDS,Pfx);
+s := DS2JsonMin(IDS,Pfx);
 s :=      TDS2JSON.MakeBirthPlace(IDS, Pfx);
 s :=      TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8);
 s :=      TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18);
@@ -638,7 +684,7 @@ s :=      TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18);
     '"birth_place":{%s},' +
     '"citizenship":%s,' +
     '"status":%s}', [
-    ObjName, DS2Json(IDS,Pfx),
+    ObjName, DS2JsonMin(IDS,Pfx),
     TDS2JSON.MakeBirthPlace(IDS, Pfx),
     TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
     TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18)]);

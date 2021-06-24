@@ -60,7 +60,7 @@ type
     Oper     : TOperation;
     ResPath  : string;
     MsgType  : string;
-    MakeBody : TMakePostBoby;
+    VarMeth4MakeBody : TMakePostBoby;
     Method   : string;
   end;
 
@@ -98,7 +98,7 @@ type
     function MakeAgreement : string;
     function MakeCover(const MsgSrcCode : string; MsgTypeCode : string = uGisun.QUERY_INFO; DSet : string = '[15]') : string;
     function MakeReqInBody(const InDS: TDataSet): string;
-    function MakeBody4Post(const InDS: TDataSet) : string;
+    //function MakeBody4Post(const InDS: TDataSet) : string;
   public
     property Params : TStringList read FParams write FParams;
     property Header : TStringList read FHeader write FHeader;
@@ -107,7 +107,7 @@ type
     function SetActInf(ActKind: TActKind; MessageType: string; const Input : TDataSet; slPar : TStringList = nil): TRestRequest;
     function MakeReqLine(Meth : string; Pars : TStringList = nil) : string;
     // Подготовка тела запроса
-    function MakeBody(const InDS : TDataSet; slPar:TStringList = nil): TRestRequest;
+    function MakeReqBody(const InDS : TDataSet; slPar:TStringList = nil): TRestRequest;
 
     constructor Create(Cfg : TRestConfig);
     destructor Destroy;
@@ -222,44 +222,47 @@ begin
   case ActKind of
     akGetPersonalData : begin
       FActInf.ResPath := 'common/register';
+      FActInf.VarMeth4MakeBody := nil;
       end;
-    akGetPersonIdentif:
+    akGetPersonIdentif : begin
       FActInf.ResPath := 'common/person-identif';
+      FActInf.VarMeth4MakeBody := nil;
+      end;
     akBirth : begin
     // Свидетельство о рождении
       FActInf.ResPath  := 'zags/birth-certificate';
       FActInf.MsgType  := '0160';
-      FActInf.MakeBody := TActBirth.BirthDS2Json;
+      FActInf.VarMeth4MakeBody := TActBirth.BirthDS2Json;
       end;
     akAffiliation : begin
     // Свидетельство об установлении отцовства
       FActInf.ResPath  := 'zags/affiliation-certificate';
       FActInf.MsgType  := '0200';
-      FActInf.MakeBody := TActAffil.AffilDS2Json;
+      FActInf.VarMeth4MakeBody := TActAffil.AffilDS2Json;
       end;
     akMarriage : begin
     // Свидетельство о браке
       FActInf.ResPath  := 'zags/marriage-certificate';
       FActInf.MsgType  := '0300';
-      FActInf.MakeBody := TActMarr.MarrDS2Json;
+      FActInf.VarMeth4MakeBody := TActMarr.MarrDS2Json;
       end;
     akDecease : begin
     // Свидетельство о смерти
       FActInf.ResPath  := 'zags/decease-certificate';
       FActInf.MsgType  := '0400';
-      FActInf.MakeBody := TActDecease.DeceaseDS2Json;
+      FActInf.VarMeth4MakeBody := TActDecease.DeceaseDS2Json;
       end;
     akDivorce : begin
     // Свидетельство о расторжении брака
       FActInf.ResPath  := 'zags/divorce-certificate';
       FActInf.MsgType  := '0500';
-      FActInf.MakeBody := TActDvrc.DvrcDS2Json;
+      FActInf.VarMeth4MakeBody := TActDvrc.DvrcDS2Json;
       end;
     akNameChange : begin
     // Свидетельство о смене ФИО
       FActInf.ResPath  := 'zags/name-change-certificate';
       FActInf.MsgType  := '0700';
-      FActInf.MakeBody := TActChgName.ChgNameDS2Json;
+      FActInf.VarMeth4MakeBody := TActChgName.ChgNameDS2Json;
       end;
   end;
   Result := Self;
@@ -276,7 +279,7 @@ begin
   Result := s;
 end;
 
-
+// Структура agreement для GET-запроса
 function TRestRequest.MakeAgreement : string;
 var
   OperInf,
@@ -319,7 +322,7 @@ begin
     MsgT  := FormatDateTime('yyyy-MM-dd"T"HH:mm:ss.SSS', Now);
     //MsgT  := DateTimeToStr(Now);
     if (FActInf.Oper = opGet) then begin
-      Agree := Format(',%s,"dataset":%s}', [MakeAgreement, DSet]);
+      Agree := Format(',%s,"dataset":%s', [MakeAgreement, DSet]);
     end else begin
       Agree := '';
     end;
@@ -329,16 +332,16 @@ begin
   end;
 end;
 
-
+(*
 function TRestRequest.MakeBody4Post(const InDS: TDataSet) : string;
 begin
   Result := '';
   try
-    Result := FActInf.MakeBody(InDS);
+    Result := FActInf.VarMeth4MakeBody(InDS);
   except
   end;
 end;
-
+*)
 
 function TRestRequest.MakeReqInBody(const InDS: TDataSet): string;
 var
@@ -348,6 +351,7 @@ begin
   s := '';
   try
     if (FActInf.Oper = opGet) then begin
+      // Для GET-запросов
       s := '"request":{';
       sPersDat := '';
       sIN := '';
@@ -394,7 +398,8 @@ begin
       end;
     end
     else
-      s := MakeBody4Post(InDS);
+      // Для POST-запросов
+      s := FActInf.VarMeth4MakeBody(InDS);
 
   except
   end;
@@ -402,20 +407,14 @@ begin
 end;
 
 // Сформировать тело запроса
-function TRestRequest.MakeBody(const InDS : TDataSet; slPar:TStringList = nil): TRestRequest;
+function TRestRequest.MakeReqBody(const InDS : TDataSet; slPar:TStringList = nil): TRestRequest;
 var
   s: string;
 begin
   try
-(*
-    Body   := '{' +
-      MakeCover(FCfg.Organ, FActInf.MsgType) + ',' +
-      MakeReqInBody(InDS) + '}';
-*)
-    Body := '{' +
-      MakeCover(FCfg.Organ, FActInf.MsgType) + ',';
-    s := MakeReqInBody(InDS) + '}';
-    Body := Body + s;
+    Body := MakeCover(FCfg.Organ, FActInf.MsgType);
+    s := MakeReqInBody(InDS);
+    Body := Format('{%s,%s}',[Body, s]);
 
     Result := Self;
   except
@@ -424,7 +423,7 @@ end;
 
 
 
-
+// Подпись/шифрование тела запроса
 procedure TRestClient.SecReq(Req : TRestRequest; var URL : string; var Head : TStringList; var HTTPDoc : TStringStream);
 var
   sUTF : UTF8String;
