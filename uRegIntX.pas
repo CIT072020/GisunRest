@@ -130,29 +130,29 @@ var
 begin
   nErr := 0;
   try
-    SOArrPD := Resp.RetSO.O['personal_data'];
+    SOArrPD := Resp.RetSO.O['response'].O['personal_data'];
     if (Assigned(SOArrPD) and (SOArrPD.IsType(stArray))) then begin
 
       iMax := SOArrPD.AsArray.Length - 1;
       for i := 0 to iMax do begin
         OnePD := SOArrPD.AsArray.O[i].O['data'];
         Resp.RetDS.Append;
-        TPersData.SObj2DSMin(OnePD, Resp.RetDS);
         if (Act = akGetPersonIdentif) then begin
         // Должен вернуть запрошенный ИН по ФИО
           Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
+          TPersData.SObj2DSPersData(OnePD, Resp.RetDS, False);
         end
         else begin
         // Должен вернуть персональные данные
           Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := True;
-          TPersData.SObj2DSFull(OnePD, Resp.RetDS);
+          TPersData.SObj2DSPersData(OnePD, Resp.RetDS);
 
         end;
         Resp.RetDS.Post;
       end;
     end;
 
-    SOArrPD := Resp.RetSO.O['identif_number'];
+    SOArrPD := Resp.RetSO.O['response'].O['identif_number'];
     if (Assigned(SOArrPD) and (SOArrPD.IsType(stArray))) then begin
       iMax := SOArrPD.AsArray.Length - 1;
 
@@ -160,7 +160,7 @@ begin
     // Должен вернуть зарезервированные новые ИН
         OnePD := SOArrPD.AsArray.O[i];
         Resp.RetDS.Append;
-        Resp.RetDS.FieldByName('REQUEST_ID').AsString := OnePD.S['request_id'];
+        //Resp.RetDS.FieldByName('REQUEST_ID').AsString := OnePD.S['request_id'];
         Resp.RetDS.FieldByName('NEW_IDENTIF').AsString := OnePD.S['data'];
         Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
         Resp.RetDS.Post;
@@ -198,12 +198,15 @@ begin
   else begin
     // Через REST-сервис
     Result := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar);
+    Result.ErrDS := CreateErrorTable;
+    Error := Result.ErrDS;
     if (Result.RetAsSOAP = rrOk) then begin
        Result.RetDS := CreateOutputTable(akGetPersonalData);
+       Output := Result.RetDS;
        nErr := SetOutDS(ActKind, Result);
+    end else begin
 
     end;
-
 
   end;
 end;

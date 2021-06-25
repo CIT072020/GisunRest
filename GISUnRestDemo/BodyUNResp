@@ -1,16 +1,16 @@
 {
   "cover" : {
-    "message_id" : "{030C153A-DCC5-452B-A90B-C06ED45516B0}",
+    "message_id" : "{B97AC683-CF64-4E2F-8363-FE851263F3EB}",
     "message_type" : {
       "code" : "88",
       "type" : -2
     },
-    "message_time" : "2021-06-24T17:29:02.318+03:00",
+    "message_time" : "2021-06-25T12:30:24.295+03:00",
     "message_source" : {
       "code" : "1",
       "type" : 80
     },
-    "parent_message_id" : "{0BB556A4-E2A7-4B92-AF04-3A7A66D4672E}",
+    "parent_message_id" : "{217C0C54-3844-4E60-B677-E4C94AAC8DED}",
     "dataset" : [ 15 ],
     "agreement" : {
       "target" : "верификация персональных данных",
@@ -23,7 +23,7 @@
   },
   "response" : {
     "personal_data" : [ {
-      "request_id" : "{D444008E-3203-4824-8F8C-4374513A8D0C}",
+      "request_id" : "{3D582B82-4080-4C42-9D4B-7BA05BAE608C}",
       "data" : {
         "identif" : "7120691A001PB3",
         "last_name" : "ТРИГУБОВИЧ",
@@ -406,7 +406,7 @@
         }
       }
     }, {
-      "request_id" : "{11502E7C-0393-4747-BD1D-B94FF2FAF7A6}",
+      "request_id" : "{B3BF1265-1205-4C41-AD8F-062C1D1B5CDD}",
       "data" : {
         "identif" : "7146694A001PB8",
         "last_name" : "ИВАНОВ",
@@ -479,11 +479,11 @@
       }
     } ],
     "identif_number" : [ {
-      "request_id" : "{3918D8D9-E5B9-4ADF-95C2-1E371E5FD190}",
-      "data" : "7712268A001PB8"
+      "request_id" : "{369914B1-9223-49DF-A875-224385E47104}",
+      "data" : "7200349A001PB6"
     }, {
-      "request_id" : "{1B7A629B-28E8-4CC7-8A94-19386FF8485C}",
-      "data" : "7817947A001PB8"
+      "request_id" : "{3BF783E8-3A79-47DA-A976-0E5E0D9DA840}",
+      "data" : "7821520A001PB4"
     } ]
   }
 }

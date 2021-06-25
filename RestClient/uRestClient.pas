@@ -118,17 +118,22 @@ type
   private
     FRestReq : TRestRequest;
     FRetAsSOAP : TRequestResult;
-    FRetData : TMemoryStream;
+    FRetData : TStringStream;
     FRetCode : Integer;
     FRetMsg  : string;
     // объект response из ответа сервера
     FSupObj  : ISuperObject;
-    FOut     : TDataSet;
+    FOutDS   : TDataSet;
+    FErrDS   : TDataSet;
+    FRespID  : string;
   public
     property Req : TRestRequest read FRestReq write FRestReq;
+    property RetCode : integer read FRetCode write FRetCode;
+    property RetMsg  : string read FRetMsg write FRetMsg;
     property RetAsSOAP : TRequestResult read FRetAsSOAP write FRetAsSOAP;
     property RetSO : ISuperObject read FSupObj write FSupObj;
-    property RetDS : TDataSet read FOut write FOut;
+    property RetDS : TDataSet read FOutDS write FOutDS;
+    property ErrDS : TDataSet read FErrDS write FErrDS;
   end;
 
   // Клиент для вызова API (REST-Full)
@@ -450,7 +455,7 @@ var
   IsGet, Ret: Boolean;
   nErr: Integer;
   sErr: string;
-  ErrList, SOErr: ISuperObject;
+  ErrList, SORet: ISuperObject;
   StreamDoc: TStringStream;
 begin
   sErr := '';
@@ -458,6 +463,10 @@ begin
 
   Ret := FHTTP.HTTPMethod(Meth, URL);
   FHTTP.Document.SaveToFile('BodyUNResp');
+  StreamDoc := TStringStream.Create('');
+  StreamDoc.Seek(0, soBeginning);
+  StreamDoc.CopyFrom(FHTTP.Document, 0);
+  Resp.FRetData := StreamDoc;
   try
     if (Ret = True) then begin
       nErr := FHTTP.ResultCode;
@@ -474,24 +483,22 @@ begin
 
       end;
 
-    // JSON-ответ должен быть всегда
+    // JSON-ответ должен (???) быть всегда
 
       if (nErr = 0) then begin
-          // пока все хорошо
-        StreamDoc := TStringStream.Create('');
+      // пока все хорошо
         try
-          StreamDoc.Seek(0, soBeginning);
-          StreamDoc.CopyFrom(FHTTP.Document, 0);
           if (IsJSON(StreamDoc.DataString) = True) then begin
-            SOErr := SO(Utf8Decode(StreamDoc.DataString));
+            SORet := SO(Utf8Decode(StreamDoc.DataString));
+            Resp.FSupObj := SORet;
+            Resp.FRespID := SORet.O['cover'].S['message_id'];
             if (IsGet) then begin
-              Resp.FSupObj := SOErr.O['response'];
               Resp.FRetAsSOAP := rrOk;
 
             end
             else begin
               // Даже для 201 возможны ошибочные данные
-              ErrList := SOErr.O['error_list'];
+              ErrList := SORet.O['response'].O['error_list'];
               if (Assigned(ErrList) and (Not ErrList.IsType(stNull))) then begin
                 nErr := 300;
 
@@ -510,8 +517,8 @@ begin
             sErr := FHTTP.ResultString;
             raise Exception.Create(sErr);
           end;
-        finally
-          StreamDoc.Free;
+        except
+          //StreamDoc.Free;
         end;
       end
       else begin
@@ -533,9 +540,8 @@ begin
         sErr := E.Message;
     end;
   end;
-    Resp.FRetCode   := nErr;
-    Resp.FRetMsg    := sErr;
-    Resp.FRetData   := FHTTP.Document;
+  Resp.FRetCode   := nErr;
+  Resp.FRetMsg    := sErr;
 end;
 
 function TRestClient.CallApi(Req : TRestRequest) : TRestResponse;

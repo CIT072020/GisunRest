@@ -89,6 +89,7 @@ type
 
 var
   Form1: TForm1;
+  ShowM : TMemo;
   RegInt : TRegIntX;
   BlackBox : TROCExchg;
   // для отладки POST
@@ -105,6 +106,20 @@ uses
 
 {$R *.dfm}
 
+// Вывод отладки в Memo
+procedure ShowDeb(const s: string; const ClearAll: Boolean = True);
+var
+  AddS: string;
+  //Pos  : TPoint;
+begin
+  AddS := '';
+  if (ClearAll = True) then
+    ShowM.Text := ''
+  else
+    AddS := CRLF;
+  ShowM.Text := ShowM.Text + AddS + s;
+  //Pos := ShowM.CaretPos;
+end;
 
 procedure Create4UN;
 var
@@ -356,6 +371,8 @@ begin
   d['REQUEST_ID'] := NewGUID;
   d.Post;
   r := RegInt.Get(akGetPersonalData, QUERY_INFO, d, dsOut, dsErr);
+  ShowDeb(IntToStr(r.RetCode) + ' ' + r.RetMsg, cbClearLog.Checked);
+  DataSource1.DataSet := dsOut;
 end;
 
 // GET IN by FIO

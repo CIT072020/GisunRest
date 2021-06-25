@@ -31,7 +31,7 @@ type
 
     // Для конвертации SuperObject -> DataSet
     class function FindRUName(LexValArr: ISuperObject; const ALang: string = 'RU'): string;
-    class procedure SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx : string);
+    class procedure SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx : string; NeedType : Boolean = True);
   end;
 
 (*
@@ -72,8 +72,12 @@ type
     destructor Destroy;
 
     class function DS2JsonMin(IDS: TDataSet; Pfx: string = ''): string;
-    class procedure SObj2DSMin(SOPersData: ISuperObject; IDS: TDataSet);
-    class procedure SObj2DSFull(SOPersData: ISuperObject; IDS: TDataSet);
+    //class procedure SObj2DSMin(SOPersData: ISuperObject; IDS: TDataSet);
+
+    class procedure SObj2DSAddress(SOPersData: ISuperObject; ODS: TDataSet);
+    class procedure SObj2DSPasp(DocsArr: ISuperObject; ODS: TDataSet; ExactType : string = '');
+    class procedure SObj2DSBPlace(SOPersData: ISuperObject; ODS: TDataSet);
+    class procedure SObj2DSPersData(SOPersData: ISuperObject; ODS: TDataSet; FullSet : Boolean = True);
   end;
 
   // Свидетельство о рождении
@@ -217,14 +221,15 @@ begin
   end;
 end;
 
-class procedure TClassifier.SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx : string);
+class procedure TClassifier.SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx : string; NeedType : Boolean = True);
 var
   s: string;
   x: ISuperObject;
 begin
   with ODS do begin
     FieldByName('K_' + Pfx).AsString := SOClsf.S['code'];
-    FieldByName('T_' + Pfx).AsString := IntToStr(SOClsf.I['type']);
+    if (NeedType) then
+      FieldByName('T_' + Pfx).AsString := IntToStr(SOClsf.I['type']);
     FieldByName('N_' + Pfx).AsString := FindRUName(SOClsf.O['lexema'].O['value']);
   end;
 end;
@@ -336,30 +341,112 @@ begin
   Result := s;
 end;
 
-class procedure TPersData.SObj2DSMin(SOPersData: ISuperObject; IDS: TDataSet);
+
+// Место рождения
+class procedure TPersData.SObj2DSBPlace(SOPersData: ISuperObject; ODS: TDataSet);
 var
   s: string;
 begin
-  with IDS do begin
+  with ODS do begin
+    TClassifier.SObj2DSSetTKN(SOPersData.O['country_b'], ODS, 'GOSUD_R');
+
+    FieldByName('OBL_R').AsString     := SOPersData.S['area_b'];
+    FieldByName('OBL_B_R').AsString   := SOPersData.S['area_bbel'];
+    FieldByName('RAION_R').AsString   := SOPersData.S['region_b'];
+    FieldByName('RAION_B_R').AsString := SOPersData.S['region_bbel'];
+
+    TClassifier.SObj2DSSetTKN(SOPersData.O['type_city_b'], ODS, 'TIP_GOROD_R');
+    FieldByName('N_TIP_GOROD_B_R').AsString := TClassifier.FindRUName(SOPersData.O['type_city_b'].O['lexema'].O['value'], 'BE');
+
+    FieldByName('GOROD_R').AsString   := SOPersData.S['city_b'];
+    FieldByName('GOROD_B_R').AsString := SOPersData.S['city_bbel'];
+
+    TClassifier.SObj2DSSetTKN(SOPersData.O['cyty_b_ate'], ODS, 'ATE_R', False);
+    FieldByName('N_ATE_R_B').AsString := TClassifier.FindRUName(SOPersData.O['city_b_ate'].O['lexema'].O['value'], 'BE');
+  end;
+end;
+
+
+// Документ, удостоверяющий личность
+class procedure TPersData.SObj2DSPasp(DocsArr: ISuperObject; ODS: TDataSet; ExactType: string = '');
+var
+  i, iMax: Integer;
+  DocT: string;
+  x: ISuperObject;
+begin
+  iMax := DocsArr.AsArray.Length - 1;
+  with ODS do begin
+    for i := 0 to iMax do begin
+      x := DocsArr.AsArray.O[i];
+      if (x.B['active'] = True) then begin
+        DocT := x.O['document_type'].s['code'];
+        if (DocT = ExactType) OR ((iMax = 0) AND (Length(ExactType) = 0)) then begin
+      // документ считается подходящим под удостоверение личности
+          TClassifier.SObj2DSSetTKN(x.O['document_type'], ODS, 'DOC_TYPE');
+          TClassifier.SObj2DSSetTKN(x.O['authority'], ODS, 'DOC_ORGAN');
+          FieldByName('DOC_SERIA').AsString := x.S['series'];
+          FieldByName('DOC_NOMER').AsString := x.S['number'];
+          FieldByName('DOC_DATE').AsDateTime := StrToDate(x.S['date_of_issue']);
+        end;
+      end;
+    end;
+  end;
+end;
+
+
+
+// Место проживания
+class procedure TPersData.SObj2DSAddress(SOPersData: ISuperObject; ODS: TDataSet);
+var
+  s: string;
+begin
+  with ODS do begin
+    TClassifier.SObj2DSSetTKN(SOPersData.O['country_b'], ODS, 'GOSUD_R');
+
+    FieldByName('OBL_R').AsString     := SOPersData.S['area_b'];
+    FieldByName('OBL_B_R').AsString   := SOPersData.S['area_bbel'];
+    FieldByName('RAION_R').AsString   := SOPersData.S['region_b'];
+    FieldByName('RAION_B_R').AsString := SOPersData.S['region_bbel'];
+
+    TClassifier.SObj2DSSetTKN(SOPersData.O['type_city_b'], ODS, 'TIP_GOROD_R');
+    FieldByName('N_TIP_GOROD_B_R').AsString := TClassifier.FindRUName(SOPersData.O['type_city_b'].O['lexema'].O['value'], 'BE');
+
+    FieldByName('GOROD_R').AsString   := SOPersData.S['city_b'];
+    FieldByName('GOROD_B_R').AsString := SOPersData.S['city_bbel'];
+
+    TClassifier.SObj2DSSetTKN(SOPersData.O['cyty_b_ate'], ODS, 'ATE_R', False);
+    FieldByName('N_ATE_R_B').AsString := TClassifier.FindRUName(SOPersData.O['city_b_ate'].O['lexema'].O['value'], 'BE');
+  end;
+end;
+
+// Полный список персональных данных
+class procedure TPersData.SObj2DSPersData(SOPersData: ISuperObject; ODS: TDataSet; FullSet : Boolean = True);
+var
+  s: string;
+begin
+  with ODS do begin
     FieldByName('IDENTIF').AsString := SOPersData.S['identif'];
     FieldByName('FAMILIA').AsString := SOPersData.S['last_name'];
     FieldByName('NAME').AsString    := SOPersData.S['name'];
     FieldByName('OTCH').AsString    := SOPersData.S['patronymic'];
     FieldByName('DATER').AsString   := SOPersData.S['birth_day'];
-  end;
-end;
+    if (NOT FullSet) then
+      Exit;
+
+    FieldByName('FAMILIA_B').AsString := SOPersData.S['last_name_bel'];
+    FieldByName('NAME_B').AsString    := SOPersData.S['name_bel'];
+    FieldByName('OTCH_B').AsString    := SOPersData.S['patronymic_bel'];
+
+    TClassifier.SObj2DSSetTKN(SOPersData.O['sex'], ODS, 'POL');
+// Место рождения
+    SObj2DSBPlace(SOPersData.O['birth_place'], ODS);
+    TClassifier.SObj2DSSetTKN(SOPersData.O['citizenship'], ODS, 'GRAJD');
+// Документ, удостоверяющий личность
+    SObj2DSPasp(SOPersData.O['documents'], ODS);
 
 
-class procedure TPersData.SObj2DSFull(SOPersData: ISuperObject; IDS: TDataSet);
-var
-  s: string;
-begin
-  with IDS do begin
-    FieldByName('FAMILIA_B').AsString := SOPersData.S[CT('last_name_bel')];
-    FieldByName('NAME_B').AsString    := SOPersData.S[CT('name_bel')];
-    FieldByName('OTCH_B').AsString    := SOPersData.S[CT('patronymic_bel')];
+    TClassifier.SObj2DSSetTKN(SOPersData.O['status'], ODS, 'STATUS');
 
-    TClassifier.SObj2DSSetTKN(SOPersData.O['sex'], IDS, 'POL');
   end;
 end;
 
