@@ -93,7 +93,7 @@ type
     // Remarks:
     //     This number is incremented each time the RestClient sends the request.
     FAttempts : integer;
-    FPersDataDTO : TPersDataDTO;
+    //FPersDataDTO : TPersDataDTO;
 
     function MakeAgreement : string;
     function MakeCover(const MsgSrcCode : string; MsgTypeCode : string = uGisun.QUERY_INFO; DSet : string = '[15]') : string;
@@ -179,7 +179,7 @@ begin
   if (Assigned(Cfg.DefHeader)) then
     FHeader.AddStrings(Cfg.DefHeader);
   FActInf := TActInf.Create;
-  FPersDataDTO := TPersDataDTO.Create;
+  //FPersDataDTO := TPersDataDTO.Create;
   FAttempts := 0;
 end;
 
@@ -187,7 +187,7 @@ end;
 destructor TRestRequest.Destroy;
 begin
   FreeAndNil(FActInf);
-  FreeAndNil(FPersDataDTO);
+  //FreeAndNil(FPersDataDTO);
   FreeAndNil(FHeader);
   inherited;
 end;

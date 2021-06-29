@@ -34,22 +34,6 @@ type
     class procedure SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx : string; NeedType : Boolean = True);
   end;
 
-(*
-  // Базовый набор для преобразований JSON <-> DataSet
-  TJ2DS = class
-  private
-    FJObjName : string;
-    FInDS     : TDataSet;
-  public
-    property JObjName : string read FJObjName write FJObjName;
-
-    function GetFI(sField: String): Integer;
-
-    constructor Create(JN : string);
-    destructor Destroy;
-  end;
-*)
-
   // Базовый набор для преобразований DataSet -> JSON
   TDS2JSON = class
   private
@@ -64,15 +48,13 @@ type
   // Базовый набор реквизитов персональных данных
   TPersData = class
   private
-    FInDS     : TDataSet;
   public
-    property InDS : TDataSet read FInDS write FInDS;
-
-    constructor Create(IDS : TDataSet = nil);
-    destructor Destroy;
-
+    // Для записи в JSON-строку
     class function DS2JsonMin(IDS: TDataSet; Pfx: string = ''): string;
 
+    // Для записи в выходные DataSet
+
+    class procedure SObj2DSErr(Err: ISuperObject; ODS: TDataSet);
     class procedure SObj2DSBurs(Burs: ISuperObject; ODS: TDataSet);
     class procedure SObj2DSActDcs(ActDcs: ISuperObject; ODS: TDataSet);
     class procedure SObj2DSDcsPlace(DcsPlace: ISuperObject; ODS: TDataSet);
@@ -108,7 +90,8 @@ type
   public
     class function MarrDS2Json(IDS : TDataSet) : string;
   end;
-// Свидетельство о смерти
+
+  // Свидетельство о смерти
   TActDecease = class(TPersData)
   private
     class function DeceaseDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
@@ -116,7 +99,7 @@ type
   public
     class function DeceaseDS2Json(IDS : TDataSet) : string;
   end;
-// Свидетельство о расторжении брака
+  // Свидетельство о расторжении брака
   TActDvrc = class(TPersData)
   private
     class function DvrcDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string) : string;
@@ -133,62 +116,6 @@ type
   end;
 
 
-
-  // Чтение/Запись актов и персональных данных
-  TPersDataDTO = class
-  private
-    // MemTable with Docs
-    FDoc : TDataSet;
-    //FChild : TDataSet;
-    //FChildSepar : Boolean;
-    FSO : ISuperObject;
-    //FChildList : TStringList;
-    FJSONStream: TStringStream;
-
-    function GetFI(sField: String): Integer;
-    function GetFS(sField: String): String;
-    function GetFD(sField: String): TDateTime;
-    function GetFB(sField: String): String;
-    // Код из справочного реквизита
-    //function GetCode(sField: String; KeyField: string = 'klUniPK'): Variant;
-    //function GetName(sField: String): string;
-
-    // Добавить в JSON-поток
-    procedure AddNum(const ss1: string; ss2: Variant); overload;
-    procedure AddNum(const ss1: string); overload;
-    procedure AddStr(const ss1: string; ss2: String = '');
-    procedure AddDJ(ss1: String; dValue: TDateTime);
-
-    function MakeCover(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
-
-    // Паспортные данные
-    //procedure GetPasp;
-    // Место рождения
-    //procedure GetPlaceOfBirth;
-    // Место проживания
-    //procedure GetPlaceOfLiving;
-    // Белорусская версия
-    //procedure GetByVer;
-    // Адрес регистрации
-    //procedure GetROC(SODsdAddr: ISuperObject);
-    // Форма 19-20
-    //procedure GetForm19_20(SOf20 : ISuperObject; MasterKey: Variant);
-    // Данные по детям из внутреннего массива
-    //procedure GetChild(SOA: TSuperArray; MasterKey: Variant);
-
-  public
-
-    // Список документов из SuperObject сохранить в MemTable
-    //function GetDocList(SOArr: ISuperObject): Boolean;
-    function MemDoc2JSON(dsDoc: TDataSet; dsChild: TDataSet; StreamDoc: TStringStream; NeedUp : Boolean): Boolean;
-
-    //constructor Create(MTDoc, MTChild : TDataSet; ChSep : Boolean = False);
-    //destructor Destroy;
-
-    //class function GetNsi(SOArr: ISuperObject; Nsi: TkbmMemTable; EmpTbl: Boolean = True): Integer;
-  end;
-
-//function Marr2Json(IDS : TDataSet) : string;
 
 implementation
 
@@ -228,15 +155,12 @@ end;
 
 // Тип-код-наименование из справочника
 class procedure TClassifier.SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx : string; NeedType : Boolean = True);
-var
-  s: string;
-  x: ISuperObject;
 begin
   with ODS do begin
-    FieldByName('K_' + Pfx).AsString := SOClsf.S['code'];
     if (NeedType) then
       FieldByName('T_' + Pfx).AsString := IntToStr(SOClsf.I['type']);
-    FieldByName('N_' + Pfx).AsString := FindRUName(SOClsf.O['lexema'].O['value']);
+    FieldByName('K_' + Pfx).AsString   := SOClsf.S['code'];
+    FieldByName('N_' + Pfx).AsString   := FindRUName(SOClsf.O['lexema'].O['value']);
   end;
 end;
 
@@ -317,42 +241,22 @@ begin
 end;
 
 
-//
-constructor TPersData.Create(IDS : TDataSet = nil);
-begin
-  inherited Create;
-  FInDS := IDS;
-end;
-
-//
-destructor TPersData.Destroy;
-begin
-  inherited;
-end;
-
-
 class function TPersData.DS2JsonMin(IDS: TDataSet; Pfx: string = ''): string;
-var
-  Mode : Integer;
-  s: string;
 begin
   with IDS do begin
-    s := Format('"identif":"%s","last_name":"%s","name":"%s","patronymic":"%s","sex":%s,"birth_day":"%s"',
+    Result := Format('"identif":"%s","last_name":"%s","name":"%s","patronymic":"%s","sex":%s,"birth_day":"%s"',
       [FieldByName(Pfx + 'IDENTIF').AsString, FieldByName(Pfx + 'FAMILIA').AsString, FieldByName(Pfx + 'NAME').AsString,
        FieldByName(Pfx + 'OTCH').AsString, TClassifier.SetCT(IDS.FieldByName(Pfx + 'POL').AsString, 32),
        FieldByName(Pfx + 'DATER').AsString]);
 
-    s := s + Format(',"last_name_bel":"%s","name_bel":"%s","patronymic_bel":"%s"',
+    Result := Result + Format(',"last_name_bel":"%s","name_bel":"%s","patronymic_bel":"%s"',
       [FieldByName(Pfx + 'FAMILIA_B').AsString, FieldByName(Pfx + 'NAME_B').AsString, FieldByName(Pfx + 'OTCH_B').AsString]);
   end;
-  Result := s;
 end;
 
 
 // Место рождения
 class procedure TPersData.SObj2DSBPlace(SOPersData: ISuperObject; ODS: TDataSet);
-var
-  s: string;
 begin
   with ODS do begin
     TClassifier.SObj2DSSetTKN(SOPersData.O['country_b'], ODS, 'GOSUD_R');
@@ -404,8 +308,6 @@ end;
 
 // Место проживания
 class procedure TPersData.SObj2DSAddress(SOPersData: ISuperObject; ODS: TDataSet);
-var
-  s: string;
 begin
   with ODS do begin
     TClassifier.SObj2DSSetTKN(SOPersData.O['country'], ODS, 'GOSUD');
@@ -440,8 +342,6 @@ end;
 
 // Место смерти
 class procedure TPersData.SObj2DSDcsPlace(DcsPlace: ISuperObject; ODS: TDataSet);
-var
-  s: string;
 begin
   with ODS do begin
     FieldByName('S_GOSUD').AsString := DcsPlace.O['country_d'].S['code'];
@@ -461,8 +361,6 @@ end;
 
 // Запись акта о смерти
 class procedure TPersData.SObj2DSActDcs(ActDcs: ISuperObject; ODS: TDataSet);
-var
-  s: string;
 begin
   with ODS do begin
     FieldByName('SM_AKT_T_DOC_TYPE').AsString   := IntToStr(ActDcs.I['type']);
@@ -484,7 +382,7 @@ class procedure TPersData.SObj2DSDeaths(Deaths: ISuperObject; ODS: TDataSet);
 var
   GoodDoc: Boolean;
   NeedDocType, j, jMax, i, iMax: Integer;
-  NeedDocCode, s: string;
+  NeedDocCode : string;
   DocDcs, OneD, DDocs: ISuperObject;
 begin
   NeedDocType := 37;
@@ -539,66 +437,86 @@ begin
 end;
 
 
-
-
-// Сведения о захоронении
+// Данные о захоронении
 class procedure TPersData.SObj2DSBurs(Burs: ISuperObject; ODS: TDataSet);
 var
-  GoodDoc: Boolean;
-  NeedDocType, j, jMax, i, iMax: Integer;
-  NeedDocCode, s: string;
-  DocDcs, OneD, DDocs: ISuperObject;
+  j, jMax, i, iMax: Integer;
+  BData, OneD: ISuperObject;
 begin
-  NeedDocType := 37;
-  NeedDocCode := '5400009';
-  DocDcs := nil;
-
-  iMax := Deaths.AsArray.Length - 1;
+  iMax := Burs.AsArray.Length - 1;
   with ODS do begin
     for i := 0 to iMax do begin
-      DDocs := Deaths.AsArray.O[i].O['death'].O['documents'];
+      BData := Burs.AsArray.O[i].O['burial_info'].O['burial_data'];
+      if (BData.B['active'] = True) then begin
 
-      jMax := DDocs.AsArray.Length - 1;
-      GoodDoc := True;
-      for j := 0 to jMax do begin
-        OneD := Deaths.AsArray.O[j].O['document'];
-        GoodDoc := OneD.B['active'];
-        if (GoodDoc = False) then
-          Break;
-        if (OneD.O['document_type'].i['type'] = NeedDocType) AND (OneD.O['document_type'].s['code'] = NeedDocCode) then
-          DocDcs := OneD;
-      end;
-      if (GoodDoc = False) then
-        Continue;
-      if (Assigned(DocDcs)) then begin
-      // Все документы True и нужный тип присутствует
-        OneD := Deaths.AsArray.O[i].O['death'].O['death_data'];
-        TClassifier.SObj2DSSetTKN(OneD.O['death_cause'], ODS, 'CAUSE');
-        FieldByName('DATES').AsString := OneD.S['death_date'];
-        FieldByName('S_PLACE').AsString := OneD.S['death_place'];
-        FieldByName('S_MESTO').AsString := OneD.S['death_place'];
+        FieldByName('ZH_N_OBL').AsString := TClassifier.FindRUName(BData.O['area'].O['lexema'].O['value']);
+        FieldByName('ZH_N_RAION').AsString := TClassifier.FindRUName(BData.O['region'].O['lexema'].O['value']);
+        FieldByName('ZH_N_NP').AsString := TClassifier.FindRUName(BData.O['city'].O['lexema'].O['value']);
+        FieldByName('ZH_K_KLAD').AsString := BData.O['burial_name'].s['code'];
+        FieldByName('ZH_N_KLAD').AsString := TClassifier.FindRUName(BData.O['burial_name'].O['lexema'].O['value']);
+        FieldByName('ZH_SECTOR').AsString := BData.S['sector'];
+        FieldByName('ZH_RAD').AsString := BData.S['row'];
+        FieldByName('ZH_UCH').AsString := BData.S['place'];
+        FieldByName('ZH_MOG').AsString := BData.S['grave'];
 
-      // Место смерти
-        SObj2DSDcsPlace(OneD.O['decease_place'], ODS);
-      // Запись акта о смерти
-        SObj2DSActDcs(DocDcs.O['act_data'], ODS);
+        FieldByName('ZH_SKLEP').AsString := BData.S['vault'];
+        FieldByName('ZH_KLUM').AsString := BData.S['wall_section'];
+        FieldByName('ZH_STAKAN').AsString := BData.S['wall_box'];
 
-      // Свидетельство о смерти
-        FieldByName('SM_SV_T_DOC_TYPE').AsString := IntToStr(DocDcs.I['type']);
-        FieldByName('SM_SV_K_DOC_TYPE').AsString := DocDcs.S['code'];
-        FieldByName('SM_SV_N_DOC_TYPE').AsString := TClassifier.FindRUName(DocDcs.O['lexema'].O['value']);
-
-        FieldByName('SM_SV_T_DOC_ORGAN').AsString := IntToStr(DocDcs.O['authority'].i['type']);
-        FieldByName('SM_SV_K_DOC_ORGAN').AsString := DocDcs.O['authority'].s['code'];
-        FieldByName('SM_SV_N_DOC_ORGAN').AsString := TClassifier.FindRUName(DocDcs.O['authority'].O['lexema'].O['value']);
-
-        FieldByName('SM_SV_DOC_DATE').AsDateTime := StrToDate(DocDcs.S['date']);
-        FieldByName('SM_SV_DOC_SERIA').AsString := DocDcs.S['series'];
-        FieldByName('SM_SV_DOC_NOMER').AsString := DocDcs.S['number'];
+        jMax := Burs.AsArray.O[i].O['burial_info'].O['documents'].AsArray.Length - 1;
+        for j := 0 to jMax do begin
+          OneD := Burs.AsArray.O[i].O['burial_info'].O['documents'].AsArray.O[j];
+          if (OneD.B['active'] = True) then begin
+            FieldByName('ZH_BOOK').AsString := OneD.S['number'];
+            Break;
+          end;
+        end;
+        Break;
       end;
     end;
   end;
 end;
+
+
+// Заполнить информацией об ошибках
+class procedure TPersData.SObj2DSErr(Err: ISuperObject; ODS: TDataSet);
+var
+  j, jMax, i, iMax: Integer;
+  s: string;
+  OneErr, OneD: ISuperObject;
+begin
+  iMax := Err.AsArray.Length - 1;
+  with ODS do begin
+    for i := 0 to iMax do begin
+      OneErr := Err.AsArray.O[i];
+      Append;
+      FieldByName('ERROR_CODE').AsString := OneErr.O['error_code'].s['code'];
+      FieldByName('ERROR_TEXT').AsString := TClassifier.FindRUName(OneErr.O['error_code'].O['lexema'].O['value']);
+      FieldByName('ERROR_PLACE').AsString := OneErr.S['error_place'];
+      FieldByName('WRONG_VALUE').AsString := OneErr.S['wrong_value'];
+      FieldByName('CORRECT_VALUE').AsString := OneErr.S['correct_value'];
+      FieldByName('CHECK_NAME').AsString := OneErr.S['check_name'];
+      FieldByName('DESCRIPTION').AsString := OneErr.S['description'];
+      FieldByName('IDENTIF').AsString := OneErr.S['identif'];
+      Post;
+    end;
+  end;
+end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -633,9 +551,8 @@ begin
     SObj2DSAddress(SOPersData.O['address'], ODS);
     // Сведения о смерти
     SObj2DSDeaths(SOPersData.O['deaths'], ODS);
-
-
-
+    // Данные о захоронении
+    SObj2DSBurs(SOPersData.O['deaths'], ODS);
   end;
 end;
 
@@ -643,23 +560,16 @@ end;
 
 // Свидетельство о рождении (ребенок или родитель)
 class function TActBirth.BirthDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string; Mode : Integer = 1) : string;
-var
-  sF,
-  sD,
-  s : string;
 begin
-
-  sF := '"%s":{%s,' +
-        '"birth_place":{%s},' +
-        '"citizenship":%s,' +
-        '"status":%s}';
-  s := Format(sF,
-    [ObjName,
-     DS2JsonMin(IDS,Pfx),
+  Result := Format(
+    '"%s":{%s,' +
+      '"birth_place":{%s},' +
+      '"citizenship":%s,' +
+      '"status":%s}', [
+    ObjName, DS2JsonMin(IDS,Pfx),
      TDS2JSON.MakeBirthPlace(IDS, Pfx, Mode),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'GRAJD').AsString, 8),
      TClassifier.SetCT(IDS.FieldByName(Pfx + 'STATUS').AsString, -18)]);
-  Result := s;
 end;
 
 
@@ -916,7 +826,6 @@ begin
      IDS.FieldByName(Pfx + 'FAMILIA_OLD').AsString]);
 end;
 
-
 // Свидетельство о расторжении брака
 class function TActDvrc.DvrcDS2Json(IDS : TDataSet) : string;
 var
@@ -938,10 +847,6 @@ begin
     TDS2JSON.MakeDocCertif(IDS, 'dvc_wm_certificate_data', IDS.FieldByName('ONA_TIP').AsString, 'ONA_') + ',' +
     TDS2JSON.MakeDocCertif(IDS, 'dvc_mn_certificate_data', IDS.FieldByName('ON_TIP').AsString, 'ONA_') + '}';
 end;
-
-
-
-
 
 // Свидетельство о смене ФИО
 class function TActChgName.ChgNameDS2JsonOne(IDS : TDataSet; Pfx, ObjName : string) : string;
@@ -989,175 +894,6 @@ begin
     TDS2JSON.MakeActData(IDS, 'cng_act_data') + ',' +
     TDS2JSON.MakeDocCertif(IDS, 'cng_certificate_data', IDS.FieldByName('DOC_TIP').AsString) + '}';
 end;
-
-
-
-
-
-
-
-
-
-
-
-
-// Числовое целое из MemTable
-function TPersDataDTO.GetFI(sField: String): Integer;
-begin
-  try
-    Result := FDoc.FieldByName(sField).AsInteger;
-  except
-    Result := null;
-  end;
-end;
-
-// Строковое из MemTable
-function TPersDataDTO.GetFS(sField: String): String;
-begin
-  Result := FDoc.FieldByName(sField).AsString;
-end;
-
-// Дата из MemTable
-function TPersDataDTO.GetFD(sField: String): TDateTime;
-begin
-  Result := FDoc.FieldByName(sField).AsDateTime;
-end;
-
-// Логическое из MemTable
-function TPersDataDTO.GetFB(sField: String): String;
-begin
-  try
-    Result := Iif(FDoc.FieldByName(sField).AsBoolean, 'true', 'false');
-  except
-    Result := null;
-  end;
-end;
-
-
-// Вставить число в JSON-поток
-// Вставить логическое
-// Вставить значение ключа
-procedure TPersDataDTO.AddNum(const ss1: string; ss2: Variant);
-begin
-  ss2 := VarToStrDef(ss2, 'null');
-  FJSONStream.WriteString('"' + ss1 + '":' + ss2 + ',');
-end;
-
-// Вставить NULL
-procedure TPersDataDTO.AddNum(const ss1: string);
-begin
-  AddNum(ss1, null);
-end;
-
-// Вставить строку
-procedure TPersDataDTO.AddStr(const ss1: string; ss2: String = '');
-begin
-  if (Pos('"', ss2) > 0) then
-    ss2 := StringReplace(ss2, '"', '\"', [rfReplaceAll]);
-  ss2 := '"' + ss2 + '"';
-  FJSONStream.WriteString('"' + ss1 + '": ' + ss2 + ',');
-end;
-  // Вставить дату
-
-procedure TPersDataDTO.AddDJ(ss1: String; dValue: TDateTime);
-var
-  sss : string;
-begin
-  if (dValue = 0) or (Dtos(dValue) = '01.01.1970') then
-    sss := 'null'
-  else
-    sss := IntToStr(Delphi2JavaDate(dValue));
-  FJSONStream.WriteString('"' + ss1 + '": ' + sss + ',');
-end;
-
-
-
-
-
-
-
-
-
-function TPersDataDTO.MakeCover(dsDoc: TDataSet; StreamDoc: TStringStream): Boolean;
-var
-  s: string;
-begin
-  try
-    FJSONStream.WriteString('"cover":{' + '"message_type":{"code": "88","type":-2},' + '"message_source":{"code": "7689","type": 80},' + '"agreement":{"operator_info": "Организация адрес", "target":"верификация персональных данных","rights": [201,703,208,480,481,482,490,491,527,528,252,465,466,516,517],' + '"issue_date": "2019-12-07T13:22:09.619+03:00", "expiry_date": "2023-12-07T13:22:09.619+03:00", "assignee_persons": ["инспектор Иванов", "начальник инспектора Петров"]},' + '"dataset": [15]}');
-  finally
-      // Последней была запятая, вернемся для записи конца объекта
-    FJSONStream.Seek(-1, soCurrent);
-    FJSONStream.WriteString('},');
-  end;
-
-end;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Тело документа для POST
-function TPersDataDTO.MemDoc2JSON(dsDoc: TDataSet; dsChild: TDataSet; StreamDoc: TStringStream; NeedUp : Boolean): Boolean;
-var
-  s, sURL, sPar, sss, sF, sFld, sPath, sPostDoc, sResponse, sError, sStatus, sId: String;
-  sUTF : UTF8String;
-  ws : WideString;
-  new_obj, obj: ISuperObject;
-  nSpr, n, i, j: Integer;
-  lOk: Boolean;
-
-
-
-// Форма 19-20
-  procedure PostForm19_20;
-  begin
-    FJSONStream.WriteString('"form19_20":{');
-    AddStr('form19_20Base', 'form19_20');
-    try
-    finally
-      // Последней была запятая, вернемся для записи конца объекта
-      FJSONStream.Seek(-1, soCurrent);
-      FJSONStream.WriteString('},');
-    end;
-  end;
-
-
-
-begin
-  Result := False;
-  FJSONStream := StreamDoc;
-  FJSONStream.WriteString('{');
-  try
-
-    // Будет null
-    AddNum('pid');
-
-
-    sUTF := AnsiToUtf8(StreamDoc.DataString);
-    FJSONStream.Seek(0, soBeginning);
-    FJSONStream.WriteString(sUTF);
-    Result := True;
-  finally
-  // Последней была запятая, вернемся для записи конца объекта
-    StreamDoc.Seek(-1, soCurrent);
-    StreamDoc.WriteString('}');
-  end;
-end;
-
-
-
-
 
 
 end.

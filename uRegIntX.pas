@@ -150,6 +150,9 @@ begin
         end;
         Resp.RetDS.Post;
       end;
+    end else begin
+    // Данные отсутствуют
+
     end;
 
     SOArrPD := Resp.RetSO.O['response'].O['identif_number'];
