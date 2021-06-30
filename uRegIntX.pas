@@ -55,6 +55,7 @@ type
     FIni : TSasaIniFile;
     FRestClient : TRestClient;
 
+    function SetErrData(const Act: TActKind; Resp: TRestResponse) : Integer;
     function SetOutDS(const Act : TActKind; Resp : TRestResponse) : Integer;
   public
     property Config : TRestConfig read FConfig write FConfig;
@@ -122,6 +123,38 @@ begin
 end;
 
 
+
+
+
+
+
+
+// Заполненеие DataSet в случае ошибок
+function TRegIntX.SetErrData(const Act: TActKind; Resp: TRestResponse): Integer;
+var
+  ErrsInSO: Integer;
+begin
+  if (Resp.RetAsSOAP = rrOk) then begin
+    Resp.ErrDS := nil;
+  end else begin
+    Resp.ErrDS := CreateErrorTable;
+    if (Resp.RetAsSOAP = rrBeforeError) then begin
+        AddOneErr(Resp.ErrDS, IntToStr(Resp.RetCode), Resp.RetMsg);
+
+    end else begin
+    ErrsInSO := TPersData.SObj2DSErr(Resp.RetSO, Resp.ErrDS);
+    end;
+
+
+  end;
+  Result := ErrsInSO;
+end;
+
+
+
+
+
+
 // Для GET-запросов заполнение выходных DataSet
 function TRegIntX.SetOutDS(const Act: TActKind; Resp: TRestResponse): Integer;
 var
@@ -137,6 +170,7 @@ begin
       for i := 0 to iMax do begin
         OnePD := SOArrPD.AsArray.O[i].O['data'];
         Resp.RetDS.Append;
+        try
         if (Act = akGetPersonIdentif) then begin
         // Должен вернуть запрошенный ИН по ФИО
           Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
@@ -148,7 +182,9 @@ begin
           TPersData.SObj2DSPersData(OnePD, Resp.RetDS);
 
         end;
+        finally
         Resp.RetDS.Post;
+        end;
       end;
     end else begin
     // Данные отсутствуют
@@ -201,16 +237,13 @@ begin
   else begin
     // Через REST-сервис
     Result := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar);
-    Result.ErrDS := CreateErrorTable;
-    Error := Result.ErrDS;
     if (Result.RetAsSOAP = rrOk) then begin
        Result.RetDS := CreateOutputTable(akGetPersonalData);
        Output := Result.RetDS;
        nErr := SetOutDS(ActKind, Result);
-    end else begin
-
-    end;
-
+     end;
+    SetErrData(ActKind, Result);
+    Error := Result.ErrDS;
   end;
 end;
 

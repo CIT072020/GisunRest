@@ -1,6 +1,10 @@
-GET /village-council-service/api/v1/data?identifier=3110179A016PB5&name=&surname=&patronymic=&pid=90034150 HTTP/1.0
-Host: a.todes.by:13555
+POST /gisun-inf/api/v1/common/register HTTP/1.1
+Host: a.todes.by:13201
 Keep-Alive: 300
 Connection: keep-alive
 User-Agent: Mozilla/4.0 (compatible; Synapse)
+Content-Type: application/json;charset=UTF-8
+Content-Length: 1057
+Reg-auth-username:PASSPORT_USER
+Reg-auth-password:user_password
 

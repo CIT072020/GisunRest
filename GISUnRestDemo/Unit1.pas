@@ -350,12 +350,12 @@ begin
   d := RegInt.CreateInputTable(akGetPersonalData, opGet);
   d.Append;
   d['IS_PERSON']  := True;
-  d['IDENTIF']    := '7120691A001PB3';
+  d['IDENTIF']    := '4230478A031PB8';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
   d.Append;
   d['IS_PERSON']  := True;
-  d['IDENTIF']    := '7146694A001PB8';
+  d['IDENTIF']    := '4291070A007PB0';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
   d.Append;
