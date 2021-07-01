@@ -412,6 +412,15 @@ object Form1: TForm1
     TabOrder = 29
     OnClick = btnPostChgFIOClick
   end
+  object btnIsoTime: TButton
+    Left = 471
+    Top = 715
+    Width = 402
+    Height = 25
+    Caption = 'Time ='
+    TabOrder = 30
+    OnClick = btnIsoTimeClick
+  end
   object DataSource1: TDataSource
     Left = 664
     Top = 74

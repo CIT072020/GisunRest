@@ -1,16 +1,16 @@
 {
   "cover" : {
-    "message_id" : "{490E4279-7621-4DC5-92C2-A02559265DFE}",
+    "message_id" : "{ECD6FE6E-2F5A-4276-B96C-DD53882A542B}",
     "message_type" : {
       "code" : "88",
       "type" : -2
     },
-    "message_time" : "2021-06-30T17:33:59.609+03:00",
+    "message_time" : "2021-07-01T16:44:42.288+03:00",
     "message_source" : {
       "code" : "1",
       "type" : 80
     },
-    "parent_message_id" : "{870D68B4-8986-45D8-A827-693A0CCC4B26}",
+    "parent_message_id" : "{48F156BA-7169-4D76-95BE-A122CD9BFB36}",
     "dataset" : [ 15 ],
     "agreement" : {
       "target" : "верификация персональных данных",
@@ -23,7 +23,635 @@
   },
   "response" : {
     "personal_data" : [ {
-      "request_id" : "{A3302AE4-C6C4-4858-B55C-A36B91C5C2FD}",
+      "request_id" : "{7453FECB-A858-4811-B117-C4B2A55E869A}",
+      "data" : {
+        "identif" : "4291070A007PB0",
+        "last_name" : "БУЛАТ",
+        "last_name_bel" : "БУЛАТ",
+        "name" : "ИРИНА",
+        "name_bel" : "ІРЫНА",
+        "patronymic" : "АНАТОЛЬЕВНА",
+        "patronymic_bel" : "АНАТОЛЬЕЎНА",
+        "sex" : {
+          "code" : "F",
+          "type" : 32,
+          "lexema" : {
+            "value" : [ {
+              "value" : "ЖЕНСКИЙ",
+              "lang" : "ru"
+            }, {
+              "value" : "Ж",
+              "lang" : "be"
+            } ]
+          }
+        },
+        "birth_day" : "19701029",
+        "birth_place" : {
+          "country_b" : {
+            "code" : "RUS",
+            "type" : 8,
+            "lexema" : {
+              "value" : [ {
+                "value" : "РОССИЙСКАЯ ФЕДЕРАЦИЯ",
+                "lang" : "ru"
+              }, {
+                "value" : "РАСІЙСКАЯ ФЕДЭРАЦЫЯ",
+                "lang" : "be"
+              } ]
+            }
+          },
+          "area_b" : "РОСТОВСКАЯ ОБЛАСТЬ",
+          "type_city_b" : {
+            "code" : "11100001",
+            "type" : 68,
+            "lexema" : {
+              "value" : [ {
+                "value" : "Г",
+                "lang" : "ru"
+              }, {
+                "value" : "Г",
+                "lang" : "be"
+              } ]
+            }
+          },
+          "city_b" : "ШАХТЫ",
+          "area_b_bel" : "РАСТОЎСКАЯ ВОБЛАСЦЬ",
+          "city_b_bel" : "ШАХТЫ"
+        },
+        "citizenship" : {
+          "code" : "BLR",
+          "type" : 8,
+          "lexema" : {
+            "value" : [ {
+              "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
+              "lang" : "ru"
+            }, {
+              "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
+              "lang" : "be"
+            } ]
+          }
+        },
+        "status" : {
+          "code" : "6",
+          "type" : -18,
+          "lexema" : {
+            "value" : [ {
+              "value" : "АРХИВНЫЙ",
+              "lang" : "ru"
+            } ]
+          }
+        },
+        "documents" : [ {
+          "document" : {
+            "access" : {
+              "code" : "10",
+              "type" : -3,
+              "lexema" : {
+                "value" : [ {
+                  "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                  "lang" : "ru"
+                } ]
+              }
+            },
+            "document_type" : {
+              "code" : "54100001",
+              "type" : 39,
+              "lexema" : {
+                "value" : [ {
+                  "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
+                  "lang" : "ru"
+                }, {
+                  "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
+                  "lang" : "be"
+                } ]
+              }
+            },
+            "authority" : {
+              "code" : "17606091",
+              "type" : 24,
+              "lexema" : {
+                "value" : [ {
+                  "value" : "ФРУНЗЕНСКОЕ РУВД Г.МИНСКА",
+                  "lang" : "ru"
+                }, {
+                  "value" : "ФРУНЗЕНСКАЕ РУУС Г.МІНСКА",
+                  "lang" : "be"
+                } ]
+              }
+            },
+            "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
+            "expire_date" : "2015-10-29T00:00:00.000+03:00",
+            "series" : "MP",
+            "number" : "0826709",
+            "active" : true
+          }
+        } ],
+        "family" : {
+          "child" : [ {
+            "person_data" : {
+              "identif" : "7461780A001PB8",
+              "last_name" : "РАБИНОВИЧ",
+              "last_name_bel" : "РАБІНОВІЧ",
+              "name" : "РАВИН",
+              "name_bel" : "РАВІН",
+              "patronymic" : "РАВИНОВИЧ",
+              "patronymic_bel" : "РАВІНАВІЧ",
+              "sex" : {
+                "code" : "M",
+                "type" : 32,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "МУЖСКОЙ",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "М",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "birth_day" : "20160802",
+              "birth_place" : {
+                "country_b" : {
+                  "code" : "BLR",
+                  "type" : 8,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
+                      "lang" : "ru"
+                    }, {
+                      "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
+                      "lang" : "be"
+                    } ]
+                  }
+                },
+                "area_b" : "БРЕСТСКАЯ ОБЛАСТЬ",
+                "region_b" : "БРЕСТСКИЙ",
+                "type_city_b" : {
+                  "code" : "11100001",
+                  "type" : 68,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "Г",
+                      "lang" : "ru"
+                    }, {
+                      "value" : "Г",
+                      "lang" : "be"
+                    } ]
+                  }
+                },
+                "city_b" : "ДРОГИЧИН",
+                "area_b_bel" : "БРЭСЦКАЯ ВОБЛАСЦЬ",
+                "region_b_bel" : "БРЭСЦКІ",
+                "city_b_bel" : "ДРАГІЧЫН"
+              },
+              "status" : {
+                "code" : "1",
+                "type" : -18,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "АКТИВЕН",
+                    "lang" : "ru"
+                  } ]
+                }
+              }
+            }
+          }, {
+            "person_data" : {
+              "identif" : "7662786A001PB3",
+              "last_name" : "ЛАПАНИК",
+              "last_name_bel" : "ЛАПАНІК",
+              "name" : "ЛИАНА",
+              "name_bel" : "ЛІЯНА",
+              "patronymic" : "ИВАНОВИЧ",
+              "patronymic_bel" : "ІВАНАВІЧ",
+              "sex" : {
+                "code" : "M",
+                "type" : 32,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "МУЖСКОЙ",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "М",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "birth_day" : "20160625",
+              "birth_place" : {
+                "country_b" : {
+                  "code" : "BLR",
+                  "type" : 8,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
+                      "lang" : "ru"
+                    }, {
+                      "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
+                      "lang" : "be"
+                    } ]
+                  }
+                },
+                "area_b" : "МИНСК ОБЛАСТЬ",
+                "region_b" : "ПАРТИЗАНСКИЙ",
+                "type_city_b" : {
+                  "code" : "11100009",
+                  "type" : 68,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "Д",
+                      "lang" : "ru"
+                    }, {
+                      "value" : "В",
+                      "lang" : "be"
+                    } ]
+                  }
+                },
+                "city_b" : "МОТЫКАЛЫ",
+                "area_b_bel" : "МІНСК ВОБЛАСЦЬ",
+                "region_b_bel" : "ПАРТЫЗАНСКІ",
+                "city_b_bel" : "МАТЫКАЛЫ"
+              },
+              "status" : {
+                "code" : "6",
+                "type" : -18,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "АРХИВНЫЙ",
+                    "lang" : "ru"
+                  } ]
+                }
+              }
+            }
+          } ],
+          "martial_status" : {
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "document_type" : {
+                  "code" : "54100006",
+                  "type" : 37,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "СВИДЕТЕЛЬСТВО О ЗАКЛЮЧЕНИИ БРАКА",
+                      "lang" : "ru"
+                    }, {
+                      "value" : "ПАСВЕДЧАННЕ АБ ЗАКЛЮЧЭННІ ШЛЮБУ",
+                      "lang" : "be"
+                    } ]
+                  }
+                },
+                "authority" : {
+                  "code" : "429",
+                  "type" : 80,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ЗНАМЕНСКИЙ СЕЛЬСКИЙ ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ БРЕСТСКОГО РАЙОНА БРЕСТСКОЙ ОБЛАСТИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2016-08-15T00:00:00.000+03:00",
+                "series" : "I-АЛ",
+                "number" : "0233116",
+                "active" : false
+              }
+            }, {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "document_type" : {
+                  "code" : "0300",
+                  "type" : 82,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "АКТОВАЯ ЗАПИСЬ РЕГИСТРАЦИИ ЗАКЛЮЧЕНИЯ БРАКА",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "authority" : {
+                  "code" : "429",
+                  "type" : 80,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ЗНАМЕНСКИЙ СЕЛЬСКИЙ ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ БРЕСТСКОГО РАЙОНА БРЕСТСКОЙ ОБЛАСТИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2016-08-15T00:00:00.000+03:00",
+                "number" : "4",
+                "active" : false
+              }
+            } ],
+            "cert_data" : {
+              "date" : "2016-08-15T00:00:00.000+03:00",
+              "region" : {
+                "code" : "429",
+                "type" : 80,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ЗНАМЕНСКИЙ СЕЛЬСКИЙ ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ БРЕСТСКОГО РАЙОНА БРЕСТСКОЙ ОБЛАСТИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              }
+            }
+          }
+        },
+        "trusteeships" : [ {
+          "trusteeship_info" : {
+            "trustee" : {
+              "identif" : "4230478A031PB8",
+              "sex" : {
+                "code" : "F",
+                "type" : 32,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ЖЕНСКИЙ",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "Ж",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "birth_place" : { },
+              "status" : {
+                "code" : "6",
+                "type" : -18,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "АРХИВНЫЙ",
+                    "lang" : "ru"
+                  } ]
+                }
+              }
+            },
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "document_type" : {
+                  "code" : "4",
+                  "type" : 133,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ДОКУМЕНТ ИЗ ИСПОЛКОМА ОБ ОПЕКЕ (ПОПЕЧИТЕЛЬСТВЕ)",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "1987-09-25T23:00:00.000+03:00",
+                "active" : true
+              }
+            } ]
+          }
+        } ],
+        "deaths" : [ {
+          "death" : {
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "active" : true
+              }
+            }, {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "active" : true
+              }
+            } ],
+            "death_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "death_cause" : {
+                "code" : "K25.0",
+                "type" : 81,
+                "lexema" : { }
+              },
+              "death_date" : "19540711",
+              "decease_place" : {
+                "country_d" : {
+                  "code" : "BLR",
+                  "type" : 8,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
+                      "lang" : "ru"
+                    }, {
+                      "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
+                      "lang" : "be"
+                    } ]
+                  }
+                },
+                "area_d" : "ГРОДНЕНСКАЯ ОБЛАСТЬ",
+                "area_dbel" : "ГРОДЗЕНСКАЯ ВОБЛАСЦЬ ВОБЛАСЦЬ",
+                "region_d" : "ОСТРОВЕЦКИЙ",
+                "region_dbel" : "АСТРАВЕЦКІ",
+                "type_city_d" : {
+                  "code" : "11100009",
+                  "type" : 68,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "Д",
+                      "lang" : "ru"
+                    }, {
+                      "value" : "В",
+                      "lang" : "be"
+                    } ]
+                  }
+                },
+                "city_d" : "МАРКУНЫ",
+                "city_dbel" : "МАРКУНЫ"
+              }
+            }
+          }
+        } ],
+        "burials" : [ {
+          "burial_info" : {
+            "burial_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "country" : {
+                "code" : "BLR",
+                "type" : 8,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "area" : {
+                "code" : "1",
+                "type" : 1,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "Брестская",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "Брэсцкая",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "region" : {
+                "code" : "397",
+                "type" : 29,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "Брестский",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "Брэсцкі",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "soviet" : {
+                "code" : "423",
+                "type" : 67,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "Знаменский",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "Знаменскі",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "city" : {
+                "code" : "424",
+                "type" : 7,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "Белое Озеро",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "Белае Возера",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "burial_name" : {
+                "code" : "103020101",
+                "type" : 134,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "КЛАДБИЩЕ АГ.МЕДНО",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "place" : "6",
+              "grave" : "1"
+            },
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "document_type" : {
+                  "code" : "2",
+                  "type" : 133,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "КНИГА ГОСУДАРСТВЕННОГО УЧЕТА УЧАСТКОВ ДЛЯ ЗАХОРОНЕНИЯ, МЕСТ В КОЛУМБАРИИ, СКЛЕПОВ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "authority" : {
+                  "code" : "200026656",
+                  "type" : 142,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "Пружанское коммунальное унитарное производственное предприятие «Коммунальник»",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2016-07-29T00:00:00.000+03:00",
+                "number" : "2",
+                "active" : true
+              }
+            } ]
+          }
+        } ]
+      }
+    }, {
+      "request_id" : "{E6AAF961-9D64-4CE9-BCDD-B9B1ED4D7311}",
       "data" : {
         "identif" : "4230478A031PB8",
         "last_name" : "ДУБИНЕЦ",
@@ -1118,641 +1746,13 @@
           }
         } ]
       }
-    }, {
-      "request_id" : "{444E50BC-8BAC-45FC-BDEB-928DC19FBAAE}",
-      "data" : {
-        "identif" : "4291070A007PB0",
-        "last_name" : "БУЛАТ",
-        "last_name_bel" : "БУЛАТ",
-        "name" : "ИРИНА",
-        "name_bel" : "ІРЫНА",
-        "patronymic" : "АНАТОЛЬЕВНА",
-        "patronymic_bel" : "АНАТОЛЬЕЎНА",
-        "sex" : {
-          "code" : "F",
-          "type" : 32,
-          "lexema" : {
-            "value" : [ {
-              "value" : "ЖЕНСКИЙ",
-              "lang" : "ru"
-            }, {
-              "value" : "Ж",
-              "lang" : "be"
-            } ]
-          }
-        },
-        "birth_day" : "19701029",
-        "birth_place" : {
-          "country_b" : {
-            "code" : "RUS",
-            "type" : 8,
-            "lexema" : {
-              "value" : [ {
-                "value" : "РОССИЙСКАЯ ФЕДЕРАЦИЯ",
-                "lang" : "ru"
-              }, {
-                "value" : "РАСІЙСКАЯ ФЕДЭРАЦЫЯ",
-                "lang" : "be"
-              } ]
-            }
-          },
-          "area_b" : "РОСТОВСКАЯ ОБЛАСТЬ",
-          "type_city_b" : {
-            "code" : "11100001",
-            "type" : 68,
-            "lexema" : {
-              "value" : [ {
-                "value" : "Г",
-                "lang" : "ru"
-              }, {
-                "value" : "Г",
-                "lang" : "be"
-              } ]
-            }
-          },
-          "city_b" : "ШАХТЫ",
-          "area_b_bel" : "РАСТОЎСКАЯ ВОБЛАСЦЬ",
-          "city_b_bel" : "ШАХТЫ"
-        },
-        "citizenship" : {
-          "code" : "BLR",
-          "type" : 8,
-          "lexema" : {
-            "value" : [ {
-              "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
-              "lang" : "ru"
-            }, {
-              "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
-              "lang" : "be"
-            } ]
-          }
-        },
-        "status" : {
-          "code" : "6",
-          "type" : -18,
-          "lexema" : {
-            "value" : [ {
-              "value" : "АРХИВНЫЙ",
-              "lang" : "ru"
-            } ]
-          }
-        },
-        "documents" : [ {
-          "document" : {
-            "access" : {
-              "code" : "10",
-              "type" : -3,
-              "lexema" : {
-                "value" : [ {
-                  "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                  "lang" : "ru"
-                } ]
-              }
-            },
-            "document_type" : {
-              "code" : "54100001",
-              "type" : 39,
-              "lexema" : {
-                "value" : [ {
-                  "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
-                  "lang" : "ru"
-                }, {
-                  "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
-                  "lang" : "be"
-                } ]
-              }
-            },
-            "authority" : {
-              "code" : "17606091",
-              "type" : 24,
-              "lexema" : {
-                "value" : [ {
-                  "value" : "ФРУНЗЕНСКОЕ РУВД Г.МИНСКА",
-                  "lang" : "ru"
-                }, {
-                  "value" : "ФРУНЗЕНСКАЕ РУУС Г.МІНСКА",
-                  "lang" : "be"
-                } ]
-              }
-            },
-            "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
-            "expire_date" : "2015-10-29T00:00:00.000+03:00",
-            "series" : "MP",
-            "number" : "0826709",
-            "active" : true
-          }
-        } ],
-        "family" : {
-          "child" : [ {
-            "person_data" : {
-              "identif" : "7461780A001PB8",
-              "last_name" : "РАБИНОВИЧ",
-              "last_name_bel" : "РАБІНОВІЧ",
-              "name" : "РАВИН",
-              "name_bel" : "РАВІН",
-              "patronymic" : "РАВИНОВИЧ",
-              "patronymic_bel" : "РАВІНАВІЧ",
-              "sex" : {
-                "code" : "M",
-                "type" : 32,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "МУЖСКОЙ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "М",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "birth_day" : "20160802",
-              "birth_place" : {
-                "country_b" : {
-                  "code" : "BLR",
-                  "type" : 8,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "area_b" : "БРЕСТСКАЯ ОБЛАСТЬ",
-                "region_b" : "БРЕСТСКИЙ",
-                "type_city_b" : {
-                  "code" : "11100001",
-                  "type" : 68,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "Г",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "Г",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "city_b" : "ДРОГИЧИН",
-                "area_b_bel" : "БРЭСЦКАЯ ВОБЛАСЦЬ",
-                "region_b_bel" : "БРЭСЦКІ",
-                "city_b_bel" : "ДРАГІЧЫН"
-              },
-              "status" : {
-                "code" : "1",
-                "type" : -18,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "АКТИВЕН",
-                    "lang" : "ru"
-                  } ]
-                }
-              }
-            }
-          }, {
-            "person_data" : {
-              "identif" : "7662786A001PB3",
-              "last_name" : "ЛАПАНИК",
-              "last_name_bel" : "ЛАПАНІК",
-              "name" : "ЛИАНА",
-              "name_bel" : "ЛІЯНА",
-              "patronymic" : "ИВАНОВИЧ",
-              "patronymic_bel" : "ІВАНАВІЧ",
-              "sex" : {
-                "code" : "M",
-                "type" : 32,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "МУЖСКОЙ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "М",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "birth_day" : "20160625",
-              "birth_place" : {
-                "country_b" : {
-                  "code" : "BLR",
-                  "type" : 8,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "area_b" : "МИНСК ОБЛАСТЬ",
-                "region_b" : "ПАРТИЗАНСКИЙ",
-                "type_city_b" : {
-                  "code" : "11100009",
-                  "type" : 68,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "Д",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "В",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "city_b" : "МОТЫКАЛЫ",
-                "area_b_bel" : "МІНСК ВОБЛАСЦЬ",
-                "region_b_bel" : "ПАРТЫЗАНСКІ",
-                "city_b_bel" : "МАТЫКАЛЫ"
-              },
-              "status" : {
-                "code" : "6",
-                "type" : -18,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "АРХИВНЫЙ",
-                    "lang" : "ru"
-                  } ]
-                }
-              }
-            }
-          } ],
-          "martial_status" : {
-            "documents" : [ {
-              "document" : {
-                "access" : {
-                  "code" : "10",
-                  "type" : -3,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "document_type" : {
-                  "code" : "54100006",
-                  "type" : 37,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "СВИДЕТЕЛЬСТВО О ЗАКЛЮЧЕНИИ БРАКА",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "ПАСВЕДЧАННЕ АБ ЗАКЛЮЧЭННІ ШЛЮБУ",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "authority" : {
-                  "code" : "429",
-                  "type" : 80,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ЗНАМЕНСКИЙ СЕЛЬСКИЙ ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ БРЕСТСКОГО РАЙОНА БРЕСТСКОЙ ОБЛАСТИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "date_of_issue" : "2016-08-15T00:00:00.000+03:00",
-                "series" : "I-АЛ",
-                "number" : "0233116",
-                "active" : false
-              }
-            }, {
-              "document" : {
-                "access" : {
-                  "code" : "10",
-                  "type" : -3,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "document_type" : {
-                  "code" : "0300",
-                  "type" : 82,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "АКТОВАЯ ЗАПИСЬ РЕГИСТРАЦИИ ЗАКЛЮЧЕНИЯ БРАКА",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "authority" : {
-                  "code" : "429",
-                  "type" : 80,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ЗНАМЕНСКИЙ СЕЛЬСКИЙ ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ БРЕСТСКОГО РАЙОНА БРЕСТСКОЙ ОБЛАСТИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "date_of_issue" : "2016-08-15T00:00:00.000+03:00",
-                "number" : "4",
-                "active" : false
-              }
-            } ],
-            "cert_data" : {
-              "date" : "2016-08-15T00:00:00.000+03:00",
-              "region" : {
-                "code" : "429",
-                "type" : 80,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "ЗНАМЕНСКИЙ СЕЛЬСКИЙ ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ БРЕСТСКОГО РАЙОНА БРЕСТСКОЙ ОБЛАСТИ",
-                    "lang" : "ru"
-                  } ]
-                }
-              }
-            }
-          }
-        },
-        "trusteeships" : [ {
-          "trusteeship_info" : {
-            "trustee" : {
-              "identif" : "4230478A031PB8",
-              "sex" : {
-                "code" : "F",
-                "type" : 32,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "ЖЕНСКИЙ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Ж",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "birth_place" : { },
-              "status" : {
-                "code" : "6",
-                "type" : -18,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "АРХИВНЫЙ",
-                    "lang" : "ru"
-                  } ]
-                }
-              }
-            },
-            "documents" : [ {
-              "document" : {
-                "access" : {
-                  "code" : "10",
-                  "type" : -3,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "document_type" : {
-                  "code" : "4",
-                  "type" : 133,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ДОКУМЕНТ ИЗ ИСПОЛКОМА ОБ ОПЕКЕ (ПОПЕЧИТЕЛЬСТВЕ)",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "date_of_issue" : "1987-09-25T23:00:00.000+03:00",
-                "active" : true
-              }
-            } ]
-          }
-        } ],
-        "deaths" : [ {
-          "death" : {
-            "documents" : [ {
-              "document" : {
-                "access" : {
-                  "code" : "10",
-                  "type" : -3,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "active" : true
-              }
-            }, {
-              "document" : {
-                "access" : {
-                  "code" : "10",
-                  "type" : -3,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "active" : true
-              }
-            } ],
-            "death_data" : {
-              "access" : {
-                "code" : "10",
-                "type" : -3,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                    "lang" : "ru"
-                  } ]
-                }
-              },
-              "death_cause" : {
-                "code" : "K25.0",
-                "type" : 81,
-                "lexema" : { }
-              },
-              "death_date" : "19540711",
-              "decease_place" : {
-                "country_d" : {
-                  "code" : "BLR",
-                  "type" : 8,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "area_d" : "ГРОДНЕНСКАЯ ОБЛАСТЬ",
-                "area_dbel" : "ГРОДЗЕНСКАЯ ВОБЛАСЦЬ ВОБЛАСЦЬ",
-                "region_d" : "ОСТРОВЕЦКИЙ",
-                "region_dbel" : "АСТРАВЕЦКІ",
-                "type_city_d" : {
-                  "code" : "11100009",
-                  "type" : 68,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "Д",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "В",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "city_d" : "МАРКУНЫ",
-                "city_dbel" : "МАРКУНЫ"
-              }
-            }
-          }
-        } ],
-        "burials" : [ {
-          "burial_info" : {
-            "burial_data" : {
-              "access" : {
-                "code" : "10",
-                "type" : -3,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                    "lang" : "ru"
-                  } ]
-                }
-              },
-              "country" : {
-                "code" : "BLR",
-                "type" : 8,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "area" : {
-                "code" : "1",
-                "type" : 1,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "Брестская",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Брэсцкая",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "region" : {
-                "code" : "397",
-                "type" : 29,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "Брестский",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Брэсцкі",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "soviet" : {
-                "code" : "423",
-                "type" : 67,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "Знаменский",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Знаменскі",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "city" : {
-                "code" : "424",
-                "type" : 7,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "Белое Озеро",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Белае Возера",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "burial_name" : {
-                "code" : "103020101",
-                "type" : 134,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "КЛАДБИЩЕ АГ.МЕДНО",
-                    "lang" : "ru"
-                  } ]
-                }
-              },
-              "place" : "6",
-              "grave" : "1"
-            },
-            "documents" : [ {
-              "document" : {
-                "access" : {
-                  "code" : "10",
-                  "type" : -3,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "document_type" : {
-                  "code" : "2",
-                  "type" : 133,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "КНИГА ГОСУДАРСТВЕННОГО УЧЕТА УЧАСТКОВ ДЛЯ ЗАХОРОНЕНИЯ, МЕСТ В КОЛУМБАРИИ, СКЛЕПОВ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "authority" : {
-                  "code" : "200026656",
-                  "type" : 142,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "Пружанское коммунальное унитарное производственное предприятие «Коммунальник»",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "date_of_issue" : "2016-07-29T00:00:00.000+03:00",
-                "number" : "2",
-                "active" : true
-              }
-            } ]
-          }
-        } ]
-      }
     } ],
     "identif_number" : [ {
-      "request_id" : "{08757410-968F-4A15-8BAF-292755EF85AA}",
-      "data" : "7222149A001PB6"
+      "request_id" : "{76E60654-01B6-440E-AB44-1D264A72DF3A}",
+      "data" : "7303367A001PB8"
     }, {
-      "request_id" : "{01852820-699C-4A20-BEEE-3D1E2AE4DA46}",
-      "data" : "7365959A001PB9"
+      "request_id" : "{EF98E950-D11D-49DA-A399-0DD93FE14819}",
+      "data" : "7283586A001PB4"
     } ]
   }
 }

@@ -9,6 +9,7 @@ uses
   StdCtrls, Mask,
   DBCtrlsEh,
   DB, Grids, DBGridEh,
+  XSBuiltIns,
   adsdata, adsfunc, adstable, adscnnct,
   HTTPSend,
   ssl_openssl, ssl_openssl_lib,
@@ -66,6 +67,7 @@ type
     btnPostDecease: TButton;
     btnPostDivr: TButton;
     btnPostChgFIO: TButton;
+    btnIsoTime: TButton;
     procedure btnGetActualClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
@@ -73,6 +75,7 @@ type
     procedure btnGetNSIClick(Sender: TObject);
     procedure btnGetPersDataClick(Sender: TObject);
     procedure btnGetUNClick(Sender: TObject);
+    procedure btnIsoTimeClick(Sender: TObject);
     procedure btnPostAffilClick(Sender: TObject);
     procedure btnPostBirthClick(Sender: TObject);
     procedure btnPostChgFIOClick(Sender: TObject);
@@ -350,12 +353,12 @@ begin
   d := RegInt.CreateInputTable(akGetPersonalData, opGet);
   d.Append;
   d['IS_PERSON']  := True;
-  d['IDENTIF']    := '4230478A031PB8';
+  d['IDENTIF']    := '4291070A007PB0';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
   d.Append;
   d['IS_PERSON']  := True;
-  d['IDENTIF']    := '4291070A007PB0';
+  d['IDENTIF']    := '4230478A031PB8';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
   d.Append;
@@ -394,6 +397,14 @@ begin
   d.Post;
   r := RegInt.Get(akGetPersonIdentif, QUERY_INFO, d, dsOut, dsErr);
 end;
+
+
+
+
+
+
+
+
 
 // Установление отцовства
 procedure TForm1.btnPostAffilClick(Sender: TObject);
@@ -936,7 +947,43 @@ begin
   r := RegInt.Post(s, akNameChange, '0700', d, dsErr);
 end;
 
+
+
+
+
+
+
+
+
+
+
+
+function IsoTime(const Value: String): TDateTime;
+var
+  d : TDateTime;
+begin
+  with XSBuiltIns.TXSDateTime.Create do
+  try
+    XSToNative(Value);
+    //Result := AsUTCDateTime;
+    Result := AsDateTime;
+  finally
+    Free;
+  end;
+
+end;
+
+procedure TForm1.btnIsoTimeClick(Sender: TObject);
+var
+  t : string;
+  d : TDateTime;
+begin
+  t := '2000-07-20T00:00:00.000+03:00';
+  d := IsoTime(t);
+  //d := IncHour(d, 3);
+  ISO8601DateToDelphiDateTime(t, d);
+  TButton(Sender).Caption := 'Date: ' + FormatDateTime('yyyy-mm-dd hh:MM:ss', d);
+end;
+
 //
 end.
-
-
