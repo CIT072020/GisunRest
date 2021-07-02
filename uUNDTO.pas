@@ -60,7 +60,7 @@ type
 
     class function SObj2DSErr(Err: ISuperObject; EDS: TDataSet) : integer;
     class procedure SObj2DSBurs(Burs: ISuperObject; ODS: TDataSet);
-    class procedure SObj2DSActDcs(ActDcs: ISuperObject; ODS: TDataSet);
+    //class procedure SObj2DSActDcs(ActDcs: ISuperObject; ODS: TDataSet);
     class procedure SObj2DSDcsPlace(DcsPlace: ISuperObject; ODS: TDataSet);
     class procedure SObj2DSDeaths(Deaths: ISuperObject; ODS: TDataSet);
     class procedure SObj2DSAddress(SOPersData: ISuperObject; ODS: TDataSet);
@@ -157,6 +157,7 @@ begin
       end;
     end;
   except
+    Result := '';
   end;
 end;
 
@@ -174,8 +175,6 @@ begin
   except
   end;
 end;
-
-
 
 
 // Место рождения
@@ -270,27 +269,30 @@ end;
 
 // Место рождения
 class procedure TPersData.SObj2DSBPlace(SOPersData: ISuperObject; ODS: TDataSet);
+var
+  i: Integer;
 begin
-  with ODS do begin
-    TClassifier.SObj2DSSetTKN(SOPersData.O['country_b'], ODS, 'GOSUD_R');
+  try
+    with ODS do begin
+      FieldByName('OBL_R').AsString     := SOPersData.S['area_b'];
+      FieldByName('OBL_B_R').AsString   := SOPersData.S['area_b_bel'];
+      FieldByName('RAION_R').AsString   := SOPersData.S['region_b'];
+      FieldByName('RAION_B_R').AsString := SOPersData.S['region_b_bel'];
 
-    FieldByName('OBL_R').AsString := SOPersData.S['area_b'];
-    FieldByName('OBL_B_R').AsString := SOPersData.S['area_b_bel'];
-    FieldByName('RAION_R').AsString := SOPersData.S['region_b'];
-    FieldByName('RAION_B_R').AsString := SOPersData.S['region_b_bel'];
+      FieldByName('GOROD_R').AsString   := SOPersData.S['city_b'];
+      FieldByName('GOROD_B_R').AsString := SOPersData.S['city_b_bel'];
 
-    FieldByName('GOROD_R').AsString := SOPersData.S['city_b'];
-    FieldByName('GOROD_B_R').AsString := SOPersData.S['city_b_bel'];
+      TClassifier.SObj2DSSetTKN(SOPersData.O['country_b'], ODS, 'GOSUD_R');
+      TClassifier.SObj2DSSetTKN(SOPersData.O['type_city_b'], ODS, 'TIP_GOROD_R');
+      FieldByName('N_TIP_GOROD_B_R').AsString := TClassifier.FindRUName(SOPersData.O['type_city_b.lexema.value'], 'BE');
 
-    TClassifier.SObj2DSSetTKN(SOPersData.O['type_city_b'], ODS, 'TIP_GOROD_R');
-    FieldByName('N_TIP_GOROD_B_R').AsString := TClassifier.FindRUName(SOPersData.O['type_city_b.lexema.value'], 'BE');
-
-    TClassifier.SObj2DSSetTKN(SOPersData.O['city_b_ate'], ODS, 'ATE_R', False);
-    FieldByName('N_ATE_R_B').AsString := TClassifier.FindRUName(SOPersData.O['city_b_ate.lexema.value'], 'BE');
+      TClassifier.SObj2DSSetTKN(SOPersData.O['city_b_ate'], ODS, 'ATE_R', False);
+      FieldByName('N_ATE_R_B').AsString := TClassifier.FindRUName(SOPersData.O['city_b_ate.lexema.value'], 'BE');
+    end;
+  except
+    i := 0;
   end;
 end;
-
-
 
 
 // Документ, удостоверяющий личность
@@ -305,7 +307,7 @@ begin
     iMax := DocsArr.AsArray.Length - 1;
     with ODS do begin
       for i := 0 to iMax do begin
-        x := DocsArr.AsArray.O[i];
+        x := DocsArr.AsArray.O[i].O['document'];
         if (x.B['active'] = True) then begin
           DocT := x.S['document_type.code'];
           if (DocT = ExactType) OR ((iMax = 0) AND (Length(ExactType) = 0)) then begin
@@ -396,83 +398,99 @@ end;
 
 
 // Запись акта о смерти
+(*
 class procedure TPersData.SObj2DSActDcs(ActDcs: ISuperObject; ODS: TDataSet);
 var
   d : TDateTime;
 begin
   with ODS do begin
-    FieldByName('SM_AKT_T_DOC_TYPE').AsString := IntToStr(ActDcs.I['type']);
-    FieldByName('SM_AKT_K_DOC_TYPE').AsString := ActDcs.S['code'];
-    FieldByName('SM_AKT_N_DOC_TYPE').AsString := TClassifier.FindRUName(ActDcs.O['lexema.value']);
-
-    FieldByName('SM_AKT_T_DOC_ORGAN').AsString := IntToStr(ActDcs.O['authority'].I['type']);
-    FieldByName('SM_AKT_K_DOC_ORGAN').AsString := ActDcs.O['authority'].S['code'];
-    FieldByName('SM_AKT_N_DOC_ORGAN').AsString := TClassifier.FindRUName(ActDcs.O['authority.lexema.value']);
-
-    if ISO8601DateToDelphiDateTime(ActDcs.S['date'], d) then
-      FieldByName('SM_AKT_DOC_DATE').AsDateTime := d;
-    FieldByName('SM_AKT_DOC_NOMER').AsString := ActDcs.S['number'];
   end;
 end;
-
+*)
 
 // Данные о смерти
 class procedure TPersData.SObj2DSDeaths(Deaths: ISuperObject; ODS: TDataSet);
 var
   GoodDoc: Boolean;
-  NeedDocType, j, jMax, i, iMax: Integer;
+  NeedActType,
+  NeedDocType,
+  j, jMax, i, iMax: Integer;
+  NeedActCode,
   NeedDocCode: string;
   d: TDateTime;
-  DocDcs, OneD, DDocs: ISuperObject;
+  OneD, DDocs: ISuperObject;
 begin
+  NeedActType := 82;
+  NeedActCode := '0400';
   NeedDocType := 37;
   NeedDocCode := '5400009';
-  DocDcs := nil;
   try
     if (Assigned(Deaths) and (Not Deaths.IsType(stNull))) then begin
       iMax := Deaths.AsArray.Length - 1;
       with ODS do begin
         for i := 0 to iMax do begin
-          DDocs := Deaths.AsArray.O[i].O['death.documents'];
-
-          jMax := DDocs.AsArray.Length - 1;
-          GoodDoc := True;
-          for j := 0 to jMax do begin
-            OneD := DDocs.AsArray.O[j].O['document'];
-            GoodDoc := OneD.B['active'];
-            if (GoodDoc = False) then
-              Break;
-            if (OneD.O['document_type'].i['type'] = NeedDocType) AND (OneD.O['document_type'].s['code'] = NeedDocCode) then
-              DocDcs := OneD;
-          end;
-          if (GoodDoc = False) then
-            Continue;
-          if (Assigned(DocDcs)) then begin
-      // Все документы True и нужный тип присутствует
-            OneD := Deaths.AsArray.O[i].O['death'].O['death_data'];
-            TClassifier.SObj2DSSetTKN(OneD.O['death_cause'], ODS, 'CAUSE');
-            FieldByName('DATES').AsString := OneD.S['death_date'];
+          OneD := Deaths.AsArray.O[i].O['death.death_data'];
+          if (Assigned(OneD) and (Not OneD.IsType(stNull))) then begin
+            DDocs := OneD.GetO('active');
+            if (DDocs.IsType(stBoolean)) AND (OneD.B['active'] = False) then
+              Continue;
+            // Флаг в True или отсутствует (???)
+            FieldByName('DATES').AsString   := OneD.S['death_date'];
             FieldByName('S_PLACE').AsString := OneD.S['death_place'];
-            FieldByName('S_MESTO').AsString := OneD.S['death_place'];
+            FieldByName('S_MESTO').AsString := OneD.S['burial_place'];
+            TClassifier.SObj2DSSetTKN(OneD.O['death_cause'], ODS, 'CAUSE');
 
-      // Место смерти
+            // Место смерти
             SObj2DSDcsPlace(OneD.O['decease_place'], ODS);
-      // Запись акта о смерти
-            SObj2DSActDcs(DocDcs.O['act_data'], ODS);
 
-      // Свидетельство о смерти
-            FieldByName('SM_SV_T_DOC_TYPE').AsString := IntToStr(DocDcs.I['type']);
-            FieldByName('SM_SV_K_DOC_TYPE').AsString := DocDcs.S['code'];
-            FieldByName('SM_SV_N_DOC_TYPE').AsString := TClassifier.FindRUName(DocDcs.O['lexema.value']);
+            // Обработка массива документов
+            DDocs := Deaths.AsArray.O[i].O['death.documents'];
+            jMax := DDocs.AsArray.Length - 1;
+            GoodDoc := True;
+            for j := 0 to jMax do begin
+              OneD := DDocs.AsArray.O[j].O['document'];
+              GoodDoc := OneD.B['active'];
+              if (GoodDoc = False) then
+                Continue;
+              if ( Not OneD.O['document_type'].IsType(stNull) ) then begin
+                if (OneD.O['document_type'].i['type'] = NeedActType) AND (OneD.O['document_type'].s['code'] = NeedActCode) then begin
+                // Запись акта о смерти
+                  FieldByName('SM_AKT_T_DOC_TYPE').AsString := IntToStr(OneD.I['document_type.type']);
+                  FieldByName('SM_AKT_K_DOC_TYPE').AsString := OneD.S['document_type.code'];
+                  FieldByName('SM_AKT_N_DOC_TYPE').AsString := TClassifier.FindRUName(OneD.O['document_type.lexema.value']);
 
-            FieldByName('SM_SV_T_DOC_ORGAN').AsString := IntToStr(DocDcs.O['authority'].i['type']);
-            FieldByName('SM_SV_K_DOC_ORGAN').AsString := DocDcs.O['authority'].s['code'];
-            FieldByName('SM_SV_N_DOC_ORGAN').AsString := TClassifier.FindRUName(DocDcs.O['authority.lexema.value']);
+                  if ISO8601DateToDelphiDateTime(OneD.S['date_of_issue'], d) then
+                    FieldByName('SM_AKT_DOC_DATE').AsDateTime := d;
+                  FieldByName('SM_AKT_DOC_SERIA').AsString := OneD.S['series'];
+                  FieldByName('SM_AKT_DOC_NOMER').AsString := OneD.S['number'];
+                  try
+                    FieldByName('SM_AKT_T_DOC_ORGAN').AsString := IntToStr(OneD.I['authority.type']);
+                    FieldByName('SM_AKT_K_DOC_ORGAN').AsString := OneD.S['authority.code'];
+                    FieldByName('SM_AKT_N_DOC_ORGAN').AsString := TClassifier.FindRUName(OneD.O['authority.lexema.value']);
+                  except
+                  end;
 
-            if ISO8601DateToDelphiDateTime(DocDcs.S['date'], d) then
-              FieldByName('SM_SV_DOC_DATE').AsDateTime := d;
-            FieldByName('SM_SV_DOC_SERIA').AsString := DocDcs.S['series'];
-            FieldByName('SM_SV_DOC_NOMER').AsString := DocDcs.S['number'];
+                end;
+                if (OneD.O['document_type'].i['type'] = NeedDocType) AND (OneD.O['document_type'].s['code'] = NeedDocCode) then begin
+                // Свидетельство о смерти
+                  FieldByName('SM_SV_T_DOC_TYPE').AsString := IntToStr(OneD.I['document_type.type']);
+                  FieldByName('SM_SV_K_DOC_TYPE').AsString := OneD.S['document_type.code'];
+                  FieldByName('SM_SV_N_DOC_TYPE').AsString := TClassifier.FindRUName(OneD.O['document_type.lexema.value']);
+
+                  if ISO8601DateToDelphiDateTime(OneD.S['date'], d) then
+                    FieldByName('SM_SV_DOC_DATE').AsDateTime := d;
+                  FieldByName('SM_SV_DOC_SERIA').AsString := OneD.S['series'];
+                  FieldByName('SM_SV_DOC_NOMER').AsString := OneD.S['number'];
+
+                  try
+                    FieldByName('SM_SV_T_DOC_ORGAN').AsString := IntToStr(OneD.I['authority.type']);
+                    FieldByName('SM_SV_K_DOC_ORGAN').AsString := OneD.S['authority.code'];
+                    FieldByName('SM_SV_N_DOC_ORGAN').AsString := TClassifier.FindRUName(OneD.O['authority.lexema.value']);
+                  except
+                  end;
+                end;
+              end;
+            end;
           end;
         end;
       end;
@@ -486,6 +504,7 @@ end;
 // Данные о захоронении
 class procedure TPersData.SObj2DSBurs(Burs: ISuperObject; ODS: TDataSet);
 var
+  NotPresent : Boolean;
   j, jMax, i, iMax: Integer;
   BData, OneD: ISuperObject;
 begin
@@ -495,7 +514,8 @@ begin
       with ODS do begin
         for i := 0 to iMax do begin
           BData := Burs.AsArray.O[i].O['burial_info.burial_data'];
-          if (BData.B['active'] = True) then begin
+          NotPresent := BData.O['active'].IsType(stNull);
+          if NotPresent OR (BData.B['active'] = True) then begin
 
             FieldByName('ZH_N_OBL').AsString := TClassifier.FindRUName(BData.O['area.lexema.value']);
             FieldByName('ZH_N_RAION').AsString := TClassifier.FindRUName(BData.O['region.lexema.value']);
@@ -535,25 +555,25 @@ end;
 // Заполнить информацией об ошибках
 class function TPersData.SObj2DSErr(Err: ISuperObject; EDS: TDataSet): integer;
 var
-  j, jMax, i, iMax: Integer;
-  s: string;
-  OneErr, OneD: ISuperObject;
+  i, iMax: Integer;
+  OneErr: ISuperObject;
 begin
+  iMax := 0;
   try
-    Err := Err.O['error_list'].O['error'];
+    Err := Err.O['error_list.error'];
     if (Assigned(Err) and (Not Err.IsType(stNull))) then begin
       iMax := Err.AsArray.Length - 1;
         for i := 0 to iMax do begin
           OneErr := Err.AsArray.O[i];
           AddOneErr(EDS,
-          OneErr.O['error_code'].S['code'],
-          TClassifier.FindRUName(OneErr.O['error_code.lexema.value']),
-          OneErr.S['error_place'],
-          OneErr.S['wrong_value'],
-          OneErr.S['correct_value'],
-          OneErr.S['check_name'],
-          OneErr.S['description'],
-          OneErr.S['identif']);
+            OneErr.O['error_code'].S['code'],
+            TClassifier.FindRUName(OneErr.O['error_code.lexema.value']),
+            OneErr.S['error_place'],
+            OneErr.S['wrong_value'],
+            OneErr.S['correct_value'],
+            OneErr.S['check_name'],
+            OneErr.S['description'],
+            OneErr.S['identif']);
         end;
     end;
   except
@@ -564,40 +584,47 @@ end;
 
 
 // Полный список персональных данных
-class procedure TPersData.SObj2DSPersData(SOPersData: ISuperObject; ODS: TDataSet; FullSet : Boolean = True);
+class procedure TPersData.SObj2DSPersData(SOPersData: ISuperObject; ODS: TDataSet; FullSet: Boolean = True);
 var
   s: string;
 begin
-  with ODS do begin
-    FieldByName('IDENTIF').AsString := SOPersData.S['identif'];
-    FieldByName('FAMILIA').AsString := SOPersData.S['last_name'];
-    FieldByName('NAME').AsString    := SOPersData.S['name'];
-    FieldByName('OTCH').AsString    := SOPersData.S['patronymic'];
-    FieldByName('DATER').AsString   := SOPersData.S['birth_day'];
-    if (NOT FullSet) then
-      Exit;
+  try
+    with ODS do begin
+      FieldByName('IDENTIF').AsString := SOPersData.S['identif'];
+      FieldByName('FAMILIA').AsString := SOPersData.S['last_name'];
+      FieldByName('NAME').AsString := SOPersData.S['name'];
+      FieldByName('OTCH').AsString := SOPersData.S['patronymic'];
+      FieldByName('DATER').AsString := SOPersData.S['birth_day'];
+      if (NOT FullSet) then
+        Exit;
 
-    FieldByName('FAMILIA_B').AsString := SOPersData.S['last_name_bel'];
-    FieldByName('NAME_B').AsString    := SOPersData.S['name_bel'];
-    FieldByName('OTCH_B').AsString    := SOPersData.S['patronymic_bel'];
+      FieldByName('FAMILIA_B').AsString := SOPersData.S['last_name_bel'];
+      FieldByName('NAME_B').AsString := SOPersData.S['name_bel'];
+      FieldByName('OTCH_B').AsString := SOPersData.S['patronymic_bel'];
 
-    TClassifier.SObj2DSSetTKN(SOPersData.O['sex'], ODS, 'POL');
+      TClassifier.SObj2DSSetTKN(SOPersData.O['sex'], ODS, 'POL');
     // Место рождения
-    SObj2DSBPlace(SOPersData.O['birth_place'], ODS);
+      SObj2DSBPlace(SOPersData.O['birth_place'], ODS);
     // Гражданство
-    TClassifier.SObj2DSSetTKN(SOPersData.O['citizenship'], ODS, 'GRAJD');
-    TClassifier.SObj2DSSetTKN(SOPersData.O['status'], ODS, 'STATUS');
+      TClassifier.SObj2DSSetTKN(SOPersData.O['citizenship'], ODS, 'GRAJD');
+      TClassifier.SObj2DSSetTKN(SOPersData.O['status'], ODS, 'STATUS');
 
     // Документ, удостоверяющий личность
-    SObj2DSPasp(SOPersData.O['documents'], ODS);
+      SObj2DSPasp(SOPersData.O['documents'], ODS);
     // Адрес проживания
-    SObj2DSAddress(SOPersData.O['address'], ODS);
+      SObj2DSAddress(SOPersData.O['address'], ODS);
     // Сведения о смерти
-    SObj2DSDeaths(SOPersData.O['deaths'], ODS);
+      SObj2DSDeaths(SOPersData.O['deaths'], ODS);
     // Данные о захоронении
-    SObj2DSBurs(SOPersData.O['deaths'], ODS);
+      SObj2DSBurs(SOPersData.O['burials'], ODS);
+    end;
+  except
+    s := 'Ошибка конвертации JSON-данных';
   end;
 end;
+
+
+
 
 
 

@@ -1,16 +1,16 @@
 {
   "cover" : {
-    "message_id" : "{ECD6FE6E-2F5A-4276-B96C-DD53882A542B}",
+    "message_id" : "{585FBE97-5AF9-4617-A3E7-61180E142D11}",
     "message_type" : {
       "code" : "88",
       "type" : -2
     },
-    "message_time" : "2021-07-01T16:44:42.288+03:00",
+    "message_time" : "2021-07-02T16:31:13.236+03:00",
     "message_source" : {
       "code" : "1",
       "type" : 80
     },
-    "parent_message_id" : "{48F156BA-7169-4D76-95BE-A122CD9BFB36}",
+    "parent_message_id" : "{44F27182-6E24-48FE-968F-481E25F35F01}",
     "dataset" : [ 15 ],
     "agreement" : {
       "target" : "верификация персональных данных",
@@ -23,7 +23,7 @@
   },
   "response" : {
     "personal_data" : [ {
-      "request_id" : "{7453FECB-A858-4811-B117-C4B2A55E869A}",
+      "request_id" : "{48D8132D-0928-4C52-B92F-85A1CBADA8F2}",
       "data" : {
         "identif" : "4291070A007PB0",
         "last_name" : "БУЛАТ",
@@ -651,7 +651,7 @@
         } ]
       }
     }, {
-      "request_id" : "{E6AAF961-9D64-4CE9-BCDD-B9B1ED4D7311}",
+      "request_id" : "{0AEC1B19-41DC-4E65-8FB8-DBC31199F722}",
       "data" : {
         "identif" : "4230478A031PB8",
         "last_name" : "ДУБИНЕЦ",
@@ -1748,11 +1748,11 @@
       }
     } ],
     "identif_number" : [ {
-      "request_id" : "{76E60654-01B6-440E-AB44-1D264A72DF3A}",
-      "data" : "7303367A001PB8"
+      "request_id" : "{39EB108D-8D05-400E-9B00-C5B58EA66E72}",
+      "data" : "7199035A001PB7"
     }, {
-      "request_id" : "{EF98E950-D11D-49DA-A399-0DD93FE14819}",
-      "data" : "7283586A001PB4"
+      "request_id" : "{30017AA4-DDEA-454E-911F-63347DFD6AF4}",
+      "data" : "7684755A001PB9"
     } ]
   }
 }
