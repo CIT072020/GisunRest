@@ -56,10 +56,12 @@ type
     FRestClient : TRestClient;
 
     function SetErrData(const Act: TActKind; Resp: TRestResponse) : Integer;
-    function SetOutDS(const Act : TActKind; Resp : TRestResponse) : Integer;
+    function SetOutDS(const Act: TActKind; slPar : TStringList; Resp: TRestResponse): Integer;
+    function GetResponse : TRestResponse;
   public
     property Config : TRestConfig read FConfig write FConfig;
     property ApiClient : TRestClient read FRestClient write FRestClient;
+    property Response : TRestResponse read GetResponse;
 
     // Получение персональных данных, ИН, резервирование ИН
     function Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument: TDataSet = nil;
@@ -122,29 +124,32 @@ begin
   inherited;
 end;
 
-
-
-
-
-
-
+// Получить последний ответ от сервера
+function TRegIntX.GetResponse : TRestResponse;
+begin
+  Result := FRestClient.Response;
+end;
 
 // Заполненеие DataSet в случае ошибок
 function TRegIntX.SetErrData(const Act: TActKind; Resp: TRestResponse): Integer;
 var
   ErrsInSO: Integer;
 begin
+  ErrsInSO := 0;
   if (Resp.RetAsSOAP = rrOk) then begin
     Resp.ErrDS := nil;
-  end else begin
+  end
+  else begin
     Resp.ErrDS := CreateErrorTable;
     if (Resp.RetAsSOAP = rrBeforeError) then begin
+      AddOneErr(Resp.ErrDS, IntToStr(Resp.RetCode), Resp.RetMsg);
+    end
+    else begin
+      // объекта со списком ошибок не оказалось
+      ErrsInSO := TPersData.SObj2DSErr(Resp.RetSO, Resp.ErrDS);
+      if (ErrsInSO <= 0) then
         AddOneErr(Resp.ErrDS, IntToStr(Resp.RetCode), Resp.RetMsg);
-
-    end else begin
-    ErrsInSO := TPersData.SObj2DSErr(Resp.RetSO, Resp.ErrDS);
     end;
-
 
   end;
   Result := ErrsInSO;
@@ -155,8 +160,9 @@ end;
 
 
 
+
 // Для GET-запросов заполнение выходных DataSet
-function TRegIntX.SetOutDS(const Act: TActKind; Resp: TRestResponse): Integer;
+function TRegIntX.SetOutDS(const Act: TActKind; slPar : TStringList; Resp: TRestResponse): Integer;
 var
   i, iMax, nErr: Integer;
   OnePD, SOArrPD: ISuperObject;
@@ -171,22 +177,23 @@ begin
         OnePD := SOArrPD.AsArray.O[i].O['data'];
         Resp.RetDS.Append;
         try
-        if (Act = akGetPersonIdentif) then begin
+          if (Act = akGetPersonIdentif) then begin
         // Должен вернуть запрошенный ИН по ФИО
-          Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
-          TPersData.SObj2DSPersData(OnePD, Resp.RetDS, False);
-        end
-        else begin
+            Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
+            TPersData.SObj2DSPersData(OnePD, Resp.RetDS, False);
+          end
+          else begin
         // Должен вернуть персональные данные
-          Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := True;
-          TPersData.SObj2DSPersData(OnePD, Resp.RetDS);
+            Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := True;
+            TPersData.SObj2DSPersData(OnePD, Resp.RetDS);
 
-        end;
+          end;
         finally
-        Resp.RetDS.Post;
+          Resp.RetDS.Post;
         end;
       end;
-    end else begin
+    end
+    else begin
     // Данные отсутствуют
 
     end;
@@ -220,6 +227,13 @@ end;
 
 
 
+
+
+
+
+
+
+
 // Получение из регистра
 function TRegIntX.Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument: TDataSet = nil;
     slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRestResponse;
@@ -240,7 +254,7 @@ begin
     if (Result.RetAsSOAP = rrOk) then begin
        Result.RetDS := CreateOutputTable(akGetPersonalData);
        Output := Result.RetDS;
-       nErr := SetOutDS(ActKind, Result);
+       nErr := SetOutDS(ActKind, slPar, Result);
      end;
     SetErrData(ActKind, Result);
     Error := Result.ErrDS;
@@ -283,7 +297,7 @@ begin
   Req.MakeReqLine('POST', slPar);
 
   // Формирование тела запроса
-  Req.MakeReqBody(InDS);
+  Req.MakeReqBody(InDS, MessageType);
 
   Result := ApiClient.CallApi(Req);
 end;
@@ -302,7 +316,7 @@ begin
   Req.MakeReqLine('POST');
 
   // Формирование тела запроса
-  Req.MakeReqBody(InDS);
+  Req.MakeReqBody(InDS, MessageType);
 
   Result := ApiClient.CallApi(Req);
 end;

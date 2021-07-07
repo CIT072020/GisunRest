@@ -8,6 +8,7 @@ uses
   DB,
   {$IFDEF SYNA} httpsend,  {$ENDIF}
   superobject,
+  superdate,
   FuncPr,
   mRegInt,
   uGisun,
@@ -95,19 +96,18 @@ type
     FAttempts : integer;
     //FPersDataDTO : TPersDataDTO;
 
-    function MakeAgreement : string;
+    function MakeAgreement(d : TDateTime) : string;
     function MakeCover(const MsgSrcCode : string; MsgTypeCode : string = uGisun.QUERY_INFO; DSet : string = '[15]') : string;
     function MakeReqInBody(const InDS: TDataSet): string;
-    //function MakeBody4Post(const InDS: TDataSet) : string;
   public
     property Params : TStringList read FParams write FParams;
     property Header : TStringList read FHeader write FHeader;
-    property Body : string read FBody write FBody;
+    property Body   : string read FBody write FBody;
 
     function SetActInf(ActKind: TActKind; MessageType: string; const Input : TDataSet; slPar : TStringList = nil): TRestRequest;
     function MakeReqLine(Meth : string; Pars : TStringList = nil) : string;
     // Подготовка тела запроса
-    function MakeReqBody(const InDS : TDataSet; slPar:TStringList = nil): TRestRequest;
+    function MakeReqBody(const InDS : TDataSet; MessageType: string = ''): TRestRequest;
 
     constructor Create(Cfg : TRestConfig);
     destructor Destroy;
@@ -139,11 +139,14 @@ type
   // Клиент для вызова API (REST-Full)
   TRestClient = class
   private
-    FHTTP   : THTTPSend;
+    FHTTP : THTTPSend;
+    FResp : TRestResponse;
 
     procedure SecReq(Req : TRestRequest; var URL : string; var Head : TStringList; var HTTPDoc : TStringStream);
-    procedure SetRetData(const Meth, URL : string; Resp : TRestResponse);
+    procedure SetRetCodes(const Meth, URL : string; Resp : TRestResponse);
   public
+    property Response : TRestResponse read FResp;
+
     function CallApi(Req : TRestRequest) : TRestResponse;
 
     constructor Create;
@@ -285,7 +288,7 @@ begin
 end;
 
 // Структура agreement для GET-запроса
-function TRestRequest.MakeAgreement : string;
+function TRestRequest.MakeAgreement(d : TDateTime) : string;
 var
   OperInf,
   Targ,
@@ -300,8 +303,8 @@ begin
     OperInf  := 'Организация адрес';
     Targ     := 'верификация персональных данных';
     Rights   := '201,703,208,480,481,482,490,491,527,528,252,465,466,516,517';
-    IssDate  := '2021-06-07T13:22:09.619+03:00';
-    ExpDate  := '2023-06-07T13:22:09.619+03:00';
+    IssDate  := DelphiDateTimeToISO8601Date(d);
+    ExpDate  := DelphiDateTimeToISO8601Date(IncMonth(d, 24));;
     Insp     := '"инспектор Иванов"';
     LeadInsp := ',"начальник инспектора Петров"';
 
@@ -320,14 +323,15 @@ var
   MsgT,
   Agree,
   MsgId : string;
+  d : TDateTime;
 begin
   Result := '';
   try
+    d     := Now;
     MsgId := NewGUID;
-    MsgT  := FormatDateTime('yyyy-MM-dd"T"HH:mm:ss.SSS', Now);
-    //MsgT  := DateTimeToStr(Now);
+    MsgT  := DelphiDateTimeToISO8601Date(d);
     if (FActInf.Oper = opGet) then begin
-      Agree := Format(',%s,"dataset":%s', [MakeAgreement, DSet]);
+      Agree := Format(',%s,"dataset":%s', [MakeAgreement(d), DSet]);
     end else begin
       Agree := '';
     end;
@@ -337,16 +341,6 @@ begin
   end;
 end;
 
-(*
-function TRestRequest.MakeBody4Post(const InDS: TDataSet) : string;
-begin
-  Result := '';
-  try
-    Result := FActInf.VarMeth4MakeBody(InDS);
-  except
-  end;
-end;
-*)
 
 function TRestRequest.MakeReqInBody(const InDS: TDataSet): string;
 var
@@ -412,12 +406,14 @@ begin
 end;
 
 // Сформировать тело запроса
-function TRestRequest.MakeReqBody(const InDS : TDataSet; slPar:TStringList = nil): TRestRequest;
+function TRestRequest.MakeReqBody(const InDS : TDataSet; MessageType: string = ''): TRestRequest;
 var
   s: string;
 begin
   try
-    Body := MakeCover(FCfg.Organ, FActInf.MsgType);
+    if (Length(MessageType) <= 0) then
+      MessageType := FActInf.MsgType;
+    Body := MakeCover(FCfg.Organ, MessageType);
     s := MakeReqInBody(InDS);
     Body := Format('{%s,%s}',[Body, s]);
 
@@ -450,7 +446,7 @@ end;
 
 
 // Установка кодов возврата после HTTPSend
-procedure TRestClient.SetRetData(const Meth, URL: string; Resp: TRestResponse);
+procedure TRestClient.SetRetCodes(const Meth, URL: string; Resp: TRestResponse);
 var
   IsGet, Ret: Boolean;
   nErr: Integer;
@@ -460,6 +456,7 @@ var
 begin
   sErr := '';
   IsGet := Iif(Resp.FRestReq.FActInf.Oper = opGet, True, False);
+  Resp.RetAsSOAP := rrError;
 
   Ret := FHTTP.HTTPMethod(Meth, URL);
   FHTTP.Document.SaveToFile('BodyUNResp');
@@ -474,64 +471,54 @@ begin
       // если все хорошо, должен прийти 200
         if (FHTTP.ResultCode = 200) then
           nErr := 0;
-
       end
       else begin
       // если все хорошо, должен прийти 201
         if (FHTTP.ResultCode = 201) then
           nErr := 0;
-
       end;
 
-    // JSON-ответ должен (???) быть всегда
+    // JSON-ответ должен (???) быть всегда при нормальном завершении
 
       if (nErr = 0) then begin
       // пока все хорошо
+        Resp.RetAsSOAP := rrAfterError;
         try
-          if (IsJSON(StreamDoc.DataString) = True) then begin
             SORet := SO(Utf8Decode(StreamDoc.DataString));
             Resp.FSupObj := SORet;
-            Resp.FRespID := SORet.O['cover'].S['message_id'];
-            if (IsGet) then begin
-              Resp.FRetAsSOAP := rrOk;
-
-            end
+            Resp.FRespID := SORet.S['cover.message_id'];
+            if (IsGet) then
+              Resp.FRetAsSOAP := rrOk
             else begin
               // Даже для 201 возможны ошибочные данные
               ErrList := SORet.O['response'].O['error_list'];
               if (Assigned(ErrList) and (Not ErrList.IsType(stNull))) then begin
-                nErr := 300;
-
-
-              end else begin
-              Resp.FRetAsSOAP := rrOk;
-
-              end;
-
-
+              // список ошибок контроля имеется
+                nErr := 1100;
+                sErr := 'Ошибка обработки JSON-ответа';
+              end else
+                Resp.FRetAsSOAP := rrOk;
             end;
-
-          end
-          else begin
-          // скорее всего, XML свалился вместо JSON
-            sErr := FHTTP.ResultString;
-            raise Exception.Create(sErr);
-          end;
         except
-          //StreamDoc.Free;
+          // вместо JSON свалилось нечто, скорее всего, XML ???
+            nErr := 1200;
+            sErr := 'Ошибка обработки JSON-ответа';
+            raise Exception.Create(sErr);
         end;
       end
       else begin
         // HTTP-error, Что-то не так с данными из запроса
-
+        // nErr уже содержит FHTTP.ResultCode
+        // В Document может быть инфа об ошибке
+        // Resp.RetAsSOAP уже содержит  rrError;
+        sErr := FHTTP.ResultString + CRLF + StreamDoc.DataString;
       end;
-
-
     end
     else begin
       // Какая-то сетевая проблема
       nErr := FHTTP.sock.LastError;
       sErr := FHTTP.sock.LastErrorDesc;
+      Resp.RetAsSOAP := rrFault;
       raise Exception.Create(sErr);
     end;
   except
@@ -540,10 +527,11 @@ begin
         sErr := E.Message;
     end;
   end;
-  Resp.FRetCode   := nErr;
-  Resp.FRetMsg    := sErr;
+  Resp.FRetCode := nErr;
+  Resp.FRetMsg  := sErr;
 end;
 
+// Выполнение запроса к серверу с установкой флагов и сообщений возврата
 function TRestClient.CallApi(Req : TRestRequest) : TRestResponse;
 var
   Ret : Boolean;
@@ -563,9 +551,9 @@ begin
   FHTTP.Document.SaveToFile('BodyUN');
 
   Result.FRestReq := Req;
-  SetRetData('POST', sURL, Result);
+  SetRetCodes('POST', sURL, Result);
+  FResp := Result;
 end;
-
 
 
 end.

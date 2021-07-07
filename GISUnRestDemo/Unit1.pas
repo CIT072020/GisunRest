@@ -85,6 +85,7 @@ type
     procedure btnPostMarrClick(Sender: TObject);
   private
     { Private declarations }
+    procedure PrepUNResult(r : TRestResponse);
   public
     { Public declarations }
   end;
@@ -340,6 +341,17 @@ begin
   end;
 end;
 
+
+procedure TForm1.PrepUNResult(r : TRestResponse);
+begin
+  ShowDeb(IntToStr(r.RetCode) + ' ' + r.RetMsg, cbClearLog.Checked);
+  DataSource1.DataSet := r.RetDS;
+  dsNsi.DataSet := r.ErrDS;
+  //RegInt.
+end;
+
+
+
 // GET Personal Data
 procedure TForm1.btnGetPersDataClick(Sender: TObject);
 var
@@ -353,7 +365,7 @@ begin
   d := RegInt.CreateInputTable(akGetPersonalData, opGet);
   d.Append;
   d['IS_PERSON']  := True;
-  d['IDENTIF']    := '4291070A007PB0';
+  d['IDENTIF']    := '7172252A001PB3';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
   d.Append;
@@ -374,8 +386,7 @@ begin
   d['REQUEST_ID'] := NewGUID;
   d.Post;
   r := RegInt.Get(akGetPersonalData, QUERY_INFO, d, dsOut, dsErr);
-  ShowDeb(IntToStr(r.RetCode) + ' ' + r.RetMsg, cbClearLog.Checked);
-  DataSource1.DataSet := dsOut;
+  PrepUNResult(r);
 end;
 
 // GET IN by FIO
@@ -396,6 +407,7 @@ begin
   d['DATER']   := '20120511';
   d.Post;
   r := RegInt.Get(akGetPersonIdentif, QUERY_INFO, d, dsOut, dsErr);
+  PrepUNResult(r);
 end;
 
 
@@ -770,9 +782,12 @@ begin
 
   d['SM_PRICH']      := 'A06.9';
   d['SM_DATE']       := '20160307';
+  d['SM_GDE']        := 'Перекресток';
+  d['SM_MESTO']      := 'Кладбище';
+
   d['SM_DOC']        := 'Справка';
 
-  d['ACT_TIP']       := '0100';
+  d['ACT_TIP']       := '0400';
   d['ACT_ORGAN']     := '18108';
   d['ACT_ORGAN_LEX'] := 'ЗАГС районный';
   d['ACT_DATE']      := StrToDate('22.06.2013');

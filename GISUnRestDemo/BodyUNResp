@@ -1,37 +1,37 @@
 {
   "cover" : {
-    "message_id" : "{585FBE97-5AF9-4617-A3E7-61180E142D11}",
+    "message_id" : "{9F948D7E-09A3-41F1-879C-10933F0D1A30}",
     "message_type" : {
       "code" : "88",
       "type" : -2
     },
-    "message_time" : "2021-07-02T16:31:13.236+03:00",
+    "message_time" : "2021-07-07T17:17:54.152+03:00",
     "message_source" : {
       "code" : "1",
       "type" : 80
     },
-    "parent_message_id" : "{44F27182-6E24-48FE-968F-481E25F35F01}",
+    "parent_message_id" : "B3949BCE-1866-4312-B811-D2FDA80B2A44",
     "dataset" : [ 15 ],
     "agreement" : {
       "target" : "верификация персональных данных",
       "rights" : [ 201, 703, 208, 480, 481, 482, 490, 491, 527, 528, 252, 465, 466, 516, 517 ],
       "operator_info" : "Организация адрес",
-      "issue_date" : "2021-06-07T13:22:09.619+03:00",
-      "expiry_date" : "2023-06-07T13:22:09.619+03:00",
+      "issue_date" : "2021-07-07T17:17:22.997+03:00",
+      "expiry_date" : "2023-07-07T17:17:22.997+03:00",
       "assignee_persons" : [ "инспектор Иванов", "начальник инспектора Петров" ]
     }
   },
   "response" : {
     "personal_data" : [ {
-      "request_id" : "{48D8132D-0928-4C52-B92F-85A1CBADA8F2}",
+      "request_id" : "9E114E69-96BE-45BD-B6D0-1818F70DFC9C",
       "data" : {
-        "identif" : "4291070A007PB0",
-        "last_name" : "БУЛАТ",
-        "last_name_bel" : "БУЛАТ",
-        "name" : "ИРИНА",
-        "name_bel" : "ІРЫНА",
-        "patronymic" : "АНАТОЛЬЕВНА",
-        "patronymic_bel" : "АНАТОЛЬЕЎНА",
+        "identif" : "7172252A001PB3",
+        "last_name" : "СТАНКЕВИЧ",
+        "last_name_bel" : "СТАНКЕВІЧ",
+        "name" : "СВЕТЛАНА",
+        "name_bel" : "СВЯТЛАНА",
+        "patronymic" : "ПЕТРОВНА",
+        "patronymic_bel" : "ПЯТРОЎНА",
         "sex" : {
           "code" : "F",
           "type" : 32,
@@ -45,22 +45,23 @@
             } ]
           }
         },
-        "birth_day" : "19701029",
+        "birth_day" : "19851111",
         "birth_place" : {
           "country_b" : {
-            "code" : "RUS",
+            "code" : "BLR",
             "type" : 8,
             "lexema" : {
               "value" : [ {
-                "value" : "РОССИЙСКАЯ ФЕДЕРАЦИЯ",
+                "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
                 "lang" : "ru"
               }, {
-                "value" : "РАСІЙСКАЯ ФЕДЭРАЦЫЯ",
+                "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
                 "lang" : "be"
               } ]
             }
           },
-          "area_b" : "РОСТОВСКАЯ ОБЛАСТЬ",
+          "area_b" : "Минская",
+          "region_b" : "Узденский",
           "type_city_b" : {
             "code" : "11100001",
             "type" : 68,
@@ -74,9 +75,10 @@
               } ]
             }
           },
-          "city_b" : "ШАХТЫ",
-          "area_b_bel" : "РАСТОЎСКАЯ ВОБЛАСЦЬ",
-          "city_b_bel" : "ШАХТЫ"
+          "city_b" : "Брест",
+          "area_b_bel" : "Мiнская",
+          "region_b_bel" : "Узденскі",
+          "city_b_bel" : "Брэст"
         },
         "citizenship" : {
           "code" : "BLR",
@@ -101,311 +103,18 @@
             } ]
           }
         },
-        "documents" : [ {
-          "document" : {
-            "access" : {
-              "code" : "10",
-              "type" : -3,
-              "lexema" : {
-                "value" : [ {
-                  "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                  "lang" : "ru"
-                } ]
-              }
-            },
-            "document_type" : {
-              "code" : "54100001",
-              "type" : 39,
-              "lexema" : {
-                "value" : [ {
-                  "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
-                  "lang" : "ru"
-                }, {
-                  "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
-                  "lang" : "be"
-                } ]
-              }
-            },
-            "authority" : {
-              "code" : "17606091",
-              "type" : 24,
-              "lexema" : {
-                "value" : [ {
-                  "value" : "ФРУНЗЕНСКОЕ РУВД Г.МИНСКА",
-                  "lang" : "ru"
-                }, {
-                  "value" : "ФРУНЗЕНСКАЕ РУУС Г.МІНСКА",
-                  "lang" : "be"
-                } ]
-              }
-            },
-            "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
-            "expire_date" : "2015-10-29T00:00:00.000+03:00",
-            "series" : "MP",
-            "number" : "0826709",
-            "active" : true
-          }
+        "photos" : [ {
+          "photo" : "/9j/4QDmRXhpZgAASUkqAAgAAAAFABIBAwABAAAAAQAAADEBAgAcAAAASgAAADIBAgAUAAAAZgAAABMCAwABAAAAAQAAAGmHBAABAAAAegAAAAAAAABBQ0QgU3lzdGVtcyBEaWdpdGFsIEltYWdpbmcAMjAwODoxMjoxMSAxMjoxNzoxNgAFAACQBwAEAAAAMDIyMJCSAgAEAAAANTYyAAKgBAABAAAAAAEAAAOgBAABAAAAgAEAAAWgBAABAAAAvAAAAAAAAAACAAEAAgAEAAAAUjk4AAIABwAEAAAAMDEwMAAAAAAAAAAA/8AAEQgBgAEAAwEhAAIRAQMRAf/bAIQAAwICAgIBAwICAgMDAwMEBwQEBAQECQYGBQcKCQsLCgkKCgwNEQ4MDBAMCgoPFA8QERITExMLDhUWFRIWERITEgEEBQUGBQYNBwcNGxIPEhsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsbGxsb/8QAmwAAAAcBAQEAAAAAAAAAAAAAAQIDBAUGBwAICRAAAQMCBAMFBgQFAgUEAwEAAQIDEQAEBRIhMQZBUQcTImFxCBQygZGhI7HB8BVCUtHhM2IWJENy8VOCkqIJFyVzAQACAwEBAAAAAAAAAAAAAAAAAQIDBAUGEQACAgICAgEFAQEBAQAAAAAAAQIRAyESMQRBUQUTIjJhcSMzFP/aAAwDAQACEQMRAD8A2AM+LQbc6coZOWCn0FdRnFHCGCoQBp604DH3proQcMhW8UuhgiNImgQulgzrr+tLN28HQnX6Uxi3c6bfOj91EwDUrIh0saTJ1pRDE6zMct6QxVtghYPlR0sEJjUxToTDJZlP+KOLckRy/OgAwYkQI1386H3eTrA1imRA92MHTSdgaA2xB0HmBNIaAFuQIKOdFUx4NE8t+tCQxNTBEwZ66Umq2MiTFIVCXuqtZj1FENpGnlSJAG1iB13FIO25iIJ6U2KhE28Jk6jlRVWxIjLMfKkmAi4yQCRppEUl7vJlQI5mpdgMUsJDum9LoZATI3/OqyY5bZHeCfrSvdQB4dPKmIVSzrp03pwhoKMmd6dALIZk7feaWDIBnTzNMQqhsA7+utCG+idtxTAUS0AQDqPypRDQGsA8qAFEtiZjSj934dRHPQ70wDBvXoOs0shuNAQKQBktJE7UOROeSn6DepEQvdjLGUTz5Cg7vcjc8qiNAZPDoD5iilob66b0IBMtBRKgKIpkgAgCaTDoIplPSSOdB3I2jWNaKsYVTHQxppSLjAmSCPPzoYkJKYg6iDy8qTUwNYNAMRXbpjaCN5pL3faPtUgRGi30AkQPOlktQZjTrzqtkxw2zC9PqaVDXTrQRF0sgGRB1n0pZDP7IpgLJRPKlEtQqQr61IBUNCBOpoS0kKnemAfIBKpGu9KZDl2jTlQIMG/6Tt050fKNutPoAW0pKgd6VQkZ53HOkMOI56eprijXSE09EQqkQNNuk70KUgeHf1pMEgcs6nWdKAtp57k6k8qBiampWQQPrRS1AkTJ1pAFLXi2PyoO6noB+dIACwSmCn6UkpoA6UxCSmknXWKTUx6HyoQBFMA6Ea0RTIQsKOb86nQiIDUGE6jypQNiRpVRYKJajz0pdDZOhSfTrQIWS3OlKpRBANACqEaCTzmlktJBB3mpIQcIHprzoQhJIiPpTGcEwga0fTaYH5UCDgawdpn7VxTJ2mj0HQdI13+VHATlOkyKBh4kQdtOddA3jWmROCfD964IgyoQBtrSGDlleoo2XMmJ+8TQABQgjbf8qAtjQRJjal6EFLQ5D0oQ2EnbflSQ2FLQSjMJ+dJqb0EaA7GpCCdx4YAkKoFW8J1ToRIoSAIpnXSOtJKY8caa9amIhQ34oCRqNqOGxpI9KpJh0tzAO/Klkt6ba0wFkpgEbCeQpVCEkaJ589DTAOlAJMK/tSqQANNp1FMDleL6VxiIn50CR2uio09aMlMJgzG0UDFQlOWRB660MAj59aZEEbSSN99aMkeMSOdIkH0KzCQddaEJAgGmRO0BkwT+QrueUc+W1LQ0HjXfc7CuiY1/zQIKAI03o3prPnSGCUyoRppyoQkGJO+m9NfAgS34ZH/mkygDQ/c0xAZPP0g7UZTXg01ESevzpoBJbYk+lELOp0g9TUhEAWvxII1owanQ7detUMsFUtHmIA5GlUNgDcRUgFAgQSN5nehA8MCj0AeU5/CY8q7dQj0igQY7TMx0NASEqkGelSGdzBCT86OCNwfSkIOBCtufWjCSZ1mmIBJObSPWaOiAvwmosYdJgDTehJGaBJjlNP0IEEZpO23yrtJnT+9DAEdQfM0bwxA1HrQMCSVfpQmMhHXlSDo6QRAGo6UYQT0in7EKAeDSRHL9aBUZ1SkfWmBwQABO1GKJQeYj60CYBQcm00nk8YylWvnFSEQIahUKkk0oGxMzVbLAwb8UAeUUITJ3J9aQBoGYgn6UASTurflypiBj8+u9dqFaK2pgGPQE+ZNB5c+WkRSGckZZI1HShBgnX70LQg6QckJ26Gja93vEa71IRwHhIpRGukxUWSDAGc23KK6Opg+tSEcZnnXCQCTz+tRAPBiJAnbWjABRg7UwO/m01/Wu1ka+gmgARG4B0pRPQmY2oEw+gRm6muJEwkSBUhBoBEgf5o8ZVbz5jlR2I4toKvzNBkhUkculS6D0QjrBS+QYJBjQyPlQd2JGXeqmWHKGxOunWgJJneNt96QARKzIMUOnd+lAHCc0nWRRo8Z6D7UxHbwAZ8qKUlMjn1oGATA022FCkb89YoAUGn9p1of5eXSpEWCAfiO55TSqBI15eVIYIBzROldHhHh150ADAyCSN/rQlJEg7bUgBSIPWjgA76ydPKmAAjPp86EJBJjXWgDkgRIgk6UogRMk6760ITDo55dgftQkDKY1I+tT0IMFAGUyOW9K5ddeXM86iIHLKsw1J59KMholzKfQTViQEMpOsTMCk16JMaxVRYEUEnQbjn0oI0j6mkACkyqedcDptv8AegRwBSo/aKGASEiZ+goGdl11nagCfCPKmBxQdDuJijBImJpCBUnQDb15UZIG8zGuoqWhHJjLB3o4EkQfrSGGCZEEjaQetGAhOp2NABt42rhATII0P0oYkGgHUJ20o2nIbnWgZ0dU71x8WpEmkAIAJijaZoHONakJgyADqNaEawBrTEGHwT186UHxQBNIBVWVTsokA6DMdaVbjvp32qa6EQKxlXygSdKIoJJHM7aaRVZYJqhJMiSPPWgGp0qIAwJMCOprhMfrTAAZMs76UeOuw2pgF1zRymg12SNaQAkTOus0aR086YAkk8j8uVdoojJ84piDgQjb0pRCc2ubToKABCTMjTkdaMEwrQSfWkAI9AJ0PnXAQImmAIgLkiBQjLmIImeVIAYGbLp6iuzDaZJMjWKAOBjQb+tDm+Z9d6YmDoU670PImSKYHZht+tHzEK6VEQoCSvVW/nThtZ7yRoBrvViAhVlIdClCRMwdj60kpU6kegqpkwkeLQAchrQEDPMkxSAExrAI1+tFcBybxP3pgFb8XinfalI2A1jWhAcRFFy+ImZBFAAgjLp9+tGGgkfnTQBknSZoUg97mAkxNSEF8AJyukczG1FF0hpQT3wWTokHRR9Kg9D7OXiNq0AH15CrxAHc0wc4swZlaWrm7LZUdAdKg8kY9skoNgW3GXDr1x3acWYCUjXMuCnz8xS44w4V75TP/ENglYOWC8DHlp6Uvu4/kf25fA8tsWwy8QPcr+3uMwkBtwExTgPApG48lGJqfJNaItNdhkOoWnOFac6OPignz3qX9IgGc0pI0HzoYGaNJFABgDk3g+VdHKZ86mI4RlGsxvyo4SMszpvUOwFYSYg7ab7Us0lQeEGI57xViIkM4vUEq86SUY8zVTLAhMmYnrINckBR0V5Cj2AYDU6CiLEt7mSdqHsAEQkgAD60podZGooQHEHIcpAn7UEDr502ABGskSCINGCgk9ZoQCb19ZWlqXbh6ANCAJUSdgBuTVXxLtEwayvlNPKU000YcWCCEnqY5DnUJ5FElGDkI3fHNq8sM212VJUcrZbg51eQMbVSsZ7UMWbtzau5DlJSVKSZHQEiAT5CsObyKWjViw29mZYxxfjbrzjzd6421JUAtYTJ/P5GqZifFuNofWc4Oc6qQsHLzmdq4eTJN+zqxxxS6KPjPF+KWwHeY06hKVEgGQCfUaVHMcbKfuAi5xm40MJ8SoFU3JlvBeicwjtKxPCbkHB+K7tmdfG5nE+Q3n5VtnAvtVYrboYtOKGba+b0T72hMOZeeYc/WtmDyZ4nvoy5sEZo3DhLtV4Z4kuke537TLt1qkKeAQpXQdD5VdE3gXhwvUOZgncJOZO+w/zXfx5IzVo5E4ODpkilOu412ow+DWR08q0IpsEqIT+9KLoBtHSOdMSDJGs/MAmlkamMxn8qQCgMOiRry10pw1HeRmjntViIkC9o9uSR1NJLVKgAAmqpFoWSSAYj86GSFZY+tRQgDBnTWh3RJHzmpAABK4n7bUeQlUzB20oQHep286IVo7rMVgJ3zTp60wI6+x7CrNAdfum/AZVvoOtU7iftIbtWyzhwCgoTIJXPnpp9TrVGTIootjByKRf9oNzf4m2ol9zuwczejfd6aqTJgnfz8qiMfu1t4SoC5tkMloBWYHM5zAI5zoK5058k2bIwpqisu4893KUNXDiWQAdSAowI0A2psq/Q64FK8UfCpZmubkyHYweP7Ymt1pThkN667bfKmz9u0/mSG0lB0gjT8qyOSZ0PtIruK8F2N6FrLLYWroN461Rcc4AVb26ywruzumRoDPOlGXEpniUuiiYm3d4TeZbtlTCzJSuPDm5kHn6UFhxMLdxDrZhlUEonQnqk8vQ9a01asxNU6ZccC46etrzvMMvltrCgFIIhJE7EcjXo/sx7a/4uw0i5uSLltP4lur4X4mTvE/vWtGDI8boyZsfJWeieCuLbfHOHkpaOVxsFEKUdhsD0MVa21ZwfDBI616LHLlGzjTjxdCiUidQY22ro1IG/5VYVhhr4eVKhAKdPi3o/og6E8iJ5E0uymVBMTFTQEG9qo67Ug4nxEg/PrVTJhdC5qIoQkSRNIYMCSJM/lQCYOv01HrTWxBgOsUYlKAATHTqaYFc4g4zwzA7JQccSVkQGxJJ89NhWTY/2yYpcWb6cCwNtaUqyqeecytTzEmAfrWPNm46RqxYuW2ZlxB2qcUltxh92wQoASlrIoH7mf8VT2uPCXz//AErgvd5K23PClQP9JGxrkyyuUtm9QSWiawfGkuOpetmV3Cye9BcM5FzqFGNop6/euOp/GeKlgZU6kpR6Cqp5NUjXgxbtke7cEjIR6nrSzSi67odDXNnI7mOFDxpAVqZJHOND8qVDcySIO586qs0OOhNSgR+9abPIadQc4EHfQVNMzyhsgMZ4TsMRsnGHbdtaFiFJOx+VY/xX2VXuFLXfcOgutbrtFGdv6SdvSr8c+L/hiy4+W/ZQFYq5aXyspdtloXCkqJBQenp61cODuLbtGO27rbxBbXmChuIO/nWxx1aOfLZ6r7HuPXBxeyhy7KU3K0pdWgygmYBKfQgaV62wTE2b/Amn+8RmalpYGhkGNa7HhzuJx/JjTJbO0pYAcTJ0GUyaCAUBSTMjSDy610bMVB4GbedKVT4UyD96AFUIClwRS7QleqTMjflU0hFfdADkE7HY60idCZnyqlliAygSqYgVxTPPnvQAYiQQRNcEwCJOY+dSoQLjjdvalx4gBI0B1JqmcZ8SXOH4X3duGLdxac3evL8SU9co/KfWq8suESyEeTPM/aX2qYdY3SsPsr1V/dKH475EJJ/pETJjSYEcqxvFuPsUxQZrh57Io+BqSEJHQAGBXAy5OUtHWxwpEC/xKywypxL3dKT8RSc3PaDzNT3CGC3WMJRiN8SgLVmbbyxlk71mejVCFs0i393tbTuLcgp2VGs0R25KdE/CBtM1nnP4OnjgC0FrWBMA6mdalLVpOYBRjlWRuzoRRItNI7siRl8jvSigUo0OvTpUS59DR9tRaOUgk02U0AsjJy110pIg1YUpTk2EDl0pheNoeaKHGxG8jkfWrEzLOJl/H3Zxh2NsrvWWw06B/qIH5iseewi/4a4g7p7ve7SqUrO0+VdHDO1xZy80Kdo2bszx/uHmXXrhWbP8ABJy6SCfPlzr2p2e9oDlvgjLL7bwSga5mlOynkSBt+9a6Xiy4M4/kR5I1HhfibDsdw9Fw06224pH4g1E9CJGo86n20hLCCk6R6+ldqLUlaOVJU6FAkgzOp5UdCZhPw1J6IiyEAFKiAQKcNA99mQmdt51qaQisugB7VOUgnSII8vKk1kgiAJ5VUy0BW43jl5V0ALyjXzpCBOgMctj50m480wglxyAn4lHWP8APlTtICl8edodvwrw05fZDAbKmwDK3DqAfL9mvH3ad2tcT45fOPm8Fiw7sww4c2UDQKWddulcjzMzvgjo+NjX7Mxa5xa5ceKoXkUSQoHQcydR+tQOL8RIaV3du6kuLEd7qB8hrFYIxOgS/BnD72K37d3fDvWs+dtsk5VK6kflW1sBFph6WkbkQo1myS2b8UNWLNPhRypBEHU7Uu2guHZYCTGUmPnWOT2dOMdElbswgwAABpBqStjDqVFOhGk9arL4j9spzggSBzOk0KgHfhSnfUA0mSfyFKAD+GiQDBO803cQkDQCNlUhPobutgtfFoZ+dRl01lZObQqEBQO9MpkrI14gNlK0yJ+s1SuNuE7DFMIV3IKVgSmP5TWjHKmYcsNGb4Dd3uDcShoggoWAfFBBnT7xW24NxxxB7vCr11MwNHlCTERXS5NbRx8kVezXuzHtjRYcSowzHAtlSlBLDqHJCTykb5T+xXqrhzE0Yjw2y4b5N0taiQ6gAJUOURuK7PiZeao5PkY+LslwAE6AEbUdIBG8Hp1roMxigyjWfvvTln/UEHbz/fKrEIq7iiVZnFEkkkkmSTRVAFOXYgn9xWeRYFCoMAgGKA5d+dAHLcS0ye8Pg3mdYqAusWtU2qr5xAUy0JQBusnnPnoBUZNIklZ577ZcV96cuX7p1IccXlyz/ppSdU+WoArzJjQZu3nr191QDiiEJ5keXlXAz7yHXxfoZ3xLjSGythKisnRInSOQ0G0VGcOYZ/E+LEtqUChvV3/Zpt51H9Y2aoq3RufDFmiytC8UgCIQP6RyqcLqlupSACRyO9c2TOtCND23aJyp0J2iKlrVpJfBJk7GNvmazs3RJZuzcdRIgN9CQI/Zp8zatwPx2kpO5J1+VBJOmPWLVtbwaSrPlEjKCdPPSjv2rLbwLjkHKfCiT9hTodiKmbdTZLfeFRJidJHpTdy0KlpAUFLGuQAgj00qNDv5Erq0Wtor6RAjWfSou8Qpt1KXADM/y0mitkJcsqS+CrUKmFdelRmKtqTZJOsgwf7VJGeaMv42woW9+nEbRCUKVqudM37FOeGsTNzaJS+tbbqRopLhhY+Wo+9dKDuBxsyplntMXWbxFu6+pSUrzIWfiR1Om4+nlXpfsD7QsQZUvCXL4Pd0YQkmQ4neR1kH9kGtnjT45DBmjygenMIxRvFMLS4kwucq0TsYn71ISS6YjqPKvQp2jjPQqIgkRFLsn8aCdNJ8qtSIFXXOcSRp5UkZCZkQDpWd7LQp/wC30FHAE786a2AzxBKl4S/nJMoOUA6x1rL8R4uwz+C++i4ab7lORta0lSLaN1RtmPLffSqMskuy6Cs8udsPGqMQ4gUxa5hbtNlpoLkKVJ1cI6noayfEH0uPJZzBZIhCCTGg1UfL84rhTfKdnWgqiZ3jakrxd25IzoQspSVE+NXp5CPIVcuz/B+4wFN2U+O4V3iienL61HK6ga8CuVmo2gyYen+kEH50/tWgYcyD1J1Jrms68CfsbZaWPEfFt0A9TUvh1s0cuUAJ5qjQnlUKL0SzLdqlMpVM7Ec6cJfaSQn4gdYGw+35U0kTSFkvkAJUMo8jp6VwbW6lQCJkQADt19aiTqhRDT6G4S2pKTyCDB+fM7UVySAS0tE7x4SKOiL2Mbt9JUW0LOaZgmZPzpnfpW9YolDajETMEGoiaIl1lL7RKUnMNxO1QvETcYadvDoF89aPZTJaKRjuHovsBeQqPCMxE6ERVDwB9DWJllXwhRCfCFJPkR/bXpW/C/xaOV5ESyP3S2FAFCUyQQBsoHorr0n51pnZjxOxb49aXT60t+NIeUgRz0V5f+a0RfGSMElcT2X2Y4o5eWzrc5mUOeBQXmBGp9dJrTGVBeywo8/M16PC7icPKqkOQmSTv+VOGAe/BmROtbEUlUcH4sfsUXTTTTaYrOyw7INUkwBvNcpMjLOhIB15UIAlzkThrzhGYZTOm+m30rBO1iwfVZOYei3VbBqzbcedSoRmgJQCPhO2+81n8hXEuwv8jxBx/iihxy42HHXnQ4oEDQFW3/mo1h1+6dW2HClSwAspE7cp2+XlXDo7K6K5jDDd1jFtZ2+jaHCFEfzajSeknXqfStRwy2btMLSy1CQhI220G1U5+kjb4y7ZZsMbKrCVKzE65OdTdq0lkl4yQBoOVYGdOJMME+5occ0UdAmPDO/zNSrLyENjvXiNPgSJUQfL9TUS5McovrlCwm2bQ0iJgozH1JNOWbu7cucyrhapHQJFK2TSHPvZDhUWGlLI6qMeVHXeXKh3SXEshW4SIO3nSslQ1dLq3PE+8QBqc5OtIqUsEgSRGsqMn6UgpBFl1clxalqj+YyddaTK3A2lRSCk6bxrSE9DZaEd4VpIlGwPM1XOKSoWmRJCZI9QJ60ymXRV7sZbdwGPCNwYqhMWC7bjFS2EgB1YJEaT+hmtuE5vkdEpiDqbW3LKrdISuTly6jqR5eVL8O3/AHdy29alYUTA131giT+960HPo929i1xc2+B291aIQ82Ggh5JVJVEQoDkdftW4MKV7ugxMiZAia9F4+4I4WZfkOk+uh8v3pThoZTA338q3GZlXWII0O3XSkyAdTrFUMtBjQyY0oco7yYk7aedACLjaVuJXnhtO07T1rOO0nDjfWLrdu2SX/8AXKjoEE+EE/y6wqqsquJZD9j5pccF5vj+/LlyVti5cRnVonRR/tTa3f7zBUt28lIE6eEn58h964VHaBLQRjli28QVrdDiyBEj+UDoBqT5nyrQrdSe4SUmR6/pWXN2joeN0WXB1o94RmMpy9fyqfStIYbBUYGup5f+axs6K6HiHS4W0tqUlIO8wdemmn61IWjQgHXKDMnc+p51EtiSdvbl4DxiNSEpBJPmTtFSCLVptrxKmBBGXUVCi5BwhCVQFDz2kD9aO2z35CdwnbMdadDfVgOYdqoJjMqJkRRm7RfdlCnHTyEbfYUuLsF1YV+yU2yQFlQTMyNoqNeZz50pAAPyjyp8SMiLuHFMoWnTwjwwdFeVQeNOpusP74kqKAB5jyNIpkVi+UW2XFCCYHqapGLXDLF6m5KwlxolLoiQBPxRzHUVrw9nOzq0K4xfIdwlLSskoTmQUHKSBuJ5kToehim2F3Jt8cDaVojOHN4lIHIfvatJzz3N7OLqbzg5i6t1qTkWW8pMhUmZgdNDXpJhQ7gAJIg/Q16Dxf8AzRxPI/cXTJGqjS6J72DIFdBbMjKyvYgzrtROYk6/lVLLDhAV+9q6JJ1knY0gE7yU4ctGUwAYgdKzvtRxb+H9kOILs1AKdbUAN1qdIiSOUCd/Kq8v4wZZjVyR8yuPHrhjj178FS86irLyP7M0lZKcFum5ukANpAWhhoaqP+5X8oHPnXCXR2QGl+9cUC6Wkk58yyRuANIHIcgKvVotDtgAlRIO8VlzHRwaRN2DmUICdD67VY7Z5Tt0dDkCQkfPcmsbRvT0TNoypDMzCUnXlBP+KmLXuiNgAnz3H7/Oo1ZdEmrB1KXFG4aClQDt4Z60+StojIlZJI0M84manxLkwyrdtC0KbR4SdQncnrSzKmGVqQlI6ZlET60kqJdoZ+/29s0UvLCVEnRRlKh1HlTU43ZRnXcNNpjMVZ+pgfl9qEL0HGP4Y4tSW15kq8Cl6kTGlQOM40iwsFXOVZCDqJ0VPTTpUqRVKVIrQ4/4cxJ9TKVlmPCVuKhKFeflSl33Xu64WkpcTAWk+FVVtUynlyRV8Qy962D8IgR6VReJUIRjOZKcuc+FUcz5cxV2LTMuVfiQl9iCk5LcwgtkpJGhSY5Hpqa7B327lTeXwOq8SFEzKgNdOh/WttaOaz2n7H+KXbGFXj6gtaGylKkqWCpCuRA6efpXsGzLa7IKA8zNdvwneJI4nlKpjpAEif8A69aVbBL0JiPOukjIysLgHUz1pM/FPOqmTOBMESCJnajTKQUzBNJAAoIcJS4JSRtG9Zl2wIVhXY/f4jbW7KXVApUEgZpJjU8jA5VVm/RlmP8AdHzN4vSLjiZ55+4KEd4vQgkGDH6VH24Q+nKhalpnLOUpSqOk8usVwl0doNZPOXeNeHMGQopSD/t5+uprQcNj+GoI3VJ89azZjfg6Jq1jukkzHmatuGdza4Y3cvKSM2omsjRujQseIMOFwWErl1Xwo3J130p63j9paJStajKwZ6x+XSmlotjMQu+0e0YZAQfFtKjv++lJWfHN1dYghCkhCDolWf7R1oZYpKydTxZDzTHf+BZyiTptOv73p/iWJvBoLSowpGYRy85+lVpl6aKJxFjN+2nMy6CTuMpygeQ6TrVXHEdlaNruUpWtQEOha1EqPUgfv71KKszydDL/APZKkqLSEoebCpyJBBA6DlFOrbjA4mVOPvPG3V4lAak67JGsfWruNGaTcuhwtFg/ijnvKbrunESHFpyyPQ/5p0m+XYWASzItyPE2oSqeuvL02qtojTSC3SxdMJKVKMD+mqzxOhsWLTjyVEIBTvunmPXcjziiGpBPcDN8TuHU48gqcK1EBKjtnGyV/T7ipXCLFx4oW1btugcxqEHnIre+jlM9g+xdjBseN8TwzEWgWrhpslxe2YE+EdAQT9BXtuyQkWWgzpklJ3rs+C/+RxvKVZBynU6jel2woKB+GYANdRGEqiwQsTp8tKKYG2tUMsOHnvFGBjaRQAMysxz0qhduGBvYr7OuKKtMwcZbLyikSfDrPrAqGVXjZODqaPmHxk2v+NFxasiQ4rUD7etV4vuqDgGhVDaUgwddx6V5+PR2xbhwpQ84hRIEqUlQHhM6EHy1rQcKWV4Q2mYUgET5Vnzdm/ATNu42wELdUlKQRqdjSWJKu8SuEPP37jbKRkQ2jRAG5O0nlVFGhu1Qr3rNpg6Vw46vRIABBBI3J/Taq3iPFuIrUvKwpqRlzLBkDmQDz+VSSQ1fog3sdxi8cgsOrOkbk0Ntj+JYfiveqtn0FWuWD+XSrGl0Si2uzROBcQxHHseFwtgoSjwpSvf1rV73D8Qd4bLyglBA1CnNTr5CsU/xdG2DtWZFxY/iDPfNreS20ZzKnQ1UUWVl7t7zd3LyUq0CUyVL10CRVkNIqm0P7DAEu3HeP4e3Zst/Eu+fIVExGVO3zNXHAsU4WsErYZvuF1qYOqTdqaKttQTIO/2NXOLkiu1Hsl7jifCyyhFxYLtQ6R3TwhxpYOwC06a9DFQ2L2TfdKfaeWUCIQCAfWqdxdMcqq0N7JS1qU18OYAxPLef81F8VMlzh11Oyynw5eSuX60L9iuvwMucGUJN0wlaG5MK3SD0PLX5datGDpsXGG87jbyFkLACilS/IgfStz2jlyWz1h7LHBN3ifFjWJW9o6xbkpcdyrjOgEeFXlXuJAhQlKUwNQnkP1rteBFxx2zh+W056FAAEZQNetLtEKWNQCNhG1dNMwsqah4RI0NEMCBOhqploEakbzRtlmkAYRJUdp35UV9hm6wm4tbrKG7htTSgs6QRBmn2HR8x/aK4PsuFe2W/wyzcAbS6ohJ0KCDBBjTfUHoaxTE0m1sEX7IH822sKJgDz0Brz1VJo7kXyimS2GJSlll9sQnKNRyMc/LcfIVe8AZUuwSdABznrWTKdHAObtQSUqU4EpRI15GakLJtl6196vVKabROSeY6npVTNENsLc8ZcL4bhneutsN2zZjv7hZDZPpuv5CPOqxe9s/ZzeYsmwZGPX7x8IbsbRu2QesEkrPzNW48TkrYp5ow0O2rTh/EkpuW7LifClRmC1LWrfy1BptimDPP2zbdriIuVZwlThSUKb8yCJOnrVbkk6LuNqy7dmVu4m7VnUFLb8IM6Kg7/OK1a7cSzYgr7zu41OpmeRrHPcjbi/QyPiBlu/xFKHkEspfh3SQB1/Wj3uC3GHqbVaIaz5dLl1OYJHkkbnXepKVIrlFXsiMQ7Mbfia2U3iV7fvOKUlQUEyEb7IEDXzqBa9nGxGLXFyrFr8yBkDqf9MbQTz8ukVrx+RwVUYs3jPJLlZO3PZjjHD1uoYNijsKb7tVq6kuNqgeIEnaY+dOcGXjOH2vuGKJztI+BS0qzo11QTzHQkVTOSkXcePRZLbDFpw7v1tJbKjOqp9AKhMdbQrC3j3WZISdJ19agnbIPoy3G7Vb7Lgb/ANQfCToFDy+lE4GwriF7GwLi0bdZbMlLupE7Enp+ddG0obOdxc50j3t7NHbzYYXxXhHZJfcP4RaIvPwmrnD1nvy9GnepJMzG/LpXrYBBQFIHhImetdvwcyzYuutHE8/x/wD58tX3sOSYKZkEb04bBzjwwZ2I510Uc4qjuUHeNZNIk6zInXblVDLAABmnWR9qNpOh0n50AHGpmNOk1zzDd3h7ls6ApK0xCh1qSA+b/tkcP49w529XN5d4R7vZ3qAq0U3JD2kEz/V1FYCGnb1LluhYS3GZZ2AMfnImuBNcZNM7ePcEyawltKOBmXQVSp/K0r/bBIPpP51euHmAnCEqUiMw1A5Hr/isOQ6WHQ5vLYt2/iYU/lOYqbSVZR5j+1VrHbfGsevmcHw5SmbdfidKwYUf6SD/ACjcz5Cq01ds0JOiwYT2U4c5C8cs13zqwMy1ySR0GkCrbZcH8PYU+g2eGWdqUfCUsguefLn+lKWWVUi2GKLabQTE8qCpdmlZ85nX0A0qt3DOIP4opx1ITI8KpkiqYv5NEl6RP8GtljHlBOiUkJJFXfGH1DD8ratjrB3HSq5dmiCpFQTbNqxJwOQEu6Kgfl0pdWBKffQwhxwhI8KZmU+XL60umKUeStDyytcXsnALa5bkDOG3Qfp5VN2+J433J73Cm1qUJ/0zqPIiaktFT2EuTxHfJDbGFItkjdbKkqXHLc6daSHDT3u6hfuhahqkx4m/IzoRSk7RDgExDAbW0sy47ZNodIhOQGJ842NVHErdHuLyIJCQZgmYoi9lb6MpvkJXegpSc4fDLgIywDzjoelXPCsNZRgavcCtBTK1uAnMAYHy/wA1uyOoow4FcmTXYJhAtPb64PNqV5v4syRHPxV9USkIQG5+HSa7P0x3CX+nN+tKskP8DZk/EBEDkdaXSSFQEz1k12UeeKm74TA0+1IqA5n6VSy0ARMaCB9KEkBQ1ihCDgg+Lc60s3qI2HmamvgTPn/7aXF14Pa6uOHcZaeetrRhtdiwU+BKFiSseZM/SKwl1TDrLrPujf8ApKXmTpmJFeaytvLJv5PUQilgil8DRKgvAkstlKe4UlTadp0I28q0DC2kowhkTHgAka1myl2HonrLB7RxuXVvu6FWRTxCQOpinFnhFqGlWzbCSVqlcCII2P8Abp61js6MYpolm8FhkpYSQRoFPXLiwPkIn60qnCXGEKbL6ATqspbyJPyGp+ZNJs0KFCKsPaNstQcIQ0IUdiarV+n/AJ1aSIKUGT08qOx0kTHBjDS4fUd1ERt6RVxxBlb9jkCCSdEga6em9Rki6FNFRfZFveAdVEQTBp9avJF+y4hcBEJIB1B/SosSfotTVuxcNBS0idjpTj3cWtoooty4kEDeDUCXFMdsvsgZFBKFEyQoyATz86jb9QcdKgIcQdQT0qS6I1WiNv7jvWTavKmfCAT9BVHxlYF2pKhqoQrWpRMklRmreGYhccZ3NiJLZc/DzaqWoQYn0/tWgfw5nDeDCLUqSVI/FP8AUYrXlekZfGhuRc/ZjwY4n7f3DSktyLN8vLBG2RtSv7V9GAec+I67zXd+lr/k3/Ti/XP/AHiv4GA0MpBn70s0qF5YgmNK7K0efZVlpA18tRSSx4gCNR051UyYnJzQYmu0kxIjekAI0VHM0s2pKTO/SpIR5H9vHgC1vhwtxshoZ/xMMuVRBUE/iNz5jxV5mc4aUux7y1bzryZTBg6CvN+Z+GdnrvEX3fDiVS570Y/Z24YzJW8ErgbDY1ojLSm0JSoJSU6abCKz5ekGHVosuGONs2QbbglQ5md/3NSwyjCdQAAqNB8R3+lYjpwVEtYJzOEtK/DTy/p2p7cW4WkSEAEZpTyHrUGbV0Q2POMYZhalLUkaaiYE/wB6zp+9exG9UUNZWwkyo7k7bVOK2VZC79nVs1eJatlKHeOwkZjCRPKr/d4S0zmYQClSdDA1Echy6U3G0TxvRn/ENsprE0syFFR0P+aYEv2eJ296hoHIAl5tY3+dV0JunZoWCvsXlvmSpLa1CYJgVLLtHO8SuDmTsTIB6x/eopF9pje5tzlBdbSBMZk6z+z+dQV7clm6KFiBqPFrHQUumRl8kFjFwEoB0IESeYNVa/UF3hjURJg61OK2YshUeIsPUUHE8PSoOsKSp1SCQQ1Op/KrDb3zt9grbScyvDqTrVs9kfHrjZ6L9h7gu8c4+xnje8aUGbFv3VlZGhee1UJ6hAH/AMq9jiQMo5ab16j6dDj46fyeT+r5FPy5V60KDyPrpSjP+qACQU6nzrqezjlaJObTmNqRUQNEyNYqosEoGpM0Ctjy667VEAyYMwdd6OkpAEwZ60wMd9rXhm74h9ju6vLRBdcwO7bv1ISNQ1qhZ+QUD6CvFti97rZ5HpC0oAX5mNjXnPqUWs1/KPW/SpJ+NXw2Ut7FU3HbQzavYeENuEqbWjUBUGcw6Ec6tybjPZgjxLGnzrK/1Rc1xmSdjehpBmYJiOlTrF+py1aYzzBz/Wsr0bYFrwkJQ2le6QkqUd/F+4HlUm89b2rHeuKTnSmcqlwEjqflUaNiMe4/4lOK8TIsEuytaj4UaQB5Dypje4th+DYB3r77bSWxOUq0gDQVYlooyNWBwFx1hmJLU9hl+HLdThBykgoUDqDzH61pLPHtzZuQMQJUAcqT4t+tOUXFix5E4md9oHazgvDTrV7iDxcccc8LTHjWszrp/SOtKcN9qPDXE2D52rgpcUPgWMpjpHrSeKSjyFHLFzcSxYdxm9aYmlS1jIlQQFjSY2nzrRsK4oF7hyVrdzE6BZABjpFVdM0w2qJN27t32gAmSAF+Hccv1qrY93YWZhObQa7zrpSkSZT8TxBxbARKlKXCVA8qhHXf+YUBsCdaIdmDK9CeHBp65vW3YKHbcpVGkzoaa8KsPt4v7stRLY8EgyQP/FXT9j8Xo+hPsz4BbYB7GeAraSkO4j3uIOqB1UVrIH/1CR8q1MEZtY869l48VHDFfw8J5UuWeT/rDJy68uuu9OWcgdlRrSjMyrLV4x57QaRUrqPmKp6LAp1WRptrrXAEK0jpvSAMIA0G/OjJjSSetNAFuLO0xDB38Ov7cP2100ph1pRkOIUIUk+oNfOvtR4Kc4I7X8d4Xt31utYdfKZZWv4i3lCkT55VAT1rkfU4fjGR3/o8/wA5QKDheFzxK/ePJEt26kJ8lHp8hUjaKlxSFA6mdK48ejq59ZEOULU2BCh4dp2qWsHXFXTbmmVQgiqJGrG9l9sr9n+HhLpCUpaEGP0+tRPEuPKtcDdWXJQE6GJURGnOoo2p6MxwK0fexN/iG/IC7g5GQf8Apt/3MVUe0DBX3b5TrLi3LMn4c8ZTPKdxWmFcjLJfi2RnC3DbNg+7e4c+9aXZT4pVKFRsD1qwv4zxBdW7LV2z3baj4X0iQoDeKsnUnszpcVoj8U4bwvG7kKesven8kpcWopKvIR06etF4Y4P92xNDyMrbaYMj4iPLlScvxosjGKlZtGHYVZ32Hd04Gzaqa3nUp5HyNBg97c4RjBwy8dW4UJCm1KOXvUciDy8/OsT2botIulniqlWI8IQFAmRujTUxzqOxa7D9rlIzEBRE+m9VslIp10pb2ILClTO0Hn5U1WALgp0GnI7VOOmc/J0Ne9NpY3Sm0ytSQkAaxJqSaYt8J4cVcokuuCECd1x96snvQsMuMT6R9nmFs4J2AcNYTbN5G7bCrcAHTUtgn7k1Y0lMzP3r28FUEkeDyO5thtiI2MTptTlnKpcaDqZq1IgysLgHU+nkKROXJuINVMmFIIXorTnRgM0ga/nSAGEydQOlCIyb8/pTVCDtaLmRXjz2uOGLjCPaSbx7JFpxNZoW0sjTv2gEOIPmU5FfOud9Ri3gtemdb6XJR8mn7RgymnbK3CXsgStwHz0prb+G4UogkgZa4ENo7uf9kOEpK0KMRGg1pxhjjrN9CFEgxod/SqZGnG9ouNu6t63Qt1SMqUhZSAQPrVa4juWsSxFFigBu1QQ5cEaAJmACdySf1NRXZrlKkQl5iDa3i3boUllCQsBOyRFQj+FPcROOPOoW022pKAjWSTsADpzG+01bHWzHkyaolW8LZwoNKbW2oNLShSjyzA6jyJCdfKml6z71xblQFtttKQhtI1QhzMmR5Jy5/nFSTKrtEzhltYLQpJQlPdZyFZhBy+KfpI+YrsQwtl55CWUNreQ6ru3WvhfaVBBVHQk/IzyqHbE5ElZXlzhmD25JLboc0zCAUZoKSf6kqn1Brru+ViziW1kNutEqZcT/ACqJ1B8lEfeq62aYZbROcPYs1iGG5Vph9Ki2pDhAyKHU/kafXiEBnuytogIKZSYEeXU1VJbNjdor620i8IynME+KTTB4/wDMnIoCQeWlOPZiydCVsxcOXwLcKCCSv0qy8MYDd8ZdpeF8OWVs49cX12llKUCQAdVKjySDrWiK5ZEiFqGFyZ9JbZpNthjDCUQGm0thIMQAAI+1OAddPv1r2y0jwbe7DHqeY3NLMqyvaxr9qnHsRW3R4tT8qRVvEDpVTLApgpGbXTrFcdFRz59KiAIUZJURAo4KS2IqSAMmM4j5eVZh7T3CP/F/seYqGGVLvcJUnErUp+JJR8UeqZqrNHlikn8FuCXDLF/08L3z/f4S0hcLcSgHQ84qPanvMxSr4dZryse2esyr8UxdlUyFSNZ9Kc2P4d9mcgJmY5mqZ6L8XZZ1uCx4dduXpDTDWZWYbADmTWaO4677gbu7ADl4pTy86tDIhI88qR9zSxqyzNKkkNmMSt0LefcdU4EtAvELgZioQB5858vSniOKWWL1q0tGCpltQcUAohK3QJJH211NXcTBtscP40h6+LbdspSfA05vLmYEkjyBn6b0UW+Ke8e8WVk7cI7w5gRrk8tN4P20paRojim0KMnEcPdDy7W4CFKlTjg0zH+4A+grk8R3jFw6hnD3WiHxKogIgkqIPnO3mRtFR02N4J1Yri/EzPcdy6gOhChK1NkJWdFGfmdehnlUfZY3aKw1QeUWzJUwo6rRqITrod+dFFNOI94fxtFv2gW61XBQi4At3kGSlSgdDrzGo9AK02+t8uHZUAJBGk7acxWfKqZvxS5RIC4Sk4pCVeHmeZJqMeBCjlMg600iqbHGDN3d1jKLHD7W4u728UGLe2t0FbjylH4UpGpO1e2fZ/7AWuzLB2+JeJwl/iu6aIWhC8zdghW7SeRV/UrroNBXX+n4HPL9x9I5Pn5/t4FjXbNpkE7xprRhliQZEcq9MeYFArMr86XYKO8kyoAdY9KYFbXB/lV59TSRMqHTrzqpkwqgQNDvRdAknNrvQBypSYJoUEpMk60IA4V4t5/KucS3cWjjD7aHWloKFtrEhaToQfKDUlsX9PB/bt2UPdlPbAWmEqXgOKJU/hj0aJAPiZJ/qT9wQazB1TSrsqbEJKYOteVy4/tZnE9ZCf3fHUwLckpOUQnb1FO2HAjEmykmcmYT5TWSZsxEvxaxcYj2NXjGHNuuOOtiEoSToOgrMXcEx+94XYU2glCSSEpbyk6QNSJMUsUklsnmg5NEJdWOL4OPerjAbl1lAyju9uWvrpS9ljFsm5bKkNW5MQEIKl/fz30rS6a0GLHT2TttjWDWrg7964CgoAqfbVlH1TANTtrxnhlvbI7vE7UIR8Cu90O+pE61RKNnWhFIRe42wVLAaVerUXTCUNguKWTyAAJk0zDl1ib6BacK4whnPAV7qtBPXQwRUVGhyXoi8Rs+Lrh/3TDcGuHM64DNyoIAEnmdRTiw4B4mVfi3vWWGi6qfC4VJSY1nl8/SrOUYo52TC27JVPBT+H8W4Wlds68gXLYlJOZuSBO45gdRrWvY8Ta4cxboaQkmEkZ4E/pWbK+VEcUeKZV2c92X7rXu0KyAg851/Ooe7V3dwE6QBB12M04lc/Z6z9iHCbZns14i4mXYNe9vYimyauy2C4hpDYKkJVuAVLkgbxXpfNMSIFeu8KPHBGjx/mu88gyQnMelcnTUflsa2mIVSTuN6XajNBJGutSEVxf+oSSTpEUkSI0qtloQqGUxB9TRQQVEfOoiOUQVyCRQiY0/xTA5IVl30pRESNTB500IheNOCOFu0Ts/e4Y4xwwX1g6oOJAWUONODZbaxqlQ6j715e9oX2eeC+yv2esLxzgW1vipnElMYlc3t2X3nUOp/DkwAAlSYAAHxVj8vBCcXk9o3eLnnBrH6Z50ZeSmVaxPLnT6470YUi7bRJYXKxM+E6H9K8zNbPT4+i38KYtbqCRIII1SduY+lHxnDGQ8pbbSmwglSI0TBPlpMRWbpmv9iIumQxaAMKSpDhlYOuYxOtRSEW6rkAoS2c2uUwDptU02aoNLsnbIutvzdNIeRJ1zdRt6U5WjD1W3cjBbX8VPiBSkjf0iNKi5M6MOLQ7bumUQW7JlteeQEiPpFNL1pwqDt2402mMwSjSocmE3CKE7C394Y96tW0hK1d2BmGY85I3jziOVTf8ADWmbQhPxZhmUFcvSl7ME2pCYw+yfxlldzbofaZlcgGZMb7cwZqI4nxkPYv3CVlaoiNRPIfmdfKn2zI9aCBCbfhFtUjM6rOQOQ5fYVVnFlVytSikkGJjzq2OimfR719k/CP4T7D2CPrAT/E37nEBvJzuECf8A2oFbAT4vEfKBXsvHXHFFfw8X5D5ZZP8AoYZcmaN6NskyZjTetPZlFR8XyjTcUq1BVtMHkKkhkA6mFSkj60g4knUmq2TE1J8PPrqNqDKE6bAD51CgOjxSOX50KQYgnXSpIAwAzRGvOjJSYMTrIoQg+WTofvvVd7SOEE8f9heN8GLHixWzUhpWnhdSMzRH/vSmiceUGhwfGSZ8yy49buuMXDZafbVlcQRBSoGCPUEEfKp7B7ppxhTKoyqTkUD0O4rx+RUexwsLY3juBcQ+6rIShJzp8MnKeY5g/wBqtVxiba7Bt1x5GVRg5fEkBW33rO0aYypkc4tbSlIeAUmAoGNfpUViVp361+7HIQQoQdTQtGp7VoNZYo+hoNXLCwvRIg79YNKvtXDigsOOIBGgOyZqVIIuSWgLa2xJAz2zi3ZP8yjtTxFlfXV2k3ZlAGqEnfoKjKkC5PssVtNq8FJGiRlEbJnfSjXWJBlyAVKUsAAA6q5RVHsbGN1iCrG0KVrC4bGeVERA/wDsKrOGpdv8aLjyUpU8qQB/KOunSppezNJ26JHHblphKbdJju05E/Ln+9qrluxe3163ZWKO+ubp0MMISNVOKICR9SKvgrKcjo+n3BHD1nwt2U4RwxYKQtnCrJm0GVYWMyUAKg85VmPzqeUkzAA1A3r2sFUUjxM3yk2DEDNJEnlSgSU6kafnUyAcCQJ+WsUu2QlWaSTvUkIrz3WP/FJLGojSOU1WWAZR1n0ohSBIy1FgAR4jHTWhyjKCPpNCEGAOadT5UYAjbX15VJAw8pKdDJ5ijIKgREDXc8qkI8Ee1/2XO9nvtFL4pw23IwDi1a7tpQHhZu932vKT+IB0UelYhYYmq3vNXJSTBk7jevL+Tj4ZJRPUeLk5QUiZxqby0ZvGAStsapTv10NP8Av277BnbZaiUvpKChKspI6xHLSsFaN97JFh1pU2ty4XvCO6fAIk6a+vIinqsOU2wlawdoDkaHpNVS0b8TTWxBFghctBDjqkmfAgkINPmbN99hClYe8UgDUpCZPzoLdD5uzuBKPdFtpSRMDPJ9AacW1s2pCwO9SuYAUjKE6eY/c1XIeloNdtuNWQOyWyDGWSryHnpTFshq/Xid0E94lJShP/AKQ5k+ZHPly50kiqbSRWeIMQeeZSxnIUtRPxanz8qe4S23h+DOXqkhor8KDOsD+5/KrHpGRPZWMQxEP4ivISof1E9eQrfvY57MkcTdr1x2g4qyF2HDkosUKEh69I3PkhJn/uUnpXR8PHzyxRz/MycMbZ7atbW292H4IQn+VsaZfI06DSUthLYA1mJr1aR5NgwABMeU0dIJHiIHnNMiK7ASRS7QJcCSfLU1JAV1YhWXfSDBpJU5godKrLAomfDr0865Wrm/znakIKQZ8xzjWhA2oSAMIzCOXKfKjIBzjLqN+k00IVywZAMmuCUlWxEmpUBVe1bs9wvtQ7C8R4NxZAy3aQph4ICl2zydUOIJ2UD03BI518wOOOE+IuzjtUveEeKrTuL6yWJgyh5s/C6j/aoajmNtxXI8+FtTOv4GTTgJYfiwCQCtUTIiTUhbXvueNpWhwFpyFyRzn9DXDa3R271ZP2OIJeStL5kqlQIGUpUSdSemtWK0xpCLcWDypAXETuNdAdqqlEux5GTtnkedWVIbOTqozI/WKlLZRUw2t23WW0iJKcus/XTyqqkb1KxYuSjMpYShCYlA0M/v8AvTG+Lds2tt1f4aR4pgz1H33oqwlKkQl5izxxMpXLaWlju15ZBJ006VB318ptSs7+iVK7sAk5lEc53FSS9GCcr2VoXZvMc7157KgkScs5R50ONY0h62DFsO7biAmPhT+c1Jq2KLpEKl1150BsmJgk86+jfsw4E1h/sYcLtoYZYW5am6LjbcKWpa1GVH+bTf5V2Pp6/wCj/wAOR9R1jX+mvBGZHjRlMZZSaM2JSROoMHWK9CefYaCU67DpQhJy6jXmTQyNiuZUaRpvSrP+qCoAfOpICvqILg8ZA3mkwNJH0qFEwmUlR1nyoDIEk7EUgB0IOmx0rk/FqdZ2JikAaE5IPz0oyFQmeZOwqQhTQoy7ii3N1a2WGvX99ctW1ratl5591YQhtCRKlKJ0AAFS6ViMAuPb59mu07TBw5d8RYu2yV92MWOFr9xBmM0zny/7steWvaR7V+Fu3jt6u8d4Pw1bFpgjKMPZu3BC8QSCVd6U8gZIA6AE1yPLzRnipfJ1PCxSjmt/BjqW3mlhxgHN/MmTB9P7U/YxJu6te6eGVYMgpT8J2rjNWdz0SOG4iu3uArOk6QsEnxA8pq0Wd2zc2TxQR4kBICTBTrOn2quURxZN4Xi92zboaePjTpn3mJ36mPSrJacROP3AS9BQcugIMaaevWqGjbCdCz2OMJMMuJG5UVGMp9OlMMWx9lZACgAgEgz4ZnQAesn0oSCUrKnfYmli579V0UrgKyJTBA8tPp0qsX2IOXV2FElKSMqQdE+Z8vWrYoySY0cvQhAZtzmI1KlGJ8z/AGpFph27eKlE5QZJiJo62WJElaWqSuXmxDWqdYr2R7K/tFYfc8K2nZpxJ3TLeFoFpa3EZSkD4QsdDO9bPCzfay79mLz8LyYdej1QRCssyDrPUddKDmPFB2r1R5UGfD8XlR0nwZQdtd6KECcpc1G42OtLNeFeaDA6UwK+tQ7zeiEpLcExHXlUSYBGvMgdN4ohEnxctN6TEcYjKDvrFdyIOhpdDBkaADXmZo6CkqI0poTFcx01NeSPaZ4zxvte9u/hn2POFsacwnCLxKMS4wxC3VleDIQXSzJ0CQ2kKJ6qE7VVn1CvksxVyv4PGHbnYdkjvtNPYT2G2eKHAUONYfaKvL1Vz7/cBWVTyCrUNqVEDnE6TWl8SYBhXBOFYPwXaJSX7S3VcXL0eK4dVGdZProOgArh+S0otI7ni25psp1/aIbeDzQ8C9SOhpi/Yh5PesAgncJ5+YrAn7OpKNOhqr3m2JcUSQkgEgbeopza4+m3PiOWRE7jWpfsVVTJdjiiycUJucqxr4lxIp81xg3brzquGQjOFEsrOb/FQcbLFIPdccYOvDMpaWVEeJwq2McqgXOOGnAQpxS9MuYK2HXpvQoA5WMjxBc3CsrWZSMxOpga7x11pRjvn0nLonZSppukhRVskLSwGQSpRT57qNP0sOAZXHZ8ZJCRAHl+VUN2aoqhdSksWZzxO5J2pj2W8QXa+2y4u2nZFjiHuyjOqm1zlB9CNPWp4/bK836pHqh72puIOwPtswuy41Q/jXZ7xBbB4FEqu8GWk5XVNc1tAkKLZ1AJy7RXsHCcXwjiDhSyx/AMStsQw3EWE3Npd2zgW280oSFJNeq8XLzjT7PHZ8fB2uh1KvKj5ikeER+dbDKCkgElQ31il2lfiyBM6xO9MCCcTEjLrM0md9dunWokwo1HXyosEmJnX50gOA/EmdSJOtdEt6QB5UUAZKeW+nXejAaeHXXSOdNALstl26bRsCoJ1O1fHvtZ7T8avPbL7XOOsCv1W7vEN7c4C1cIWQ4m2W4GlJSeWZtoA+RI51l8l6Ro8dbYh2Q4Q1iXtc4Dad2Ft2jvehGXRKW0Eg/YVtHbbhT6btvH7cqK7NBLyQJKm0mVfQSf/bXFzK0djx3U7M/Wpq5sEuJOZCxuDv0NRgW4y7EHKTI6GufH4O1NbsM4tC0FTZBKtxUNeW9u4TLWUn71JaK2rId22SHyEFQHLlSJt1BRB261bZVxADZK4zabbxTpq3QN5kdeXypNklEmLOxBWmUK/OanLdtBAQE5hMxG9UyZbFEihzu1BEGYn0pwkKQ2XDoVGBNUMvQyx67Ra4cpanMqEozKnlAml/Zn4XueIUP4i02txzFsWS6Y/pRmP28P1rTiX4mfyGkaz7aOEM4L2PcI3a0gOWuJKtyoj+VxoyPSUimHsL+0Orss7Yv/ANJ8a4mocJcSO97gVw8uU4bdqP8Apydm1nQ8gqDzNdrBL7c0zzeWPODPpEpKkmNQRy6UU5sokGNhXaaOSdnMFURrPWlmlpQ7JEdTOlAyJUhDbJdcWlDaN1qVlSPmdKzLj32kexPs9Cm8b45tLm7TP/KYZ/zL0+eXQfM1VOcILZNRcujHrj/8hvZi3jfctcEcQLts0d8Xmkq9cp/vVv4L9s7sa404sThir57BEuKQy25in4ZK1zzEpyggSc2k1nXk29oteGSVm7NONXFuh+2dQ606MzTjSwpDg6hQ0NHy6ZcsnYVrW1aKRli+O4Dw7Z+88QY7h2FtmEhV5dIZBPKMxFQjXav2YP8AaFY8K23aBgT+M4ivurSzZuwtx5UE5QBzgE/KoucE6bCn6LgykKVBUQjXMqNhzNfFjtY4JveAe2K74QxBbTl0MeuXVracC0ONh1QbUFDQgpTPzrP5S6NPjPs0L2crJL3tZXF0pci2wxxYPIFSkp/vXoHjywbaYReKazoaWC4DqCnZQPlBNcjItHTxupHnu5wv/hrju54aSpSkMqUqzJVPeMgxH/cnT5EUZ21Q7bRJKTrKRqk9a5ktM70fyiR67JYYSsKCSoSnlIn9+lJnDw43ldM6aZtaAojLzC8jsobj0V+lRNwjujJg8ulWLZGgjI7xUIQAfWpaysSu4yuLCpIMTQwSJ5qzUnwJ8ISJ6z8qctNKTvA69CaoZYkOmW0+8BAGYxJjz8utP3EpatFZR4iYKpmKrZbEofHdxe4zfWXBmAJ7/FMXuUWjSEnUqWYA+v2Fe6ewDsjwzgLguyw1ltp1WHW4t1XAEB50aur+atB5AV0vHjpHL8yezLPb4eW52GYetDfgt8YZU7/tBSpIP/yIFeOLm7Iw+zv1vENsgpUr/wBM6QZiR/iti7OSuj0/2Ge3px7wO5Z4bxxev8YcNKIaSq8VkvGEp0lp4jxRp4Vz6ivoNwB2jcHdqfZhb8Y8D4u3f4e/4FAjK9buAatuo3SoffcSK6eDI5fhI52bFxfJFhJI3JPTWlEuDvQYg8j/AHrYZz5D8d9uHaNxhiC08acQcQXKiTNtcvFlCT//AJiAPpWfvcTW7cpLbLR9R864227Z1FGugicZwq6XleJ1P8iwdPSirtbF2VW2Jd2TuFSKf+jWjS+zDt27Yex5Hc8K8c2qcNVqqwxBffWx8wg/Cf8Atir7xT7fva7inBhwq2xHB8NuHDC7rCbFXfZY+FJWYHqBNSjknFcYvRVLFGTs878Z9pPFPF3ES8UxF55VwtWfvrx9TrifNIVMdaqfDfFt5wp2z4RxlbPrfvsJv2r9CluEFRQsKyzyBiPnUOPstpVSPQXaL7VvbN26cQpw7F+IRw5gdy5phGDFTaciuS1/EtUdTHlWd8VN4bf8V29ywwYs2EsWyO80QhKTJPU6knzonKUnchQgo6RoPs03TDnbg9dJOVd1huiZjQOjUeVeyHuFWMc4bWh1KPEjXTeqKstTpmFdrfY1jd5wybzB2i5imEq721IMFxI0y/NPhPog1kuG3YxLChdoSWnAru32XE5VtOAwoEdZ0I5GudnhxO34s+UaHnu6S1C21ZM0yDt0I86b3VqLe6AdWlYWJQoCJ8iOSqzJm1oMjDGnnilbaZIEjqOVOm+EMNuEgv28mfi60+TQmhG64KsmXoabRr0/Uc6S/gqbVeRppMHYgbec0crFSFWrXKQlxZJTuTEn00oyEpeuyhhBdURsNAPOoMmtkkmySyM6jmcUPERsn0FV/izG2sEwBbynAlcHKOlKP5Sosl+MTSfZN7FcSvMXX2scW4c8xeXKizgLVy2UqbRHjusp20MJJ9a9sWNjb4Vwoi1Y8KEJCRvXaxxpHmvInykeVfa/ZGOezxxQ0kHPaWSbtPUFDiVfpXinha6bv8EdYUQc6M0dTzBqxGddC1iq4tMOftLfIe5XnAWkKTp1B3BGhHnXq/s648wXsx7H3vaQ7D8QOHs4M5a2vaL2dXD6nWlIcWGxd2ijqGyTICpyExMaHQnTspntUfQHhnirAuNuzXC+L+Fr8XmEYxaovbN4aZkKEwRyUDII5EGpRLkOjWPOuunezmNU6PkVinst9oeEuquePsT4R4cWqVLVxBxcwl0dSUBSlH6VTMb4Q4KwO1cCe1LgnEXWkklqxFw8FnoFFsJ+8VyNI6ilZTXsU4XbcDTiLdfmhkmPoaG3XgFwf+TcdQRqQ33kfSKCWw6mbUuaW18/HIpUlP1JFc248tqLSytmQDGdSiv8oH50AN7yyurtGV+8dKByQA2n7CmSLW2s7ke72yFOgwCrUT1igZYcMfcsrJ+6Uv8AHUMgcA1TO+XzOgHzoGbe3u+PQ68ySbVAQoKMgK3j6fnUWkCNE7KcXdwr248ItirKxf4c80nWNQM2nzRXv7hG7RcYKlIckkQDOpNU+xssV9hwfykoamJCFH9OX+a8/wDbX2GuO4g7x5wRZhF+lObFMPQR/wA2kf8AUSNs4G4/mHnvDLDnGjT42X7c18GI25Zct+8BKWXdiJAB6GpAWrZspfYS40QM4UJ06zXEemejW0Fbwe8bQl7DbplLRPhbdBUVDmAQDUgg31u0XH8JeHhnwpJCvQ9PWhuyPGhpcYqhTJS7YutKPLIo8/MelR4724u0e7WjqxzCEqUfoPypiodjCr59CQ4g2iJ/6g8Z8kpG3zilmbVLSvdrVJg6qMypR8z+42qLZbBDbGMSssIwrvbh5lvKCTmXE1cew3sKf46xxrtR7QrP3Xh20X3uF2d2O7F2oa98pJEFA0yg/Eddhrf48bfJmfy8nCFI9IcK9qnZTiXFzuFM8aYd7+khkMKOVKQDAAM9Z35771euJsRRZ4eVpUnKEBKcp3naunDJGa0ednCUXs8y9qKG8c7M+K7ZzxB/DH2tp/6aiPuBXgfgh/usebtnFZe8QFAz10Iq1EEWgD3PjRIMFLyIM7EgwR+VSF9hQU2qzaunbVm/aLJcaWQHG8wJbWP5khSQYPQVaVvs9vext23cD9nfss4R2ScfY69huJWt9dKt7t5E2PdOuZm0B0fDMneBrXr1i6auLRNzZOt3DDicyHWlhaFA8wRpXTwZIyjXtHPyxak38nw8ew2yuLsv3Vul91RlS3ZWo/M60ZPDuGPkf8ikDbwz+lYKSOiKf8N4IykZ7VIg7rcyj6bmpBhAbtEs2rag2nZKR3aB+ppA2HVhy7opTdLCkpMltGgV5HmRRl2Vu2mXFDw8hsKCNkFi92EEpRsNopjhrIefU+8qEIGYnoKCQ8YeW7fsvpbCGmnEuRPMHw1Ko7q14quARLGIEPNuHZtwDVJ/tzBqIFh4fIXx/gePBaW7rA71Lkq3cZPhcT65TI9POvd3C/E2DcN9ltzxbjuIt2mE4awXri5UqAExIjQ/YHluSKok+OyaXJ0ee+NfbM464pxd+z4EQxguEpWpLTpSVPOonRUGMs7wZInlWldgfa1xTi9s1hXG2MJvHMTcCLF5bf4iCASUqPRU6aaEedYFOSnbOhLDGOLXZFdtfACOEuPxxHY25OB466rvAkQi3uTy02C4JH+6etZ8lLtjbh5speYTz2UkTsRGtZs0eM2jrePPniTJWyctjaBwspShfiVmQUpSfltT1T6A2otXiFwAQSpMj7b+tZzRQ271a3DCHVEbHu8w9f2aAXF2Gyg50wYyklKfoP8AFBHQ2d8NqtTuRAGpKTp8yPyq/wDZf2c2nEViOJuJ2rgYU5PudoyvuVXoSfEpS/8ApsDWV84IFWY48pUV5sv2sba7NKvcY7PMItmbXAmsD94UoJTb4XhTLmXoAtaVLVPUnnWQ9uSeLMQ7PzdYxjTjnfvlv3VbmdSGeh0hOo/ljat01cHx6ONCTlNc9nnLHMORh+H+8nQoI7ojQhXIjpFeq/Z27V8X4/8AY/xPCuI8TN3jHC1wG1OqGVbtuseAkxBPn1SetQwadmjylyhfwNcWdFzwTiWc6PJWn5FJEV4KfQcF4rtnDKUBQnlI2rors5KLvjrae4tb9oQkrB9JEH5bVL27ybjhpaEJR3iU960qNUkbj0NWp6KZDmzu1v4WlhOZtbZ8ACpCkndPpPI1O4Z2hce8E2XecK8XYphXMt210tCfTLsaEqdoVJqmZwWUlcshLSSkaJTmV9T5+VHSHNUqunlA9XCAfOBFWEgUtssnRCcx8tTSyHKBBy7lG8RTG4cnnQCKxiZK8TSlOs6QKfssB27bw5BhtqHLg/1HpSZIsdzwXd2XY03xat/Cyu7xtdqnDzeg3q7VFuHVXHcj4GUqUhPeGJWrLrGjO3uWGMDeuL1A/Gby90tIOf8ApUQdtiQelR9Bqx5geLvsNDE7m1UwkuBptZ1zn/t320nnpXpLHbbiPjX/APEPwwvBblUYik3F8gAFdy0HXJbnkB3bRIG+UD1zZjRhS5bPK/DzisPx97Cr7wOsqymfzr0j2W2rV3we0w8nM42fDB130IrBkX5HSv8ACjbML46tbTDf+GOPLRrFeHrv8NbtwjvFsyAMq+ZRIBzbpMHXcPLr2ecKxPD1Yl2b40GCBIsrl4utqTHX4h6+IGrHFZlxfZTiyvx3/GZti/A2IcN44cPx3CrnCbkfCtIAbXPMHY89t6Yr4VW4748YUW0+H8Q5U/KNT6VzpJwlUjtxkpxtdBk8JPWYJadt4JgqUjb5CPuabPYEoEpNywoTuUAT/wC1In7ildjqhLh7htnibtewrhtkm9F08Q+p1MNoZTq4oJGwCQTJM7a16Z4h/wCAbbC1YYhu3vnk2yGLZl1RTbsMpGVKUpGhiJ161u8dLi2zlebJ81EolhwrhGBXK3sJCIuFSvIICNdhA2qtdolpbr4FuGXGgEuaT0VVk9QpGaDuVnl7jVSFYK00pXikmB1FbR7LGE3mGeyTxrxLdLSGsVu0WdojnnQEpUfnn/8AqahhNGd/gyf4xxFHD/ZJd3zsEW9s45BMZlZSB9yK8TcVWJFi2shSlNHKozMabV0I9nKRZcFcONdkiW1nO8lOQqmSFDal8EvlnC0qlQUjxQOXUVauiqQtb3zKmFNQpCm1lKFjSU7gH+9L22NOXKPdb5QUlpeijznb5ipogQneeLQ0Yu+GJA56VMZwVzkQKUCtPL1pCDFcokKNR17cJQyVGDp9KY0QLLife3b5ckMIKk+a9gKlWS3huA948Sp13VXVazsPQf2qI2PLNlNniCeJLp91zEbhZbtWGgAAgggp9SSonlEdYp+bGxw5HvmNPB+60KGUEhCCeQHM7anXT0qL/FaGlbIbizH1jCyXFpL62yywhIgNg7n5DSa9a+xrxHYcYewXd8JXCi5f8IXzrIamV9w+e8bUB0nvU/IVRNaLoumYf298Bu8K+0g6ptuLTEGE3Nssc4MKHqDH1qa7LcVxq2KLVpcoQQlJVMisE/g6qpxs9C4Twvc4paNvXuLIDbg1CE5t/Oml/bcacG3GfhzHru1YQczIUSUIPlzT8jS4tK0UaemDa9p/aBxe8nhriqyQ/auLShy9LaXHUNzulUDWeXMaaU2urd3BOILjDb7IHbZWU5G/iB1Ch1SRBHrWfPyklJm7xGoXAau4nZNtlaULKuhJ1P1qDu8ZauLz3OzaVcXLhgNNIzKV5BI1PpWRK9I6F62XfgTB7bg5V5ifEKn0Y9eNBm1ZtHE57BuZVnPwlShAKNYA11Okg7h7Wddxa3ZWf/Utni3J6FpcgnzSoegrpwXGNHCzS+5kbCtfxazWpPvi1JUkCC1OU/IkVXO0fFfduB1WDuJN+9OkK7tUJI03iSedRnL8RQj+RgOMYQ5dFTiFe8OqISlKRMqJgAfM16t/gWH8Fdk+A9nmGobbRZ24vr2P5niIJPmVZz9Klg2yzynUEkY77QWNJY7Jf4WwtGe/uUMlPVCfGr8h9a8v4upKsCfSsgLnnOhEV0InNXRKcCuuI4BxJSAhRaeSClRgAKjWakmsQ4Ss8Qcw0Yvai5bnvAUKbAUeWfadfSpttPRCrG9zZvWmKnKSUOJCkq6/PY+oph3pax05VE94gjLyVlP561aiuqDanTp50JgVMQok6b0oSAN6ACOLUm1JG/UVAYm+VHukElSiBQCERbK93t7RGin3gT0ga61I26E4pxegIk29qYSFGBm5qqJIn0qtLRTuLO92HWgppgg6oA0J9SoH5AVXMUxJlhBxG5GZcyhM/Eo7aelVvbJLopt3dO3t+q4eJKlba6AdK0j2de15zsX9piz4kuiteCXyDh2NMpE5rZZErA/qbUAsehHOlJXEaez2Z7TPAzfEvYyni3BUt3zVipGIMPWxzJXbLAzLSeaSlQX6DyqkdmnCjDdta3Ja0gKJjrXOmrkdGMv+ZuH8KTaMt3lmkZBCloSqdescqf3SGLzCk99bpcQdDrt1qXRWVR7BGbPEV3eGudwpchxs6IVrz8/MVD9oljeY12QK4kwm0S7i2Ao/5hCZC3rQbmBuUb/9s9KrlHlFouxS45FIpfBfC17xVwO1xbxG/eWWBvOFq3Fo1nfvMp8RTOiW50zmZMgDSrnaXWFYNbuW/C+F/wAIbdT3bjoBVcvDop0+L5CBVMYrGv6aM2VzlxXQk1ZuuIJZcCs5knN+zS6ba5SsKW7B2Hi1o5GfiOrVAct1vC5AQD4lTMnoOprLO0PA7j+LjEy3kXcKUVrVoV0pbVk8b4yJfsP4Tbve0FfFGLlCMH4aPvd06oSC6EkoSOpHxf8Ax61K45xtc4pxRd3wSe/vXe8UBs2nZCB6JAHrWnCqiZ/Ilc6ME7bsYcxHtOZwhDoWMKYyvBK93lnMpMRuBlFZjfIcPD7oWJnaTA8/3FbYmX0PezxwIxm9tlaBTWfL8jP2ouJW7RxVGdtAKgpKh/VzH51dHsqkNUX9xgt0mwKi5YrUcqFf9Bf+07gHptTu6U046ze26we7dhRA2BEH986fTF2HmNaEnnH+asIHBWn+YoxUSQABJ003oEJXzgatj4gMvQ1X7VXvN84+rYGE60EkO1uhlD90ZIab7pqDzO5/KpDBVowngxWILVmczQlJH+oojSOv80+R9KgM7FMRateGLVu8zlxDMuN7+P8AmB85mqPfuXV5e98+Dr8InQCkTG2RSdCDS7FupapgRURntn2Q+0m4xjsJe7IOJ19+wytVthjylSruVglVsPPUqQP+5PMVtnZvwpY2C7rhu/DSn8NV3OYJIC0jVKteoIrI1Uy9P8WaGjhtVtZrRbHvUAyoE6xVecskW14bdQWW1HQDcetE40xxdorXEljdWruY3CkMkwn8OVLJ86R4fwS7uuIG7IrcaZuG1JvCFGVMEeMH1Gnzqr2WLosScA723bbtyDbW7Sbe2aZSltphpIhKEAaAAaf+aXd4EYfazKZBkTBFFKQXQyT2VWDl4VPWq08zCiKNiHZ3g6bRNo1h7gWoEKBWYUNNPSofbRPlQ5wbs1Nw8nvUBDDIGVGXKB6CqD7QnCd9/FsIwzALUvu3L/cJSnTxnbN0Hn0FSnjrGKE7mR+P2VvwzwNb9m3DK+8btlJexq9QY7+4MaegIGnKEjlWd8bY/h3AnAruILShzESnLZ25WApbh0CoOpAJBMbVYo8UUSlylZ5vU7d4pibt1cvl591Sluur3WpR3+tEvmcuDKClH+qIjX7VqWiDFuE8OFrhV5ijqilK0FEzByz4o6kmEjqaaXzveYw2gkygK+RPKrI9lMhC9SHMVbQdZJ0jSkUWj9tjKVMFIad/DdSpXggn4vlv8qk+iKdMkuc0eAT5VMiCAkI6R86K2rO4pY2GwoEROOXGW3KEq8qaYWkJw0rPITSZL0KvsuOt21i2iVurGk8yf81M3GIJwrDUXtsAXG/BYSjN3aZ/EfKTzUR4Z2AmkMj+Lr566tbdq6yh5q2GfLyzagHqqDr5moNKUuWWcpko1UJG3OosnHof2WGsvWsuNhZA3BmT/wCKfIwBM+EBJVrHX00/Sok0i+dkOKnBO08YXduKYGJJSlCwopLbyTKFA8joRPmK95cMYl/FLrD+JnnMl00lFviBy5S6lXwOkcjMg9DPlVM17+Bp06+TTEOhq7CkOwR1/mpPF8GsMVwsvNqDDyZz5dUqNSceURRlTKDi1u4zc90WQ4QQFOb+lOsItGbrh11y6dcHvLvcDIMucJ1On9MkfSs1bL70Wqywdu0ISyhKWk/CgSJFSrVuFFPgOWek1JRE2OWkJbG2u2UjSmjy7Y8S3GbKkJbbGWdP5jp++VNKqE3oO1dIU0R3QBOgyGBWd31wLzjBaytLd17x7o2t0FRbUdFKHmEhRj0qUlbSIJ0mzMsaw23tOKH/AOF2qmlqJQFuKzqSgmZP+4zJ5zXmLtYdXifai60svBkOfhhxS0+BEoSoZkwCT3hlJI5HlSlqdBDcbKgEssOfhpCkt7DkSeZgmmKkuYtjSbJJKWUnM4QNADyHmdquExziLrKFot2UpbZtPwyATBWOXok8+ZqvMvh/ijLJKMhOh6kCrYrRS+xyEA4ktYPwDMnSBM9PSuWQp1SIhKwoHXTUfrUmR9n/2Q=="
         } ],
         "family" : {
-          "child" : [ {
-            "person_data" : {
-              "identif" : "7461780A001PB8",
-              "last_name" : "РАБИНОВИЧ",
-              "last_name_bel" : "РАБІНОВІЧ",
-              "name" : "РАВИН",
-              "name_bel" : "РАВІН",
-              "patronymic" : "РАВИНОВИЧ",
-              "patronymic_bel" : "РАВІНАВІЧ",
-              "sex" : {
-                "code" : "M",
-                "type" : 32,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "МУЖСКОЙ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "М",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "birth_day" : "20160802",
-              "birth_place" : {
-                "country_b" : {
-                  "code" : "BLR",
-                  "type" : 8,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "area_b" : "БРЕСТСКАЯ ОБЛАСТЬ",
-                "region_b" : "БРЕСТСКИЙ",
-                "type_city_b" : {
-                  "code" : "11100001",
-                  "type" : 68,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "Г",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "Г",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "city_b" : "ДРОГИЧИН",
-                "area_b_bel" : "БРЭСЦКАЯ ВОБЛАСЦЬ",
-                "region_b_bel" : "БРЭСЦКІ",
-                "city_b_bel" : "ДРАГІЧЫН"
-              },
-              "status" : {
-                "code" : "1",
-                "type" : -18,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "АКТИВЕН",
-                    "lang" : "ru"
-                  } ]
-                }
-              }
-            }
-          }, {
-            "person_data" : {
-              "identif" : "7662786A001PB3",
-              "last_name" : "ЛАПАНИК",
-              "last_name_bel" : "ЛАПАНІК",
-              "name" : "ЛИАНА",
-              "name_bel" : "ЛІЯНА",
-              "patronymic" : "ИВАНОВИЧ",
-              "patronymic_bel" : "ІВАНАВІЧ",
-              "sex" : {
-                "code" : "M",
-                "type" : 32,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "МУЖСКОЙ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "М",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "birth_day" : "20160625",
-              "birth_place" : {
-                "country_b" : {
-                  "code" : "BLR",
-                  "type" : 8,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "area_b" : "МИНСК ОБЛАСТЬ",
-                "region_b" : "ПАРТИЗАНСКИЙ",
-                "type_city_b" : {
-                  "code" : "11100009",
-                  "type" : 68,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "Д",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "В",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "city_b" : "МОТЫКАЛЫ",
-                "area_b_bel" : "МІНСК ВОБЛАСЦЬ",
-                "region_b_bel" : "ПАРТЫЗАНСКІ",
-                "city_b_bel" : "МАТЫКАЛЫ"
-              },
-              "status" : {
-                "code" : "6",
-                "type" : -18,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "АРХИВНЫЙ",
-                    "lang" : "ru"
-                  } ]
-                }
-              }
-            }
-          } ],
           "martial_status" : {
-            "documents" : [ {
-              "document" : {
-                "access" : {
-                  "code" : "10",
-                  "type" : -3,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "document_type" : {
-                  "code" : "54100006",
-                  "type" : 37,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "СВИДЕТЕЛЬСТВО О ЗАКЛЮЧЕНИИ БРАКА",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "ПАСВЕДЧАННЕ АБ ЗАКЛЮЧЭННІ ШЛЮБУ",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "authority" : {
-                  "code" : "429",
-                  "type" : 80,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ЗНАМЕНСКИЙ СЕЛЬСКИЙ ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ БРЕСТСКОГО РАЙОНА БРЕСТСКОЙ ОБЛАСТИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "date_of_issue" : "2016-08-15T00:00:00.000+03:00",
-                "series" : "I-АЛ",
-                "number" : "0233116",
-                "active" : false
-              }
-            }, {
-              "document" : {
-                "access" : {
-                  "code" : "10",
-                  "type" : -3,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "document_type" : {
-                  "code" : "0300",
-                  "type" : 82,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "АКТОВАЯ ЗАПИСЬ РЕГИСТРАЦИИ ЗАКЛЮЧЕНИЯ БРАКА",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "authority" : {
-                  "code" : "429",
-                  "type" : 80,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ЗНАМЕНСКИЙ СЕЛЬСКИЙ ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ БРЕСТСКОГО РАЙОНА БРЕСТСКОЙ ОБЛАСТИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "date_of_issue" : "2016-08-15T00:00:00.000+03:00",
-                "number" : "4",
-                "active" : false
-              }
-            } ],
             "cert_data" : {
-              "date" : "2016-08-15T00:00:00.000+03:00",
-              "region" : {
-                "code" : "429",
-                "type" : 80,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "ЗНАМЕНСКИЙ СЕЛЬСКИЙ ИСПОЛНИТЕЛЬНЫЙ КОМИТЕТ БРЕСТСКОГО РАЙОНА БРЕСТСКОЙ ОБЛАСТИ",
-                    "lang" : "ru"
-                  } ]
-                }
-              }
+              "date" : "2013-08-08T00:00:00.000+03:00"
             }
           }
         },
-        "trusteeships" : [ {
-          "trusteeship_info" : {
-            "trustee" : {
-              "identif" : "4230478A031PB8",
-              "sex" : {
-                "code" : "F",
-                "type" : 32,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "ЖЕНСКИЙ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Ж",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "birth_place" : { },
-              "status" : {
-                "code" : "6",
-                "type" : -18,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "АРХИВНЫЙ",
-                    "lang" : "ru"
-                  } ]
-                }
-              }
-            },
+        "militaries" : [ {
+          "militaries_info" : {
             "documents" : [ {
               "document" : {
                 "access" : {
@@ -418,20 +127,89 @@
                     } ]
                   }
                 },
-                "document_type" : {
-                  "code" : "4",
-                  "type" : 133,
+                "active" : true
+              }
+            } ],
+            "military_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "military_service_awarding_date" : "2015-04-01T00:00:00.000+03:00",
+              "military_service_suspension_date" : "2019-04-06T00:00:00.000+03:00"
+            }
+          }
+        } ],
+        "taxies" : [ {
+          "taxies_info" : {
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
                   "lexema" : {
                     "value" : [ {
-                      "value" : "ДОКУМЕНТ ИЗ ИСПОЛКОМА ОБ ОПЕКЕ (ПОПЕЧИТЕЛЬСТВЕ)",
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
                       "lang" : "ru"
                     } ]
                   }
                 },
-                "date_of_issue" : "1987-09-25T23:00:00.000+03:00",
                 "active" : true
               }
-            } ]
+            } ],
+            "tax_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "tax_number" : "123456780",
+              "tax_awarding_date" : "1993-11-11T01:00:00.000+03:00",
+              "tax_debt_data" : 1
+            }
+          }
+        } ],
+        "insurances" : [ {
+          "insurances_info" : {
+            "documents" : [ {
+              "document" : {
+                "access" : {
+                  "code" : "10",
+                  "type" : -3,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "active" : true
+              }
+            } ],
+            "insurance_data" : {
+              "access" : {
+                "code" : "10",
+                "type" : -3,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
+                    "lang" : "ru"
+                  } ]
+                }
+              },
+              "insurance_awarding_date" : "2013-12-01T00:00:00.000+03:00"
+            }
           }
         } ],
         "deaths" : [ {
@@ -448,6 +226,32 @@
                     } ]
                   }
                 },
+                "document_type" : {
+                  "code" : "54100009",
+                  "type" : 37,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "СВИДЕТЕЛЬСТВО О СМЕРТИ",
+                      "lang" : "ru"
+                    }, {
+                      "value" : "ПАСВЕДЧАННЕ АБ СМЕРЦI",
+                      "lang" : "be"
+                    } ]
+                  }
+                },
+                "authority" : {
+                  "code" : "22362",
+                  "type" : 80,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТДЕЛ ЗАГС УЗДЕНСКОГО РАЙИСПОЛКОМА МИНСКОЙ ОБЛАСТИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2016-04-02T00:00:00.000+03:00",
+                "series" : "I-АЛ",
+                "number" : "012340",
                 "active" : true
               }
             }, {
@@ -462,6 +266,28 @@
                     } ]
                   }
                 },
+                "document_type" : {
+                  "code" : "0400",
+                  "type" : 82,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "АКТОВАЯ ЗАПИСЬ РЕГИСТРАЦИИ СМЕРТИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "authority" : {
+                  "code" : "22362",
+                  "type" : 80,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТДЕЛ ЗАГС УЗДЕНСКОГО РАЙИСПОЛКОМА МИНСКОЙ ОБЛАСТИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2016-04-02T00:00:00.000+03:00",
+                "number" : "124",
                 "active" : true
               }
             } ],
@@ -477,11 +303,11 @@
                 }
               },
               "death_cause" : {
-                "code" : "K25.0",
+                "code" : "A06.9",
                 "type" : 81,
                 "lexema" : { }
               },
-              "death_date" : "19540711",
+              "death_date" : "20160101",
               "decease_place" : {
                 "country_d" : {
                   "code" : "BLR",
@@ -496,162 +322,19 @@
                     } ]
                   }
                 },
-                "area_d" : "ГРОДНЕНСКАЯ ОБЛАСТЬ",
-                "area_dbel" : "ГРОДЗЕНСКАЯ ВОБЛАСЦЬ ВОБЛАСЦЬ",
-                "region_d" : "ОСТРОВЕЦКИЙ",
-                "region_dbel" : "АСТРАВЕЦКІ",
-                "type_city_d" : {
-                  "code" : "11100009",
-                  "type" : 68,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "Д",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "В",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
-                "city_d" : "МАРКУНЫ",
-                "city_dbel" : "МАРКУНЫ"
+                "area_d" : "БРЕСТСКАЯ ОБЛАСТЬ",
+                "region_d" : "БРЕСТСКИЙ",
+                "city_d" : "СТРАДЕЧЬ",
+                "area_d_bel" : "БРЭСЦКАЯ ВОБЛАСЦЬ",
+                "region_d_bel" : "БРЭСЦКІ",
+                "city_d_bel" : "СТРАДЗЕЧ"
               }
             }
-          }
-        } ],
-        "burials" : [ {
-          "burial_info" : {
-            "burial_data" : {
-              "access" : {
-                "code" : "10",
-                "type" : -3,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                    "lang" : "ru"
-                  } ]
-                }
-              },
-              "country" : {
-                "code" : "BLR",
-                "type" : 8,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "РЕСПУБЛИКА БЕЛАРУСЬ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "РЭСПУБЛІКА БЕЛАРУСЬ",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "area" : {
-                "code" : "1",
-                "type" : 1,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "Брестская",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Брэсцкая",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "region" : {
-                "code" : "397",
-                "type" : 29,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "Брестский",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Брэсцкі",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "soviet" : {
-                "code" : "423",
-                "type" : 67,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "Знаменский",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Знаменскі",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "city" : {
-                "code" : "424",
-                "type" : 7,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "Белое Озеро",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "Белае Возера",
-                    "lang" : "be"
-                  } ]
-                }
-              },
-              "burial_name" : {
-                "code" : "103020101",
-                "type" : 134,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "КЛАДБИЩЕ АГ.МЕДНО",
-                    "lang" : "ru"
-                  } ]
-                }
-              },
-              "place" : "6",
-              "grave" : "1"
-            },
-            "documents" : [ {
-              "document" : {
-                "access" : {
-                  "code" : "10",
-                  "type" : -3,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "document_type" : {
-                  "code" : "2",
-                  "type" : 133,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "КНИГА ГОСУДАРСТВЕННОГО УЧЕТА УЧАСТКОВ ДЛЯ ЗАХОРОНЕНИЯ, МЕСТ В КОЛУМБАРИИ, СКЛЕПОВ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "authority" : {
-                  "code" : "200026656",
-                  "type" : 142,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "Пружанское коммунальное унитарное производственное предприятие «Коммунальник»",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "date_of_issue" : "2016-07-29T00:00:00.000+03:00",
-                "number" : "2",
-                "active" : true
-              }
-            } ]
           }
         } ]
       }
     }, {
-      "request_id" : "{0AEC1B19-41DC-4E65-8FB8-DBC31199F722}",
+      "request_id" : "24C1A689-E5CC-4630-AB5B-35DBC5C1F3D0",
       "data" : {
         "identif" : "4230478A031PB8",
         "last_name" : "ДУБИНЕЦ",
@@ -1748,11 +1431,11 @@
       }
     } ],
     "identif_number" : [ {
-      "request_id" : "{39EB108D-8D05-400E-9B00-C5B58EA66E72}",
-      "data" : "7199035A001PB7"
+      "request_id" : "16968819-6DB1-40E4-ABD6-8B21B7624237",
+      "data" : "7110609A001PB9"
     }, {
-      "request_id" : "{30017AA4-DDEA-454E-911F-63347DFD6AF4}",
-      "data" : "7684755A001PB9"
+      "request_id" : "9AFEABE2-49D6-4ABD-940D-5F5C9E233E7B",
+      "data" : "7523996A001PB0"
     } ]
   }
 }
