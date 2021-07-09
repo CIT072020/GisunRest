@@ -357,15 +357,20 @@ procedure TForm1.btnGetPersDataClick(Sender: TObject);
 var
   i : Integer;
   s : string;
+  dsDoc,
   dsOut,
   dsErr,
   d : TDataSet;
+  sp : TStringList;
   r : TRestResponse;
+  RetSOAP : TRequestResult;
 begin
+  sp := TStringList.Create;
   d := RegInt.CreateInputTable(akGetPersonalData, opGet);
   d.Append;
   d['IS_PERSON']  := True;
-  d['IDENTIF']    := '7172252A001PB3';
+  //d['IDENTIF']    := '7172252A001PB3';
+  d['IDENTIF']    := '3260578B005PB1';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
   d.Append;
@@ -385,8 +390,10 @@ begin
   d['DATER']      := '20020612';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
-  r := RegInt.Get(akGetPersonalData, QUERY_INFO, d, dsOut, dsErr);
-  PrepUNResult(r);
+  sp.Add('father=1');
+  sp.Add('child=1');
+  RetSOAP := RegInt.Get(akGetPersonalData, QUERY_INFO, d, dsOut, dsErr, dsDoc, sp);
+  PrepUNResult(RegInt.Response);
 end;
 
 // GET IN by FIO
@@ -398,6 +405,7 @@ var
   dsErr,
   d : TDataSet;
   r : TRestResponse;
+  RetSOAP : TRequestResult;
 begin
   d := RegInt.CreateInputTable(akGetPersonIdentif, opGet);
   d.Append;
@@ -406,8 +414,8 @@ begin
   d['OTCH']    := 'ИВАНОВИЧ';
   d['DATER']   := '20120511';
   d.Post;
-  r := RegInt.Get(akGetPersonIdentif, QUERY_INFO, d, dsOut, dsErr);
-  PrepUNResult(r);
+  RetSOAP := RegInt.Get(akGetPersonIdentif, QUERY_INFO, d, dsOut, dsErr);
+  PrepUNResult(RegInt.Response);
 end;
 
 
@@ -427,6 +435,7 @@ var
   dsErr,
   d : TDataSet;
   r : TRestResponse;
+  RetSOAP : TRequestResult;
 begin
   d := RegInt.CreateInputTable(akAffiliation, opPost);
   d.Append;
@@ -553,7 +562,7 @@ begin
 
   d.Post;
   s := NewGUID;
-  r := RegInt.Post(s, akAffiliation, '0200', d, dsErr);
+  RetSOAP := RegInt.Post(s, akAffiliation, '0200', d, dsErr);
 end;
 
 // Свидетельство о рождении
@@ -565,6 +574,7 @@ var
   dsErr,
   d : TDataSet;
   r : TRestResponse;
+  RetSOAP : TRequestResult;
 begin
   d := RegInt.CreateInputTable(akBirth, opPost);
   d.Append;
@@ -654,7 +664,7 @@ begin
 
   d.Post;
   s := NewGUID;
-  r := RegInt.Post(s, akBirth, '0160', d, dsErr);
+  RetSOAP := RegInt.Post(s, akBirth, '0160', d, dsErr);
 end;
 
 
@@ -668,6 +678,7 @@ var
   dsErr,
   d : TDataSet;
   r : TRestResponse;
+  RetSOAP : TRequestResult;
 begin
   d := RegInt.CreateInputTable(akMarriage, opPost);
   d.Append;
@@ -734,7 +745,7 @@ begin
 
   d.Post;
   s := NewGUID;
-  r := RegInt.Post(s, akMarriage, '0300', d, dsErr);
+  RetSOAP := RegInt.Post(s, akMarriage, '0300', d, dsErr);
 end;
 
 // Свидетельство о смерти
@@ -746,6 +757,7 @@ var
   dsErr,
   d : TDataSet;
   r : TRestResponse;
+  RetSOAP : TRequestResult;
 begin
   d := RegInt.CreateInputTable(akDecease, opPost);
   d.Append;
@@ -801,7 +813,7 @@ begin
 
   d.Post;
   s := NewGUID;
-  r := RegInt.Post(s, akDecease, '0400', d, dsErr);
+  RetSOAP := RegInt.Post(s, akDecease, '0400', d, dsErr);
 end;
 
 // Свидетельство о расторжении брака
@@ -813,6 +825,7 @@ var
   dsErr,
   d : TDataSet;
   r : TRestResponse;
+  RetSOAP : TRequestResult;
 begin
   d := RegInt.CreateInputTable(akDivorce, opPost);
   d.Append;
@@ -895,7 +908,7 @@ begin
 
   d.Post;
   s := NewGUID;
-  r := RegInt.Post(s, akDivorce, '0500', d, dsErr);
+  RetSOAP := RegInt.Post(s, akDivorce, '0500', d, dsErr);
 end;
 
 procedure TForm1.btnPostChgFIOClick(Sender: TObject);
@@ -906,6 +919,7 @@ var
   dsErr,
   d : TDataSet;
   r : TRestResponse;
+  RetSOAP : TRequestResult;
 begin
   d := RegInt.CreateInputTable(akNameChange, opPost);
   d.Append;
@@ -959,7 +973,7 @@ begin
 
   d.Post;
   s := NewGUID;
-  r := RegInt.Post(s, akNameChange, '0700', d, dsErr);
+  RetSOAP := RegInt.Post(s, akNameChange, '0700', d, dsErr);
 end;
 
 

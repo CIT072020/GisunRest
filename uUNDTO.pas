@@ -572,39 +572,55 @@ var
   s: string;
 begin
   try
-    with ODS do begin
-      FieldByName('IDENTIF').AsString := SOPersData.S['identif'];
-      FieldByName('FAMILIA').AsString := SOPersData.S['last_name'];
-      FieldByName('NAME').AsString := SOPersData.S['name'];
-      FieldByName('OTCH').AsString := SOPersData.S['patronymic'];
-      FieldByName('DATER').AsString := SOPersData.S['birth_day'];
-      if (NOT FullSet) then
-        Exit;
 
-      FieldByName('FAMILIA_B').AsString := SOPersData.S['last_name_bel'];
-      FieldByName('NAME_B').AsString := SOPersData.S['name_bel'];
-      FieldByName('OTCH_B').AsString := SOPersData.S['patronymic_bel'];
+    if (Assigned(SOPersData) and (Not SOPersData.IsType(stNull))) then begin
 
-      TClassifier.SObj2DSSetTKN(SOPersData.O['sex'], ODS, 'POL');
+      with ODS do begin
+        Append;
+        try
+          FieldByName('IS_PERSON').AsBoolean := FullSet;
+          FieldByName('IDENTIF').AsString := SOPersData.S['identif'];
+          FieldByName('FAMILIA').AsString := SOPersData.S['last_name'];
+          FieldByName('NAME').AsString := SOPersData.S['name'];
+          FieldByName('OTCH').AsString := SOPersData.S['patronymic'];
+          FieldByName('DATER').AsString := SOPersData.S['birth_day'];
+          if (FullSet) then begin
+
+            FieldByName('FAMILIA_B').AsString := SOPersData.S['last_name_bel'];
+            FieldByName('NAME_B').AsString := SOPersData.S['name_bel'];
+            FieldByName('OTCH_B').AsString := SOPersData.S['patronymic_bel'];
+
+            TClassifier.SObj2DSSetTKN(SOPersData.O['sex'], ODS, 'POL');
     // Место рождения
-      SObj2DSBPlace(SOPersData.O['birth_place'], ODS);
+            SObj2DSBPlace(SOPersData.O['birth_place'], ODS);
     // Гражданство
-      TClassifier.SObj2DSSetTKN(SOPersData.O['citizenship'], ODS, 'GRAJD');
-      TClassifier.SObj2DSSetTKN(SOPersData.O['status'], ODS, 'STATUS');
+            TClassifier.SObj2DSSetTKN(SOPersData.O['citizenship'], ODS, 'GRAJD');
+            TClassifier.SObj2DSSetTKN(SOPersData.O['status'], ODS, 'STATUS');
 
     // Документ, удостоверяющий личность
-      SObj2DSPasp(SOPersData.O['documents'], ODS);
+            SObj2DSPasp(SOPersData.O['documents'], ODS);
     // Адрес проживания
-      SObj2DSAddress(SOPersData.O['address'], ODS);
+            SObj2DSAddress(SOPersData.O['address'], ODS);
     // Сведения о смерти
-      SObj2DSDeaths(SOPersData.O['deaths'], ODS);
+            SObj2DSDeaths(SOPersData.O['deaths'], ODS);
     // Данные о захоронении
-      SObj2DSBurs(SOPersData.O['burials'], ODS);
+            SObj2DSBurs(SOPersData.O['burials'], ODS);
+          end;
+        finally
+          Post;
+        end;
+      end;
     end;
   except
     s := 'Ошибка конвертации JSON-данных';
   end;
 end;
+
+
+
+
+
+
 
 
 

@@ -1954,7 +1954,7 @@ begin
     WriteTextLog('GISUN URL='+FRegInt.GisunUrl,LOG_GISUN);
 
     cNameInputFile:=strPathINI+'GISUN_Input.ini';
-    cNameOutputFile:=strPathINI+'GISUN_Output.ini';
+    cNameOutputFile:=strPathINI+'GISUN_OutputJ.ini';
     if not FRegInt.ReadMetaInfo(cNameInputFile,cNameOutputFile) then begin
       PutError('Ошибка чтения метаинформации для ГИС РН');
       IsEnabled:=false;

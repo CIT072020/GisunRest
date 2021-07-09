@@ -45,6 +45,9 @@ const
 type
   TExchangeMode = (emDefault, emSOAP, emJSON, emMIXED);
 
+  TObrPersonalDataSO = procedure(data : ISuperObject; dsOutPut:TDataSet; dsDokument:TDataSet; slPar:TStringList) of object;
+
+
    //Интерфейс для обмена с регистром населения
   TRegIntX = class(TRegInt)
   private
@@ -58,6 +61,9 @@ type
     function SetErrData(const Act: TActKind; Resp: TRestResponse) : Integer;
     function SetOutDS(const Act: TActKind; slPar : TStringList; Resp: TRestResponse): Integer;
     function GetResponse : TRestResponse;
+    //function OneFamilyMember(OnePers: ISuperObject; slPar : TStringList): integer;
+    function AddFamily(PersData: ISuperObject; slPar : TStringList): integer;
+    function LocateID(const RequestID: string): Boolean;
   public
     property Config : TRestConfig read FConfig write FConfig;
     property ApiClient : TRestClient read FRestClient write FRestClient;
@@ -65,13 +71,13 @@ type
 
     // Получение персональных данных, ИН, резервирование ИН
     function Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument: TDataSet = nil;
-    slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRestResponse;
+    slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRequestResult;
 
     // версия для работы с REST-сервисами
     function GetRest(ActKind: TActKind; MessageType: string; const InDS, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestResponse;
 
     // Передача документов в регистр
-    function Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet; var Error: TDataSet; ExchMode: Integer = EM_DEFLT): TRestResponse;
+    function Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet; var Error: TDataSet; ExchMode: Integer = EM_DEFLT): TRequestResult;
     function PostRest(RequestMessageId: string; ActKind: TActKind; MessageType: string; const InDS : TDataSet; var Error: TDataSet): TRestResponse;
 
     constructor Create(MessageSource: string; Ini : TSasaIniFile = nil);
@@ -156,15 +162,104 @@ begin
 end;
 
 
+(*
+// Добавить одного члена семьи в DataSet
+function TRegIntX.OneFamilyMember(OnePers: ISuperObject; slPar : TStringList): integer;
+begin
+
+    if (Assigned(OnePers) and (Not OnePers.IsType(stNull))) then begin
+
+            TPersData.SObj2DSPersData(OnePers.O['person_data'], Response.RetDS);
+    end;
+
+end;
+*)
+
+// Заполнить DataSet информацией о членах семьи
+function TRegIntX.AddFamily(PersData: ISuperObject; slPar: TStringList): integer;
+var
+  i, iMax: Integer;
+  Child, Fam: ISuperObject;
+
+  function GetSLPar(sParam, CheckValue: String): Boolean;
+  begin
+    Result := Iif(slPar.Values[sParam] = CheckValue, True, False);
+  end;
+
+  // Добавить одного члена семьи в DataSet
+  function OneFamMember(ParName: string): integer;
+  begin
+    if (Assigned(Fam.O[ParName]) and (Not Fam.O[ParName].IsType(stNull))) then begin
+      if (slPar.Values[ParName] = '1') then begin
+        TPersData.SObj2DSPersData(Fam.O[ParName].O['person_data'], Response.RetDS);
+        Response.RetDS.Edit;
+        Response.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
+        Response.RetDS.FieldByName('PREFIX').AsString := Response.Req.InDS.FieldByName('PREFIX').AsString + '_' + UpperCase(ParName);
+        Response.RetDS.FieldByName('REQUEST_ID').AsString := Response.Req.InDS.FieldByName('REQUEST_ID').AsString;
+        Response.RetDS.Post;
+      end;
+    end;
+  end;
+
+begin
+  iMax := 0;
+  try
+    if (Assigned(slPar) and (NOT Iif(slPar.Values['family'] = '0', True, False))) then begin
+      Fam := PersData.O['family'];
+      if (Assigned(Fam) and (Not Fam.IsType(stNull))) then begin
+        OneFamMember('mather');
+        OneFamMember('father');
+        OneFamMember('wife');
+        OneFamMember('husband');
+        if (slPar.Values['child'] = '1') then begin
+          Child := Fam.O['child'];
+
+          if (Assigned(Child) and (Child.IsType(stArray))) then begin
+            iMax := Child.AsArray.Length;
+            for i := 0 to iMax - 1 do begin
+              TPersData.SObj2DSPersData(Child.AsArray.O[i].O['person_data'], Response.RetDS);
+              Response.RetDS.Edit;
+              Response.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
+              Response.RetDS.FieldByName('PREFIX').AsString := Response.Req.InDS.FieldByName('PREFIX').AsString + '_CHILD' + IntToStr(i + 1);
+              Response.RetDS.FieldByName('REQUEST_ID').AsString := Response.Req.InDS.FieldByName('REQUEST_ID').AsString;
+              Response.RetDS.Post;
+            end;
+          end;
+        end;
+
+      end;
+    end;
+  except
+    iMax := 0;
+  end;
+  Result := iMax;
+end;
 
 
 
+
+// Позиционирование
+function TRegIntX.LocateID(const RequestID: string): Boolean;
+begin
+  Result := False;
+  with Response.Req.InDS do begin
+    First;
+    while not Eof do begin
+      if (FieldByName('REQUEST_ID').AsString = RequestID) then begin
+        Result := True;
+        Break;
+      end;
+      Next;
+    end;
+  end;
+end;
 
 
 // Для GET-запросов заполнение выходных DataSet
-function TRegIntX.SetOutDS(const Act: TActKind; slPar : TStringList; Resp: TRestResponse): Integer;
+function TRegIntX.SetOutDS(const Act: TActKind; slPar: TStringList; Resp: TRestResponse): Integer;
 var
   i, iMax, nErr: Integer;
+  ReqID : string;
   OnePD, SOArrPD: ISuperObject;
 begin
   nErr := 0;
@@ -174,22 +269,20 @@ begin
 
       iMax := SOArrPD.AsArray.Length - 1;
       for i := 0 to iMax do begin
+        ReqID := SOArrPD.AsArray.O[i].S['request_id'];
+        if (LocateID(ReqID)) then begin
         OnePD := SOArrPD.AsArray.O[i].O['data'];
-        Resp.RetDS.Append;
-        try
-          if (Act = akGetPersonIdentif) then begin
+        if (Act = akGetPersonIdentif) then begin
         // Должен вернуть запрошенный ИН по ФИО
-            Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
-            TPersData.SObj2DSPersData(OnePD, Resp.RetDS, False);
-          end
-          else begin
+          TPersData.SObj2DSPersData(OnePD, Resp.RetDS, False);
+        end
+        else begin
         // Должен вернуть персональные данные
-            Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := True;
-            TPersData.SObj2DSPersData(OnePD, Resp.RetDS);
+          TPersData.SObj2DSPersData(OnePD, Resp.RetDS);
+          AddFamily(OnePD, slPar);
+        end;
+        end else begin
 
-          end;
-        finally
-          Resp.RetDS.Post;
         end;
       end;
     end
@@ -234,48 +327,64 @@ end;
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // Получение из регистра
 function TRegIntX.Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument: TDataSet = nil;
-    slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRestResponse;
+    slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRequestResult;
 var
   nErr : Integer;
-  ResObs : TRequestResult;
+  Resp : TRestResponse;
 begin
   if (ExchMode = EM_DEFLT) then
     ExchMode := FExchMode;
   if (ExchMode = EM_SOAP) then begin
-    ResObs := inherited Get(ActKind, MessageType, Input, Output, Error, Dokument, slPar);
-    Result := TRestResponse.Create;
-    Result.RetAsSOAP := ResObs;
+    Result := inherited Get(ActKind, MessageType, Input, Output, Error, Dokument, slPar);
   end
   else begin
     // Через REST-сервис
-    Result := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar);
-    if (Result.RetAsSOAP = rrOk) then begin
-       Result.RetDS := CreateOutputTable(akGetPersonalData);
-       Output := Result.RetDS;
-       nErr := SetOutDS(ActKind, slPar, Result);
+    Resp := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar);
+    Result := Resp.RetAsSOAP;
+    if (Result = rrOk) then begin
+       Resp.RetDS := CreateOutputTable(akGetPersonalData);
+       Output := Resp.RetDS;
+       nErr := SetOutDS(ActKind, slPar, Resp);
+       if Assigned(FObrPersonalData) then begin
+         //FObrPersonalData(Person.data, output, dokument, slPar);
+       end;
      end;
-    SetErrData(ActKind, Result);
-    Error := Result.ErrDS;
+    SetErrData(ActKind, Resp);
+    Error := Resp.ErrDS;
   end;
 end;
 
 // Запись в регистр документов
-function TRegIntX.Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet; var Error: TDataSet; ExchMode: Integer = EM_DEFLT): TRestResponse;
+function TRegIntX.Post(RequestMessageId: string; ActKind: TActKind; MessageType: string; const Input: TDataSet; var Error: TDataSet; ExchMode: Integer = EM_DEFLT): TRequestResult;
 var
-  ResObs : TRequestResult;
+  Resp : TRestResponse;
 begin
   if (ExchMode = EM_DEFLT) then
     ExchMode := FExchMode;
   if (ExchMode = EM_SOAP) then begin
-    ResObs := inherited Post(RequestMessageId, ActKind, MessageType, Input, Error);
-    Result := TRestResponse.Create;
-    Result.RetAsSOAP := ResObs;
+    Result := inherited Post(RequestMessageId, ActKind, MessageType, Input, Error);
   end
   else begin
     // Через REST-сервис
-    Result := PostRest(RequestMessageId, ActKind, MessageType, Input, Error);
+    Resp := PostRest(RequestMessageId, ActKind, MessageType, Input, Error);
+    Result := Resp.RetAsSOAP;
   end;
 end;
 
@@ -291,8 +400,14 @@ var
 
 begin
   // Формирование запроса на сервер
+  with InDS do begin
+    Edit;
+    FieldByName('REQUEST_ID').AsString := NewGUID;
+    Post;
+  end;
   Req := TRestRequest.Create(Self.Config);
-  Req.SetActInf(ActKind, MessageType, InDS, slPar);
+  Req.InDS := InDS;
+  Req.SetActInf(ActKind, MessageType, InDS, opGet);
 
   Req.MakeReqLine('POST', slPar);
 
@@ -311,7 +426,8 @@ var
 begin
   // Формирование запроса на сервер
   Req := TRestRequest.Create(Self.Config);
-  Req.SetActInf(ActKind, MessageType, InDS);
+  Req.InDS := InDS;
+  Req.SetActInf(ActKind, MessageType, InDS, opPost);
 
   Req.MakeReqLine('POST');
 

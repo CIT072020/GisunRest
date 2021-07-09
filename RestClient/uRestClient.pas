@@ -70,6 +70,7 @@ type
   private
     FCfg    : TRestConfig;
     // Параметры каждого запроса
+    FInputDS : TDataSet;
     FActInf   : TActInf;
     FMethod : string;
     FFullURL : string;
@@ -103,8 +104,9 @@ type
     property Params : TStringList read FParams write FParams;
     property Header : TStringList read FHeader write FHeader;
     property Body   : string read FBody write FBody;
+    property InDS   : TDataSet read FInputDS write FInputDS;
 
-    function SetActInf(ActKind: TActKind; MessageType: string; const Input : TDataSet; slPar : TStringList = nil): TRestRequest;
+    function SetActInf(ActKind: TActKind; MessageType: string; const Input : TDataSet; opCode : TOperation): TRestRequest;
     function MakeReqLine(Meth : string; Pars : TStringList = nil) : string;
     // Подготовка тела запроса
     function MakeReqBody(const InDS : TDataSet; MessageType: string = ''): TRestRequest;
@@ -214,19 +216,13 @@ end;
 
 
 // Заполнение дполнительных полей в зависимости от типа документа
-function TRestRequest.SetActInf(ActKind: TActKind; MessageType: string; const Input : TDataSet; slPar : TStringList = nil): TRestRequest;
+function TRestRequest.SetActInf(ActKind: TActKind; MessageType: string; const Input : TDataSet; opCode : TOperation): TRestRequest;
 var
   s: string;
 begin
-  FActInf.Act := ActKind;
+  FActInf.Act     := ActKind;
   FActInf.MsgType :=  MessageType;
-  if (ActKind = akGetPersonalData) OR (ActKind = akGetPersonIdentif) then begin
-    FActInf.Oper := opGet;
-  end
-  else begin
-    FActInf.Oper := opPost;
-
-  end;
+  FActInf.Oper    := opCode;
   case ActKind of
     akGetPersonalData : begin
       FActInf.ResPath := 'common/register';
