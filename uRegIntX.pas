@@ -22,8 +22,8 @@ uses
 const
 //=== *** === === *** === === *** === === *** === =>
   UN_INI_NAME  = '..\GISUN\GISUN.ini';
-  UN_IN_FILES  = '..\GISUN\GISUN_Input.ini';
-  UN_OUT_FILES = '..\GISUN\GISUN_Output.ini';
+  UN_IN_FILES  = '..\GISUN\GISUN_InputJ.ini';
+  UN_OUT_FILES = '..\GISUN\GISUN_OutputJ.ini';
 
   // Секции INI-файла
   SCT_REST = 'REST';
@@ -37,6 +37,17 @@ const
   EM_SOAP  = 1;
   EM_JSON  = 2;
   EM_MIXED = 3;
+
+  // Имена в списке параметров вызова GET
+  PGET_FAM_ALL   = 'family';
+  PGET_FAM_CHILD = 'child';
+  PGET_FAM_MTHR  = 'mather';
+  PGET_FAM_FTHR  = 'father';
+  PGET_FAM_WIFE  = 'wife';
+  PGET_FAM_HSBD  = 'husband';
+
+  PGET_SUD = 'RESH_SUD';
+  PGET_FRM = 'FORM';
 
   // Сообщения об ошибках
   ERR_NO_AUTH = 'Отказ от взаимодействия';
@@ -58,6 +69,7 @@ type
     FIni : TSasaIniFile;
     FRestClient : TRestClient;
 
+    function AddCourts(PersData: ISuperObject; slPar: TStringList; dsOutPut : TDataSet): integer;
     function SetErrData(const Act: TActKind; Resp: TRestResponse) : Integer;
     function SetOutDS(const Act: TActKind; slPar : TStringList; Resp: TRestResponse): Integer;
     function GetResponse : TRestResponse;
@@ -162,18 +174,103 @@ begin
 end;
 
 
-(*
-// Добавить одного члена семьи в DataSet
-function TRegIntX.OneFamilyMember(OnePers: ISuperObject; slPar : TStringList): integer;
-begin
+// Заполнить DataSet информацией о решениях суда
+function TRegIntX.AddCourts(PersData: ISuperObject; slPar: TStringList; dsOutPut: TDataSet): integer;
+var
+  iCrts: Integer;
+  lOtmena: Boolean;
+  DcsnHead, DcsnGoal, GroupName: string;
+  DcsnDate: TDateTime;
+  dsCourts: TDataSet;
+  x : TObject;
+  CourtData, OneInf, OneData, OneDecision, Courts: ISuperObject;
 
-    if (Assigned(OnePers) and (Not OnePers.IsType(stNull))) then begin
+  // Добавить в DataSet группу решений суда одного типа
+  function OneCourtsGroup(ParName: string; nType: TOneReshSud): integer;
+  var
+    i, iMax: Integer;
+  begin
+    GroupName := ParName + 's';
+    if (Assigned(Courts.O[GroupName]) and (Courts.O[GroupName].IsType(stArray))) then begin
+      iMax := Courts.O[GroupName].AsArray.Length;
+      for i := 0 to iMax - 1 do begin
+        OneDecision := Courts.O[GroupName].AsArray.O[i];
+        if (Assigned(OneDecision) and (NOT OneDecision.IsType(stNull))) then begin
+          OneData := OneDecision.O[ParName + '_info.' + ParName + '_data'];
+          DcsnGoal := 'физического лица ';
+          if ISO8601DateToDelphiDateTime(OneData.S[ParName + '_date'], DcsnDate) then begin
+            // положительное решение
+            lOtmena := False;
+            DcsnHead := 'о признании ';
+          end
+          else begin
+            // решение об отмене
+            lOtmena := True;
+            if NOT (ISO8601DateToDelphiDateTime(OneData.S[ParName + '_date_cancel'], DcsnDate)) then
+              // Решение без дат, пропускаем
+              Break;
+            DcsnHead := 'об отмене признания ';
+          end;
 
-            TPersData.SObj2DSPersData(OnePers.O['person_data'], Response.RetDS);
+          case nType of
+            rsUneff:
+              DcsnGoal := DcsnGoal + 'недееспособным';
+            rsDeaths:
+              DcsnGoal := DcsnGoal + 'умершим';
+            rsAbsents:
+              DcsnGoal := DcsnGoal + 'безвестно отсутствующим';
+            rsRestrict:
+              DcsnGoal := DcsnGoal + 'ограниченно дееспособным';
+          end;
+
+          with dsCourts do begin
+            Append;
+            FieldByName('ID').AsString          := dsOutPut.FieldByName('PREFIX').AsString;
+            FieldByName('FIO').AsString         := dsOutPut.FieldByName('FAMILIA').AsString + ' ' + dsOutPut.FieldByName('NAME').AsString + ' ' + dsOutPut.FieldByName('OTCH').AsString;
+            FieldByName('TYPE_RESH').AsInteger  := Integer(nType);
+            FieldByName('DATE_RESH').AsDateTime := DcsnDate;
+            FieldByName('CANCEL').AsBoolean     := lOtmena;
+            FieldByName('REQUEST_ID').AsString  := dsOutPut.FieldByName('REQUEST_ID').AsString;
+            //FieldByName('TEXT').AsString:=DokumentToStr(doc,s+ss);
+            //FieldByName('SUD').AsString:=doc.AuthorName;
+            Post;
+          end;
+
+        end;
+      end;
+
     end;
 
+  end;
+
+begin
+  iCrts := 0;
+  try
+    iCrts := slPar.IndexOf(PGET_SUD);
+    if (iCrts >= 0) then begin
+      Courts := PersData.O['courts'];
+      if (Assigned(Courts) and (Not Courts.IsType(stNull))) then begin
+        dsCourts := TDataSet(slPar.Objects[iCrts]);
+        if (dsCourts = nil) then begin
+          dsCourts := TRestResponse.CreateCourts;
+          dsCourts.Open;
+        end;
+        Response.CourtDS := dsCourts;
+
+        OneCourtsGroup('death', rsDeaths);
+        OneCourtsGroup('unefficient', rsUneff);
+        OneCourtsGroup('absent', rsAbsents);
+        OneCourtsGroup('restrict_efficient', rsRestrict);
+
+      end;
+      iCrts := 1;
+    end;
+  except
+    iCrts := 0;
+  end;
+  Result := iCrts;
 end;
-*)
+
 
 // Заполнить DataSet информацией о членах семьи
 function TRegIntX.AddFamily(PersData: ISuperObject; slPar: TStringList): integer;
@@ -181,22 +278,17 @@ var
   i, iMax: Integer;
   Child, Fam: ISuperObject;
 
-  function GetSLPar(sParam, CheckValue: String): Boolean;
-  begin
-    Result := Iif(slPar.Values[sParam] = CheckValue, True, False);
-  end;
-
   // Добавить одного члена семьи в DataSet
   function OneFamMember(ParName: string): integer;
   begin
     if (Assigned(Fam.O[ParName]) and (Not Fam.O[ParName].IsType(stNull))) then begin
       if (slPar.Values[ParName] = '1') then begin
-        TPersData.SObj2DSPersData(Fam.O[ParName].O['person_data'], Response.RetDS);
-        Response.RetDS.Edit;
-        Response.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
-        Response.RetDS.FieldByName('PREFIX').AsString := Response.Req.InDS.FieldByName('PREFIX').AsString + '_' + UpperCase(ParName);
-        Response.RetDS.FieldByName('REQUEST_ID').AsString := Response.Req.InDS.FieldByName('REQUEST_ID').AsString;
-        Response.RetDS.Post;
+        TPersData.SObj2DSPersData(Fam.O[ParName].O['person_data'], Response.OutDS);
+        Response.OutDS.Edit;
+        Response.OutDS.FieldByName('IS_PERSON').AsBoolean := False;
+        Response.OutDS.FieldByName('PREFIX').AsString := Response.Req.InDS.FieldByName('PREFIX').AsString + '_' + UpperCase(ParName);
+        Response.OutDS.FieldByName('REQUEST_ID').AsString := Response.Req.InDS.FieldByName('REQUEST_ID').AsString;
+        Response.OutDS.Post;
       end;
     end;
   end;
@@ -217,12 +309,12 @@ begin
           if (Assigned(Child) and (Child.IsType(stArray))) then begin
             iMax := Child.AsArray.Length;
             for i := 0 to iMax - 1 do begin
-              TPersData.SObj2DSPersData(Child.AsArray.O[i].O['person_data'], Response.RetDS);
-              Response.RetDS.Edit;
-              Response.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
-              Response.RetDS.FieldByName('PREFIX').AsString := Response.Req.InDS.FieldByName('PREFIX').AsString + '_CHILD' + IntToStr(i + 1);
-              Response.RetDS.FieldByName('REQUEST_ID').AsString := Response.Req.InDS.FieldByName('REQUEST_ID').AsString;
-              Response.RetDS.Post;
+              TPersData.SObj2DSPersData(Child.AsArray.O[i].O['person_data'], Response.OutDS);
+              Response.OutDS.Edit;
+              Response.OutDS.FieldByName('IS_PERSON').AsBoolean := False;
+              Response.OutDS.FieldByName('PREFIX').AsString := Response.Req.InDS.FieldByName('PREFIX').AsString + '_CHILD' + IntToStr(i + 1);
+              Response.OutDS.FieldByName('REQUEST_ID').AsString := Response.Req.InDS.FieldByName('REQUEST_ID').AsString;
+              Response.OutDS.Post;
             end;
           end;
         end;
@@ -259,7 +351,7 @@ end;
 function TRegIntX.SetOutDS(const Act: TActKind; slPar: TStringList; Resp: TRestResponse): Integer;
 var
   i, iMax, nErr: Integer;
-  ReqID : string;
+  ReqID: string;
   OnePD, SOArrPD: ISuperObject;
 begin
   nErr := 0;
@@ -271,17 +363,19 @@ begin
       for i := 0 to iMax do begin
         ReqID := SOArrPD.AsArray.O[i].S['request_id'];
         if (LocateID(ReqID)) then begin
-        OnePD := SOArrPD.AsArray.O[i].O['data'];
-        if (Act = akGetPersonIdentif) then begin
+          OnePD := SOArrPD.AsArray.O[i].O['data'];
+          if (Act = akGetPersonIdentif) then begin
         // Должен вернуть запрошенный ИН по ФИО
-          TPersData.SObj2DSPersData(OnePD, Resp.RetDS, False);
+            TPersData.SObj2DSPersData(OnePD, Resp.OutDS, False);
+          end
+          else begin
+        // Должен вернуть персональные данные
+            TPersData.SObj2DSPersData(OnePD, Resp.OutDS);
+            AddCourts(OnePD, slPar, Resp.OutDS);
+            AddFamily(OnePD, slPar);
+          end;
         end
         else begin
-        // Должен вернуть персональные данные
-          TPersData.SObj2DSPersData(OnePD, Resp.RetDS);
-          AddFamily(OnePD, slPar);
-        end;
-        end else begin
 
         end;
       end;
@@ -298,11 +392,11 @@ begin
       for i := 0 to iMax do begin
     // Должен вернуть зарезервированные новые ИН
         OnePD := SOArrPD.AsArray.O[i];
-        Resp.RetDS.Append;
-        //Resp.RetDS.FieldByName('REQUEST_ID').AsString := OnePD.S['request_id'];
-        Resp.RetDS.FieldByName('NEW_IDENTIF').AsString := OnePD.S['data'];
-        Resp.RetDS.FieldByName('IS_PERSON').AsBoolean := False;
-        Resp.RetDS.Post;
+        Resp.OutDS.Append;
+        //Resp.OutDS.FieldByName('REQUEST_ID').AsString := OnePD.S['request_id'];
+        Resp.OutDS.FieldByName('NEW_IDENTIF').AsString := OnePD.S['data'];
+        Resp.OutDS.FieldByName('IS_PERSON').AsBoolean := False;
+        Resp.OutDS.Post;
       end;
 
     end;
@@ -312,6 +406,36 @@ begin
   end;
 
 end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -359,8 +483,8 @@ begin
     Resp := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar);
     Result := Resp.RetAsSOAP;
     if (Result = rrOk) then begin
-       Resp.RetDS := CreateOutputTable(akGetPersonalData);
-       Output := Resp.RetDS;
+       Resp.OutDS := CreateOutputTable(akGetPersonalData);
+       Output := Resp.OutDS;
        nErr := SetOutDS(ActKind, slPar, Resp);
        if Assigned(FObrPersonalData) then begin
          //FObrPersonalData(Person.data, output, dokument, slPar);

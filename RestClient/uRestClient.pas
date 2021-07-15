@@ -125,17 +125,25 @@ type
     FRetMsg  : string;
     // объект response из ответа сервера
     FSupObj  : ISuperObject;
-    FOutDS   : TDataSet;
+    FCourt,
     FErrDS   : TDataSet;
+    FOutDS   : TDataSet;
     FRespID  : string;
+
   public
     property Req : TRestRequest read FRestReq write FRestReq;
     property RetCode : integer read FRetCode write FRetCode;
     property RetMsg  : string read FRetMsg write FRetMsg;
     property RetAsSOAP : TRequestResult read FRetAsSOAP write FRetAsSOAP;
     property RetSO : ISuperObject read FSupObj write FSupObj;
-    property RetDS : TDataSet read FOutDS write FOutDS;
+    property OutDS : TDataSet read FOutDS write FOutDS;
     property ErrDS : TDataSet read FErrDS write FErrDS;
+    property CourtDS : TDataSet read FCourt write FCourt;
+
+    class function CreateCourts(IndexExp : string = '') : TDataSet;
+
+    constructor Create;
+    destructor Destroy;
   end;
 
   // Клиент для вызова API (REST-Full)
@@ -158,6 +166,8 @@ type
 
 
 implementation
+uses
+  ifpii_dbfunc;
 
 // Конфиг запроса к REST-серверу
 constructor TRestConfig.Create(DefH : TStringList = nil);
@@ -196,6 +206,35 @@ begin
   FreeAndNil(FHeader);
   inherited;
 end;
+
+
+
+// Создание ответа от REST-серверу
+constructor TRestResponse.Create;
+begin
+  inherited Create;
+end;
+
+// Запрос к REST-серверу
+destructor TRestResponse.Destroy;
+begin
+  inherited;
+end;
+
+// Создание DataSet для решений суда
+class function TRestResponse.CreateCourts(IndexExp : string = '') : TDataSet;
+begin
+  Result := dbCreateMemTable(
+     'FIO,Char,100;' +
+     'ID,Char,50;' +
+     'TYPE_RESH,Integer;' +
+     'DATE_RESH,Date;' +
+     'SUD,Char,100;' +
+     'TEXT,Char,100;' +
+     'CANCEL,Logical;' +
+     'REQUEST_ID,Char,50;', IndexExp);
+end;
+
 
 // Клиент для вызова API (REST-Full)
 constructor TRestClient.Create;

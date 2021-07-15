@@ -342,11 +342,13 @@ begin
 end;
 
 
+
 procedure TForm1.PrepUNResult(r : TRestResponse);
 begin
   ShowDeb(IntToStr(r.RetCode) + ' ' + r.RetMsg, cbClearLog.Checked);
-  DataSource1.DataSet := r.RetDS;
-  dsNsi.DataSet := r.ErrDS;
+  DataSource1.DataSet := r.OutDS;
+  dsNsi.DataSet       := r.ErrDS;
+  dsDocs.DataSet      := r.CourtDS;
   //RegInt.
 end;
 
@@ -355,8 +357,10 @@ end;
 // GET Personal Data
 procedure TForm1.btnGetPersDataClick(Sender: TObject);
 var
+  b : Boolean;
   i : Integer;
   s : string;
+  dsRSud,
   dsDoc,
   dsOut,
   dsErr,
@@ -390,8 +394,13 @@ begin
   d['DATER']      := '20020612';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
+
   sp.Add('father=1');
   sp.Add('child=1');
+  dsRSud := TRestResponse.CreateCourts;
+  dsRSud.Open;
+  sp.AddObject(PGET_SUD, dsRSud);
+
   RetSOAP := RegInt.Get(akGetPersonalData, QUERY_INFO, d, dsOut, dsErr, dsDoc, sp);
   PrepUNResult(RegInt.Response);
 end;
@@ -1004,14 +1013,23 @@ end;
 
 procedure TForm1.btnIsoTimeClick(Sender: TObject);
 var
+  b : Boolean;
   t : string;
   d : TDateTime;
+  ds : TDataSet;
 begin
   t := '2000-07-20T00:00:00.000+03:00';
   d := IsoTime(t);
   //d := IncHour(d, 3);
   ISO8601DateToDelphiDateTime(t, d);
-  TButton(Sender).Caption := 'Date: ' + FormatDateTime('yyyy-mm-dd hh:MM:ss', d);
+
+  b := ds is TDataSet;
+  if (b) then
+    t := 'Really DataSet'
+  else
+    t := 'Something...';
+
+  TButton(Sender).Caption := t + '===Date: ' + FormatDateTime('yyyy-mm-dd hh:MM:ss', d);
 end;
 
 //

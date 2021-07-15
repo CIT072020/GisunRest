@@ -282,7 +282,6 @@ type
 
       FFGisun : TGisunInterface;
 
-      function CreateOutputTable(ActKind: TActKind): TDataSet;
       function GetGisun : TGisunInterface; virtual;
       procedure SetGisun(const Value: TGisunInterface); virtual;
    public
@@ -314,6 +313,7 @@ type
       destructor Destroy; override;
 
       function CheckLogon:Boolean;
+      function CreateOutputTable(ActKind: TActKind): TDataSet;
 
       //Функция читает метаинформацию, необходимую для создания таблиц, используемых
       //при вызове функций Get и Post

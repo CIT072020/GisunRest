@@ -591,19 +591,19 @@ begin
             FieldByName('OTCH_B').AsString := SOPersData.S['patronymic_bel'];
 
             TClassifier.SObj2DSSetTKN(SOPersData.O['sex'], ODS, 'POL');
-    // Место рождения
+            // Место рождения
             SObj2DSBPlace(SOPersData.O['birth_place'], ODS);
-    // Гражданство
+            // Гражданство
             TClassifier.SObj2DSSetTKN(SOPersData.O['citizenship'], ODS, 'GRAJD');
             TClassifier.SObj2DSSetTKN(SOPersData.O['status'], ODS, 'STATUS');
 
-    // Документ, удостоверяющий личность
+            // Документ, удостоверяющий личность
             SObj2DSPasp(SOPersData.O['documents'], ODS);
-    // Адрес проживания
+            // Адрес проживания
             SObj2DSAddress(SOPersData.O['address'], ODS);
-    // Сведения о смерти
+            // Сведения о смерти
             SObj2DSDeaths(SOPersData.O['deaths'], ODS);
-    // Данные о захоронении
+            // Данные о захоронении
             SObj2DSBurs(SOPersData.O['burials'], ODS);
           end;
         finally
