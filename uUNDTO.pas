@@ -25,6 +25,16 @@ type
   TActPostBoby = function(IDS : TDataSet) : string;
   TMakePostBoby = function(IDS : TDataSet) : string of object;
 
+  // Справочное значение из SuperObject
+  TNSIValue = record
+  //
+    NsiType : Integer;
+    NsiCode : string;
+    NsiName : string;
+    FullFill : Boolean;
+   end;
+
+
   // Классификатор
   TClassifier = class
   private
@@ -35,7 +45,10 @@ type
 
     // Для конвертации SuperObject -> DataSet
     class function FindRUName(LexValArr: ISuperObject; const ALang: string = 'RU'): string;
-    class procedure SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx : string; NeedType : Boolean = True);
+    class procedure SObj2DSSetTKN(SOClassif: ISuperObject; ODS: TDataSet; const
+        Pfx: string; NeedType: Boolean = True);
+    // Для конвертации SuperObject -> Record
+    class function SObj2TKN(SOClassif: ISuperObject; NeedType: Boolean = True) : TNSIValue;
   end;
 
   // Базовый набор для преобразований DataSet -> JSON
@@ -147,34 +160,60 @@ var
   x: ISuperObject;
 begin
   Result := '';
-  try
-    iMax := LexValArr.AsArray.Length - 1;
-    for i := 0 to iMax do begin
-      x := LexValArr.AsArray.O[i];
-      if (UpperCase(x.S['lang']) = ALang) then begin
-        Result := x.S['value'];
-        Break;
+  if (LexValArr <> nil) then begin
+    try
+      iMax := LexValArr.AsArray.Length - 1;
+      for i := 0 to iMax do begin
+        x := LexValArr.AsArray.O[i];
+        if (UpperCase(x.S['lang']) = ALang) then begin
+          Result := x.S['value'];
+          Break;
+        end;
       end;
+    except
+      Result := '';
     end;
-  except
-    Result := '';
   end;
 end;
 
 
-// Тип-код-наименование из справочника
-class procedure TClassifier.SObj2DSSetTKN(SOClsf: ISuperObject; ODS: TDataSet; const Pfx: string; NeedType: Boolean = True);
+
+
+// Тип-код-наименование из справочника -> DataSet
+class procedure TClassifier.SObj2DSSetTKN(SOClassif: ISuperObject; ODS:
+    TDataSet; const Pfx: string; NeedType: Boolean = True);
 begin
-  try
-    with ODS do begin
+  if (SOClassif <> nil) then begin
+    try
       if (NeedType) then
-        FieldByName('T_' + Pfx).AsString := IntToStr(SOClsf.I['type']);
-      FieldByName('K_' + Pfx).AsString := SOClsf.S['code'];
-      FieldByName('N_' + Pfx).AsString := FindRUName(SOClsf.O['lexema.value']);
+        ODS.FieldByName('T_' + Pfx).AsString := IntToStr(SOClassif.I['type']);
+      ODS.FieldByName('K_' + Pfx).AsString := SOClassif.S['code'];
+      ODS.FieldByName('N_' + Pfx).AsString := FindRUName(SOClassif.O['lexema.value']);
+    except
+      ODS.FieldByName('N_' + Pfx).AsString := '';
     end;
-  except
   end;
 end;
+
+
+// Тип-код-наименование из справочника -> Record
+class function TClassifier.SObj2TKN(SOClassif: ISuperObject; NeedType: Boolean = True) : TNSIValue;
+begin
+  Result.FullFill := False;
+  if (SOClassif <> nil) then begin
+    try
+      if (NeedType) then
+        Result.NsiType := SOClassif.I['type'];
+      Result.NsiCode := SOClassif.S['code'];
+      Result.NsiName := FindRUName(SOClassif.O['lexema.value']);
+      Result.FullFill := True;
+    except
+      Result.FullFill := False;
+    end;
+  end;
+end;
+
+
 
 
 // Место рождения
@@ -303,9 +342,9 @@ var
   d: TDateTime;
   x: ISuperObject;
 begin
-  try
-    iMax := DocsArr.AsArray.Length - 1;
-    with ODS do begin
+  if (DocsArr <> nil) then begin
+    try
+      iMax := DocsArr.AsArray.Length - 1;
       for i := 0 to iMax do begin
         x := DocsArr.AsArray.O[i].O['document'];
         if (x.B['active'] = True) then begin
@@ -314,18 +353,23 @@ begin
           // документ считается подходящим под удостоверение личности
             TClassifier.SObj2DSSetTKN(x.O['document_type'], ODS, 'DOC_TYPE');
             TClassifier.SObj2DSSetTKN(x.O['authority'], ODS, 'DOC_ORGAN');
-            FieldByName('DOC_SERIA').AsString := x.S['series'];
-            FieldByName('DOC_NOMER').AsString := x.S['number'];
+            ODS.FieldByName('DOC_SERIA').AsString := x.S['series'];
+            ODS.FieldByName('DOC_NOMER').AsString := x.S['number'];
             if ISO8601DateToDelphiDateTime(x.S['date_of_issue'], d) then
-              FieldByName('DOC_DATE').AsDateTime := d;
+              ODS.FieldByName('DOC_DATE').AsDateTime := d;
           end;
         end;
       end;
+    except
+      iMax := 0;
     end;
-  except
-    iMax := 0;
   end;
 end;
+
+
+
+
+
 
 
 
@@ -335,45 +379,47 @@ end;
 // Место проживания
 class procedure TPersData.SObj2DSAddress(SOPersData: ISuperObject; ODS: TDataSet);
 var
-  s: string;
   d: TDateTime;
 begin
-  try
-    with ODS do begin
-      TClassifier.SObj2DSSetTKN(SOPersData.O['country'], ODS, 'GOSUD');
-      TClassifier.SObj2DSSetTKN(SOPersData.O['area'], ODS, 'OBL');
-      FieldByName('N_OBL_B').AsString := TClassifier.FindRUName(SOPersData.O['area.lexema.value'], 'BE');
-      TClassifier.SObj2DSSetTKN(SOPersData.O['region'], ODS, 'RAION');
-      FieldByName('N_RAION_B').AsString := TClassifier.FindRUName(SOPersData.O['region.lexema.value'], 'BE');
-      TClassifier.SObj2DSSetTKN(SOPersData.O['soviet'], ODS, 'SOVET');
+  if (SOPersData <> nil) then begin
+    try
+      with ODS do begin
+        TClassifier.SObj2DSSetTKN(SOPersData.O['country'], ODS, 'GOSUD');
+        TClassifier.SObj2DSSetTKN(SOPersData.O['area'], ODS, 'OBL');
+        FieldByName('N_OBL_B').AsString := TClassifier.FindRUName(SOPersData.O['area.lexema.value'], 'BE');
+        TClassifier.SObj2DSSetTKN(SOPersData.O['region'], ODS, 'RAION');
+        FieldByName('N_RAION_B').AsString := TClassifier.FindRUName(SOPersData.O['region.lexema.value'], 'BE');
+        TClassifier.SObj2DSSetTKN(SOPersData.O['soviet'], ODS, 'SOVET');
 
-      TClassifier.SObj2DSSetTKN(SOPersData.O['locality_type'], ODS, 'TIP_GOROD');
-      FieldByName('N_TIP_GOROD_B').AsString := TClassifier.FindRUName(SOPersData.O['locality_type.lexema.value'], 'BE');
-      TClassifier.SObj2DSSetTKN(SOPersData.O['locality'], ODS, 'GOROD');
-      FieldByName('N_GOROD_B').AsString := TClassifier.FindRUName(SOPersData.O['locality.lexema.value'], 'BE');
-      TClassifier.SObj2DSSetTKN(SOPersData.O['city_region'], ODS, 'RN_GOROD');
-      FieldByName('N_RN_GOROD_B').AsString := TClassifier.FindRUName(SOPersData.O['city_region.lexema.value'], 'BE');
+        TClassifier.SObj2DSSetTKN(SOPersData.O['locality_type'], ODS, 'TIP_GOROD');
+        FieldByName('N_TIP_GOROD_B').AsString := TClassifier.FindRUName(SOPersData.O['locality_type.lexema.value'], 'BE');
+        TClassifier.SObj2DSSetTKN(SOPersData.O['locality'], ODS, 'GOROD');
+        FieldByName('N_GOROD_B').AsString := TClassifier.FindRUName(SOPersData.O['locality.lexema.value'], 'BE');
+        TClassifier.SObj2DSSetTKN(SOPersData.O['city_region'], ODS, 'RN_GOROD');
+        FieldByName('N_RN_GOROD_B').AsString := TClassifier.FindRUName(SOPersData.O['city_region.lexema.value'], 'BE');
 
-      TClassifier.SObj2DSSetTKN(SOPersData.O['street_type'], ODS, 'TIP_UL');
-      FieldByName('N_TIP_UL_B').AsString := TClassifier.FindRUName(SOPersData.O['street_type.lexema.value'], 'BE');
-      TClassifier.SObj2DSSetTKN(SOPersData.O['street'], ODS, 'UL');
-      FieldByName('N_UL_B').AsString := TClassifier.FindRUName(SOPersData.O['street.lexema.value'], 'BE');
+        TClassifier.SObj2DSSetTKN(SOPersData.O['street_type'], ODS, 'TIP_UL');
+        FieldByName('N_TIP_UL_B').AsString := TClassifier.FindRUName(SOPersData.O['street_type.lexema.value'], 'BE');
+        TClassifier.SObj2DSSetTKN(SOPersData.O['street'], ODS, 'UL');
+        FieldByName('N_UL_B').AsString := TClassifier.FindRUName(SOPersData.O['street.lexema.value'], 'BE');
 
-      FieldByName('DOM').AsString := SOPersData.S['house'];
-      FieldByName('KORP').AsString := SOPersData.S['buiding'];
-      FieldByName('KV').AsString := SOPersData.S['flat'];
+        FieldByName('DOM').AsString := SOPersData.S['house'];
+        FieldByName('KORP').AsString := SOPersData.S['buiding'];
+        FieldByName('KV').AsString := SOPersData.S['flat'];
 
-      if ISO8601DateToDelphiDateTime(SOPersData.S['reg_date'], d) then
-        FieldByName('REG_DATE').AsDateTime := d;
-      if ISO8601DateToDelphiDateTime(SOPersData.S['reg_date_till'], d) then
-        FieldByName('REG_DATE_TILL').AsDateTime := d;
+        if ISO8601DateToDelphiDateTime(SOPersData.S['reg_date'], d) then
+          FieldByName('REG_DATE').AsDateTime := d;
+        if ISO8601DateToDelphiDateTime(SOPersData.S['reg_date_till'], d) then
+          FieldByName('REG_DATE_TILL').AsDateTime := d;
 
-      FieldByName('SIGN_AWAY').AsBoolean := SOPersData.B['sign_away'];
+        FieldByName('SIGN_AWAY').AsBoolean := SOPersData.B['sign_away'];
+      end;
+    except
+      d := 0;
     end;
-  except
-    s := '';
   end;
 end;
+
 
 // Место смерти
 class procedure TPersData.SObj2DSDcsPlace(DcsPlace: ISuperObject; ODS: TDataSet);

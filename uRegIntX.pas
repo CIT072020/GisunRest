@@ -38,6 +38,9 @@ const
   EM_JSON  = 2;
   EM_MIXED = 3;
 
+  // Используемые НСИ
+  NSI_SSOVET = 80;
+
   // Имена в списке параметров вызова GET
   PGET_FAM_ALL   = 'family';
   PGET_FAM_CHILD = 'child';
@@ -58,7 +61,6 @@ type
 
   TObrPersonalDataSO = procedure(data : ISuperObject; dsOutPut:TDataSet; dsDokument:TDataSet; slPar:TStringList) of object;
 
-
    //Интерфейс для обмена с регистром населения
   TRegIntX = class(TRegInt)
   private
@@ -69,13 +71,13 @@ type
     FIni : TSasaIniFile;
     FRestClient : TRestClient;
 
-    function AddCourts(PersData: ISuperObject; slPar: TStringList; dsOutPut : TDataSet): integer;
+    function AddCourts(PersData: ISuperObject; slPar: TStringList; const ReqID : string): integer;
     function SetErrData(const Act: TActKind; Resp: TRestResponse) : Integer;
     function SetOutDS(const Act: TActKind; slPar : TStringList; Resp: TRestResponse): Integer;
     function GetResponse : TRestResponse;
-    //function OneFamilyMember(OnePers: ISuperObject; slPar : TStringList): integer;
-    function AddFamily(PersData: ISuperObject; slPar : TStringList): integer;
-    function LocateID(const RequestID: string): Boolean;
+    function AddMartInfo(MartInfo: ISuperObject; const ReqID : string): integer;
+    function AddFamily(PersData: ISuperObject; slPar : TStringList; const ReqID, Pfx : string): integer;
+    function LocateID(IDS : TDataSet; const RequestID: string): Boolean;
   public
     property Config : TRestConfig read FConfig write FConfig;
     property ApiClient : TRestClient read FRestClient write FRestClient;
@@ -175,12 +177,13 @@ end;
 
 
 // Заполнить DataSet информацией о решениях суда
-function TRegIntX.AddCourts(PersData: ISuperObject; slPar: TStringList; dsOutPut: TDataSet): integer;
+function TRegIntX.AddCourts(PersData: ISuperObject; slPar: TStringList; const ReqID : string): integer;
 var
   iCrts: Integer;
   lOtmena: Boolean;
   DcsnHead, DcsnGoal, GroupName: string;
   DcsnDate: TDateTime;
+  dsOutPut,
   dsCourts: TDataSet;
   x : TObject;
   CourtData, OneInf, OneData, OneDecision, Courts: ISuperObject;
@@ -250,6 +253,7 @@ begin
     if (iCrts >= 0) then begin
       Courts := PersData.O['courts'];
       if (Assigned(Courts) and (Not Courts.IsType(stNull))) then begin
+        dsOutPut := Response.OutDS;
         dsCourts := TDataSet(slPar.Objects[iCrts]);
         if (dsCourts = nil) then begin
           dsCourts := TRestResponse.CreateCourts;
@@ -272,22 +276,83 @@ begin
 end;
 
 
+
+
+const
+  // брак признан недействительным
+  MRG_STATE_INVALID = 23;
+  // брак расторгнут по суду
+  MRG_STATE_BYDVC   = 22;
+
+
+
+
+
 // Заполнить DataSet информацией о членах семьи
-function TRegIntX.AddFamily(PersData: ISuperObject; slPar: TStringList): integer;
+function TRegIntX.AddMartInfo(MartInfo: ISuperObject; const ReqID : string): integer;
+var
+  Status,
+  i, iMax: Integer;
+  EventDate : TDateTime;
+  MartCert,
+  Child, Mart: ISuperObject;
+  Org : TNSIValue;
+
+begin
+  iMax := 0;
+  try
+    if (MartInfo <> nil) then begin
+      MartCert := MartInfo.O['cert_data'];
+      if (Assigned(MartCert) and (Not MartCert.IsType(stNull))) then begin
+
+         if NOT (ISO8601DateToDelphiDateTime(MartCert.S['invalid_mrg_date'], EventDate)) then begin
+           if NOT (ISO8601DateToDelphiDateTime(MartCert.S['invalid_mrg_date'], EventDate)) then begin
+
+           if (ISO8601DateToDelphiDateTime(MartCert.S['date'], EventDate)) then begin
+             Org := TClassifier.SObj2TKN(MartCert.O['region']);
+
+
+
+           end else begin
+             // ни одна из дат не установлена ???
+           end;
+
+
+           end else begin
+             // брак расторгнут по суду
+             Status := MRG_STATE_BYDVC;
+           end;
+         end else begin
+           // брак признан недействительным
+           Status := MRG_STATE_INVALID;
+
+         end;
+
+      end;
+    end;
+  except
+    iMax := 0;
+  end;
+  Result := iMax;
+end;
+
+
+// Заполнить DataSet информацией о членах семьи
+function TRegIntX.AddFamily(PersData: ISuperObject; slPar : TStringList; const ReqID, Pfx : string): integer;
 var
   i, iMax: Integer;
   Child, Fam: ISuperObject;
 
   // Добавить одного члена семьи в DataSet
-  function OneFamMember(ParName: string): integer;
+  function OneFamMember(const ParName : string): integer;
   begin
     if (Assigned(Fam.O[ParName]) and (Not Fam.O[ParName].IsType(stNull))) then begin
       if (slPar.Values[ParName] = '1') then begin
         TPersData.SObj2DSPersData(Fam.O[ParName].O['person_data'], Response.OutDS);
         Response.OutDS.Edit;
         Response.OutDS.FieldByName('IS_PERSON').AsBoolean := False;
-        Response.OutDS.FieldByName('PREFIX').AsString := Response.Req.InDS.FieldByName('PREFIX').AsString + '_' + UpperCase(ParName);
-        Response.OutDS.FieldByName('REQUEST_ID').AsString := Response.Req.InDS.FieldByName('REQUEST_ID').AsString;
+        Response.OutDS.FieldByName('PREFIX').AsString     := Pfx + '_' + UpperCase(ParName);
+        Response.OutDS.FieldByName('REQUEST_ID').AsString := ReqID;
         Response.OutDS.Post;
       end;
     end;
@@ -296,9 +361,11 @@ var
 begin
   iMax := 0;
   try
-    if (Assigned(slPar) and (NOT Iif(slPar.Values['family'] = '0', True, False))) then begin
       Fam := PersData.O['family'];
       if (Assigned(Fam) and (Not Fam.IsType(stNull))) then begin
+        AddMartInfo(Fam.O['martial_status'], ReqID);
+        if (Assigned(slPar) and (NOT Iif(slPar.Values['family'] = '0', True, False))) then begin
+
         OneFamMember('mather');
         OneFamMember('father');
         OneFamMember('wife');
@@ -312,14 +379,15 @@ begin
               TPersData.SObj2DSPersData(Child.AsArray.O[i].O['person_data'], Response.OutDS);
               Response.OutDS.Edit;
               Response.OutDS.FieldByName('IS_PERSON').AsBoolean := False;
-              Response.OutDS.FieldByName('PREFIX').AsString := Response.Req.InDS.FieldByName('PREFIX').AsString + '_CHILD' + IntToStr(i + 1);
-              Response.OutDS.FieldByName('REQUEST_ID').AsString := Response.Req.InDS.FieldByName('REQUEST_ID').AsString;
+              Response.OutDS.FieldByName('PREFIX').AsString     := Pfx + '_CHILD' + IntToStr(i + 1);
+              Response.OutDS.FieldByName('REQUEST_ID').AsString := ReqID;
               Response.OutDS.Post;
             end;
           end;
         end;
 
-      end;
+
+        end;
     end;
   except
     iMax := 0;
@@ -328,21 +396,17 @@ begin
 end;
 
 
-
-
-// Позиционирование
-function TRegIntX.LocateID(const RequestID: string): Boolean;
+// Позиционирование входного DataSet
+function TRegIntX.LocateID(IDS: TDataSet; const RequestID: string): Boolean;
 begin
   Result := False;
-  with Response.Req.InDS do begin
-    First;
-    while not Eof do begin
-      if (FieldByName('REQUEST_ID').AsString = RequestID) then begin
-        Result := True;
-        Break;
-      end;
-      Next;
+  IDS.First;
+  while not IDS.Eof do begin
+    if (IDS.FieldByName('REQUEST_ID').AsString = RequestID) then begin
+      Result := True;
+      Break;
     end;
+    IDS.Next;
   end;
 end;
 
@@ -362,7 +426,7 @@ begin
       iMax := SOArrPD.AsArray.Length - 1;
       for i := 0 to iMax do begin
         ReqID := SOArrPD.AsArray.O[i].S['request_id'];
-        if (LocateID(ReqID)) then begin
+        if (LocateID(Resp.Req.InDS, ReqID)) then begin
           OnePD := SOArrPD.AsArray.O[i].O['data'];
           if (Act = akGetPersonIdentif) then begin
         // Должен вернуть запрошенный ИН по ФИО
@@ -371,11 +435,12 @@ begin
           else begin
         // Должен вернуть персональные данные
             TPersData.SObj2DSPersData(OnePD, Resp.OutDS);
-            AddCourts(OnePD, slPar, Resp.OutDS);
-            AddFamily(OnePD, slPar);
+            AddCourts(OnePD, slPar, ReqID);
+            AddFamily(OnePD, slPar, ReqID, Resp.Req.InDS.FieldByName('PREFIX').AsString);
           end;
         end
         else begin
+          // Какой-то неправильный ID?!
 
         end;
       end;

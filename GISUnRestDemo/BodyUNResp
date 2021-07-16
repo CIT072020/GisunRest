@@ -1,29 +1,29 @@
 {
   "cover" : {
-    "message_id" : "{2C9536A4-5FED-45A4-B9F4-91827CF7A683}",
+    "message_id" : "{B100F254-9E95-4C29-8BC4-E93853791E53}",
     "message_type" : {
       "code" : "88",
       "type" : -2
     },
-    "message_time" : "2021-07-15T11:57:45.894+03:00",
+    "message_time" : "2021-07-16T15:02:00.038+03:00",
     "message_source" : {
       "code" : "1",
       "type" : 80
     },
-    "parent_message_id" : "A980A2E0-1EBF-4CCC-A35B-941BF94FF6C6",
+    "parent_message_id" : "327AD0A7-7A2A-4DED-9705-AA53C851B897",
     "dataset" : [ 15 ],
     "agreement" : {
       "target" : "верификация персональных данных",
       "rights" : [ 201, 703, 208, 480, 481, 482, 490, 491, 527, 528, 252, 465, 466, 516, 517 ],
       "operator_info" : "Организация адрес",
-      "issue_date" : "2021-07-15T11:57:06.451+03:00",
-      "expiry_date" : "2023-07-15T11:57:06.451+03:00",
+      "issue_date" : "2021-07-16T15:01:17.510+03:00",
+      "expiry_date" : "2023-07-16T15:01:17.510+03:00",
       "assignee_persons" : [ "инспектор Иванов", "начальник инспектора Петров" ]
     }
   },
   "response" : {
     "personal_data" : [ {
-      "request_id" : "B454D8DB-5279-4CBA-B524-ADE9C3BD2B12",
+      "request_id" : "C1022319-C4FA-40AD-8FF7-C23A96B7F7EA",
       "data" : {
         "identif" : "3260578B005PB1",
         "last_name" : "ЛАПАНИК",
@@ -115,19 +115,6 @@
                 } ]
               }
             },
-            "document_type" : {
-              "code" : "54100001",
-              "type" : 39,
-              "lexema" : {
-                "value" : [ {
-                  "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
-                  "lang" : "ru"
-                }, {
-                  "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
-                  "lang" : "be"
-                } ]
-              }
-            },
             "authority" : {
               "code" : "17608047",
               "type" : 24,
@@ -141,11 +128,24 @@
                 } ]
               }
             },
-            "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
-            "expire_date" : "2003-05-26T00:00:00.000+03:00",
             "series" : "MP",
             "number" : "0826113",
-            "active" : true
+            "active" : true,
+            "document_type" : {
+              "code" : "54100001",
+              "type" : 39,
+              "lexema" : {
+                "value" : [ {
+                  "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
+                  "lang" : "ru"
+                }, {
+                  "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
+                  "lang" : "be"
+                } ]
+              }
+            },
+            "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
+            "expire_date" : "2003-05-26T00:00:00.000+03:00"
           }
         } ],
         "photos" : [ {
@@ -162,19 +162,6 @@
                   } ]
                 }
               },
-              "document_type" : {
-                "code" : "54100001",
-                "type" : 39,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
-                    "lang" : "be"
-                  } ]
-                }
-              },
               "authority" : {
                 "code" : "17608047",
                 "type" : 24,
@@ -188,11 +175,24 @@
                   } ]
                 }
               },
-              "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
-              "expire_date" : "2003-05-26T00:00:00.000+03:00",
               "series" : "MP",
               "number" : "0826113",
-              "active" : true
+              "active" : true,
+              "document_type" : {
+                "code" : "54100001",
+                "type" : 39,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
+              "expire_date" : "2003-05-26T00:00:00.000+03:00"
             }
           } ]
         } ],
@@ -1395,6 +1395,19 @@
                     } ]
                   }
                 },
+                "authority" : {
+                  "code" : "11608",
+                  "type" : 80,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТДЕЛ ЗАГС РЕЧИЦКОГО РАЙИСПОЛКОМА ГОМЕЛЬСКОЙ ОБЛАСТИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "series" : "I-ЛЮ",
+                "number" : "0095252",
+                "active" : true,
                 "document_type" : {
                   "code" : "54100007",
                   "type" : 37,
@@ -1408,20 +1421,7 @@
                     } ]
                   }
                 },
-                "authority" : {
-                  "code" : "11608",
-                  "type" : 80,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТДЕЛ ЗАГС РЕЧИЦКОГО РАЙИСПОЛКОМА ГОМЕЛЬСКОЙ ОБЛАСТИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "date_of_issue" : "2018-09-20T00:00:00.000+03:00",
-                "series" : "I-ЛЮ",
-                "number" : "0095252",
-                "active" : true
+                "date_of_issue" : "2018-09-20T00:00:00.000+03:00"
               }
             }, {
               "document" : {
@@ -1431,16 +1431,6 @@
                   "lexema" : {
                     "value" : [ {
                       "value" : "ОТКРЫТАЯ ГРУППА ИНФОРМАЦИИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "document_type" : {
-                  "code" : "0500",
-                  "type" : 82,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "АКТОВАЯ ЗАПИСЬ РЕГИСТРАЦИИ РАСТОРЖЕНИЯ БРАКА",
                       "lang" : "ru"
                     } ]
                   }
@@ -1455,9 +1445,19 @@
                     } ]
                   }
                 },
-                "date_of_issue" : "2018-09-20T00:00:00.000+03:00",
                 "number" : "21",
-                "active" : true
+                "active" : true,
+                "document_type" : {
+                  "code" : "0500",
+                  "type" : 82,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "АКТОВАЯ ЗАПИСЬ РЕГИСТРАЦИИ РАСТОРЖЕНИЯ БРАКА",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2018-09-20T00:00:00.000+03:00"
               }
             } ],
             "cert_data" : {
@@ -1516,6 +1516,7 @@
                     } ]
                   }
                 },
+                "active" : true,
                 "document_type" : {
                   "code" : "3",
                   "type" : 133,
@@ -1526,8 +1527,7 @@
                     } ]
                   }
                 },
-                "date_of_issue" : "2016-03-25T00:00:00.000+03:00",
-                "active" : true
+                "date_of_issue" : "2016-03-25T00:00:00.000+03:00"
               }
             } ]
           }
@@ -1573,6 +1573,7 @@
                     } ]
                   }
                 },
+                "active" : true,
                 "document_type" : {
                   "code" : "3",
                   "type" : 133,
@@ -1583,8 +1584,7 @@
                     } ]
                   }
                 },
-                "date_of_issue" : "2016-03-25T00:00:00.000+03:00",
-                "active" : true
+                "date_of_issue" : "2016-03-25T00:00:00.000+03:00"
               }
             } ]
           }
@@ -1626,19 +1626,6 @@
                     } ]
                   }
                 },
-                "document_type" : {
-                  "code" : "54100001",
-                  "type" : 39,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
-                      "lang" : "ru"
-                    }, {
-                      "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
-                      "lang" : "be"
-                    } ]
-                  }
-                },
                 "authority" : {
                   "code" : "17608047",
                   "type" : 24,
@@ -1652,11 +1639,24 @@
                     } ]
                   }
                 },
-                "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
-                "expire_date" : "2003-05-26T00:00:00.000+03:00",
                 "series" : "MP",
                 "number" : "0826113",
-                "active" : false
+                "active" : false,
+                "document_type" : {
+                  "code" : "54100001",
+                  "type" : 39,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
+                      "lang" : "ru"
+                    }, {
+                      "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
+                      "lang" : "be"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
+                "expire_date" : "2003-05-26T00:00:00.000+03:00"
               }
             } ]
           }
@@ -1764,16 +1764,6 @@
                     } ]
                   }
                 },
-                "document_type" : {
-                  "code" : "2",
-                  "type" : 133,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "КНИГА ГОСУДАРСТВЕННОГО УЧЕТА УЧАСТКОВ ДЛЯ ЗАХОРОНЕНИЯ, МЕСТ В КОЛУМБАРИИ, СКЛЕПОВ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
                 "authority" : {
                   "code" : "200026656",
                   "type" : 142,
@@ -1784,16 +1774,26 @@
                     } ]
                   }
                 },
-                "date_of_issue" : "2016-07-29T00:00:00.000+03:00",
                 "number" : "2",
-                "active" : true
+                "active" : true,
+                "document_type" : {
+                  "code" : "2",
+                  "type" : 133,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "КНИГА ГОСУДАРСТВЕННОГО УЧЕТА УЧАСТКОВ ДЛЯ ЗАХОРОНЕНИЯ, МЕСТ В КОЛУМБАРИИ, СКЛЕПОВ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2016-07-29T00:00:00.000+03:00"
               }
             } ]
           }
         } ]
       }
     }, {
-      "request_id" : "C203A7C9-E18F-499D-870E-6A5CA91CCBC2",
+      "request_id" : "2FA5E9F3-8EF6-48B5-9A41-84DB35083D31",
       "data" : {
         "identif" : "4230478A031PB8",
         "last_name" : "ДУБИНЕЦ",
@@ -1967,19 +1967,6 @@
                 } ]
               }
             },
-            "document_type" : {
-              "code" : "54100001",
-              "type" : 39,
-              "lexema" : {
-                "value" : [ {
-                  "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
-                  "lang" : "ru"
-                }, {
-                  "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
-                  "lang" : "be"
-                } ]
-              }
-            },
             "authority" : {
               "code" : "17608047",
               "type" : 24,
@@ -1993,11 +1980,24 @@
                 } ]
               }
             },
-            "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
-            "expire_date" : "2003-04-23T00:00:00.000+03:00",
             "series" : "MP",
             "number" : "0826111",
-            "active" : true
+            "active" : true,
+            "document_type" : {
+              "code" : "54100001",
+              "type" : 39,
+              "lexema" : {
+                "value" : [ {
+                  "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
+                  "lang" : "ru"
+                }, {
+                  "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
+                  "lang" : "be"
+                } ]
+              }
+            },
+            "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
+            "expire_date" : "2003-04-23T00:00:00.000+03:00"
           }
         } ],
         "photos" : [ {
@@ -2014,19 +2014,6 @@
                   } ]
                 }
               },
-              "document_type" : {
-                "code" : "54100001",
-                "type" : 39,
-                "lexema" : {
-                  "value" : [ {
-                    "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
-                    "lang" : "ru"
-                  }, {
-                    "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
-                    "lang" : "be"
-                  } ]
-                }
-              },
               "authority" : {
                 "code" : "17608047",
                 "type" : 24,
@@ -2040,11 +2027,24 @@
                   } ]
                 }
               },
-              "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
-              "expire_date" : "2003-04-23T00:00:00.000+03:00",
               "series" : "MP",
               "number" : "0826111",
-              "active" : true
+              "active" : true,
+              "document_type" : {
+                "code" : "54100001",
+                "type" : 39,
+                "lexema" : {
+                  "value" : [ {
+                    "value" : "ПАСПОРТ ГРАЖДАНИНА РБ",
+                    "lang" : "ru"
+                  }, {
+                    "value" : "ПАШПАРТ ГРАМАДЗЯНІНА РБ",
+                    "lang" : "be"
+                  } ]
+                }
+              },
+              "date_of_issue" : "2000-05-30T00:00:00.000+03:00",
+              "expire_date" : "2003-04-23T00:00:00.000+03:00"
             }
           } ]
         } ],
@@ -2539,6 +2539,19 @@
                     } ]
                   }
                 },
+                "authority" : {
+                  "code" : "9417",
+                  "type" : 80,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "ОТДЕЛ ЗАГС БРАГИНСКОГО РАЙИСПОЛКОМА ГОМЕЛЬСКОЙ ОБЛАСТИ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "series" : "I-РЕ",
+                "number" : "0450931",
+                "active" : false,
                 "document_type" : {
                   "code" : "54100006",
                   "type" : 37,
@@ -2552,20 +2565,7 @@
                     } ]
                   }
                 },
-                "authority" : {
-                  "code" : "9417",
-                  "type" : 80,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "ОТДЕЛ ЗАГС БРАГИНСКОГО РАЙИСПОЛКОМА ГОМЕЛЬСКОЙ ОБЛАСТИ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
-                "date_of_issue" : "2019-11-06T00:00:00.000+03:00",
-                "series" : "I-РЕ",
-                "number" : "0450931",
-                "active" : false
+                "date_of_issue" : "2019-11-06T00:00:00.000+03:00"
               }
             }, {
               "document" : {
@@ -2579,16 +2579,6 @@
                     } ]
                   }
                 },
-                "document_type" : {
-                  "code" : "0300",
-                  "type" : 82,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "АКТОВАЯ ЗАПИСЬ РЕГИСТРАЦИИ ЗАКЛЮЧЕНИЯ БРАКА",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
                 "authority" : {
                   "code" : "9417",
                   "type" : 80,
@@ -2599,9 +2589,19 @@
                     } ]
                   }
                 },
-                "date_of_issue" : "2019-11-06T00:00:00.000+03:00",
                 "number" : "3334",
-                "active" : false
+                "active" : false,
+                "document_type" : {
+                  "code" : "0300",
+                  "type" : 82,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "АКТОВАЯ ЗАПИСЬ РЕГИСТРАЦИИ ЗАКЛЮЧЕНИЯ БРАКА",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2019-11-06T00:00:00.000+03:00"
               }
             } ],
             "cert_data" : {
@@ -2733,6 +2733,7 @@
                     } ]
                   }
                 },
+                "active" : true,
                 "document_type" : {
                   "code" : "3",
                   "type" : 133,
@@ -2743,8 +2744,7 @@
                     } ]
                   }
                 },
-                "date_of_issue" : "2016-03-21T00:00:00.000+03:00",
-                "active" : true
+                "date_of_issue" : "2016-03-21T00:00:00.000+03:00"
               }
             } ]
           }
@@ -2860,16 +2860,6 @@
                     } ]
                   }
                 },
-                "document_type" : {
-                  "code" : "2",
-                  "type" : 133,
-                  "lexema" : {
-                    "value" : [ {
-                      "value" : "КНИГА ГОСУДАРСТВЕННОГО УЧЕТА УЧАСТКОВ ДЛЯ ЗАХОРОНЕНИЯ, МЕСТ В КОЛУМБАРИИ, СКЛЕПОВ",
-                      "lang" : "ru"
-                    } ]
-                  }
-                },
                 "authority" : {
                   "code" : "700028635",
                   "type" : 142,
@@ -2880,9 +2870,19 @@
                     } ]
                   }
                 },
-                "date_of_issue" : "2017-06-06T00:00:00.000+03:00",
                 "number" : "2",
-                "active" : true
+                "active" : true,
+                "document_type" : {
+                  "code" : "2",
+                  "type" : 133,
+                  "lexema" : {
+                    "value" : [ {
+                      "value" : "КНИГА ГОСУДАРСТВЕННОГО УЧЕТА УЧАСТКОВ ДЛЯ ЗАХОРОНЕНИЯ, МЕСТ В КОЛУМБАРИИ, СКЛЕПОВ",
+                      "lang" : "ru"
+                    } ]
+                  }
+                },
+                "date_of_issue" : "2017-06-06T00:00:00.000+03:00"
               }
             } ]
           }
@@ -2890,11 +2890,11 @@
       }
     } ],
     "identif_number" : [ {
-      "request_id" : "7ED1B272-4920-41FE-B245-A677FCF82F52",
-      "data" : "7035748A001PB3"
+      "request_id" : "71D7BA64-E5BE-4D78-A81A-300DA23FA7CB",
+      "data" : "7629957A001PB8"
     }, {
-      "request_id" : "D0D5E3AF-D112-4589-A40A-3197ACD92D19",
-      "data" : "7127319A001PB1"
+      "request_id" : "AD1AB788-6D95-4C54-9311-37A347D1E73D",
+      "data" : "7089878A001PB2"
     } ]
   }
 }
