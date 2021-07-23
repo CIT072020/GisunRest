@@ -1,4 +1,4 @@
-unit uRegIntX;
+unit uUNRegIntX;
 
 interface
 
@@ -11,12 +11,12 @@ uses
   superobject,
   superdate,
   SasaIniFile,
-  uROCService,
   mGisun,
   mRegInt,
   wsGisun,
   uGisun,
-  uRestClient,
+  uRestService,
+  uUNRestClient,
   uUNDTO;
 
 const
@@ -52,14 +52,33 @@ const
   PGET_SUD = 'RESH_SUD';
   PGET_FRM = 'FORM';
 
+  // Статус брачных отношений
+  // сведения отсутствуют
+  MRG_STATE_UNKNOWN = 0;
+  // брак зарегистрирован
+  MRG_STATE_PRESENT = 10;
+  // вдова (вдовец)
+  MRG_STATE_WIDOW   = 11;
+  // брак расторгнут ЗАГСом
+  MRG_STATE_DVCZGS  = 21;
+  // брак расторгнут по суду
+  MRG_STATE_DVCCRT  = 22;
+  // брак признан недействительным
+  MRG_STATE_INVALID = 23;
+
+
+
   // Сообщения об ошибках
   ERR_NO_AUTH = 'Отказ от взаимодействия';
 
 
 type
+  // Способ обмена ЛАИС с регистром населения
   TExchangeMode = (emDefault, emSOAP, emJSON, emMIXED);
 
-  TObrPersonalDataSO = procedure(data : ISuperObject; dsOutPut:TDataSet; dsDokument:TDataSet; slPar:TStringList) of object;
+  //TObrPersonalDataSO = procedure(data : ISuperObject; dsOutPut:TDataSet; dsDokument:TDataSet; slPar:TStringList) of object;
+  // Дополнительная обработка для отдельных актов/запросов
+  TProcPersData = procedure(const dsOutPut, dsCourt : TDataSet; MaritInfo : TMaritState; PersDataSO : ISuperObject) of object;
 
    //Интерфейс для обмена с регистром населения
   TRegIntX = class(TRegInt)
@@ -70,18 +89,23 @@ type
     FIniOut,
     FIni : TSasaIniFile;
     FRestClient : TRestClient;
+    FProcPersData : TProcPersData;
 
+    // Дополнительная обработка персональных данных
+    procedure AdditDataProcess(PersData: ISuperObject; const ReqID: string);
     function AddCourts(PersData: ISuperObject; slPar: TStringList; const ReqID : string): integer;
-    function SetErrData(const Act: TActKind; Resp: TRestResponse) : Integer;
-    function SetOutDS(const Act: TActKind; slPar : TStringList; Resp: TRestResponse): Integer;
+    function SetErrData(Resp: TRestResponse) : Integer;
+    function SetOutDS(Resp: TRestResponse): Integer;
     function GetResponse : TRestResponse;
-    function AddMartInfo(MartInfo: ISuperObject; const ReqID : string): integer;
+    function AddMaritInfo(MaritInfo: ISuperObject; const ReqID: string): integer;
     function AddFamily(PersData: ISuperObject; slPar : TStringList; const ReqID, Pfx : string): integer;
-    function LocateID(IDS : TDataSet; const RequestID: string): Boolean;
+    function LocateID(IODS: TDataSet; const RequestID: string): Boolean;
   public
     property Config : TRestConfig read FConfig write FConfig;
     property ApiClient : TRestClient read FRestClient write FRestClient;
     property Response : TRestResponse read GetResponse;
+    // Дополнительная обработка для отдельных актов/запросов
+    property ProcPersData : TProcPersData read FProcPersData write FProcPersData;
 
     // Получение персональных данных, ИН, резервирование ИН
     function Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument: TDataSet = nil;
@@ -151,7 +175,7 @@ begin
 end;
 
 // Заполненеие DataSet в случае ошибок
-function TRegIntX.SetErrData(const Act: TActKind; Resp: TRestResponse): Integer;
+function TRegIntX.SetErrData(Resp: TRestResponse): Integer;
 var
   ErrsInSO: Integer;
 begin
@@ -278,80 +302,79 @@ end;
 
 
 
-const
-  // брак признан недействительным
-  MRG_STATE_INVALID = 23;
-  // брак расторгнут по суду
-  MRG_STATE_BYDVC   = 22;
 
 
 
-
-
-// Заполнить DataSet информацией о членах семьи
-function TRegIntX.AddMartInfo(MartInfo: ISuperObject; const ReqID : string): integer;
+// Заполнить сведения о браке
+function TRegIntX.AddMaritInfo(MaritInfo: ISuperObject; const ReqID: string): integer;
 var
-  Status,
-  i, iMax: Integer;
-  EventDate : TDateTime;
-  MartCert,
-  Child, Mart: ISuperObject;
-  Org : TNSIValue;
-
+  Status, i, iMax: Integer;
+  EventDate: TDateTime;
+  MaritCert, Child: ISuperObject;
+  Ms : TMaritState;
+  Org: TNSIValue;
 begin
   iMax := 0;
+  Ms.Status := MRG_STATE_UNKNOWN;
   try
-    if (MartInfo <> nil) then begin
-      MartCert := MartInfo.O['cert_data'];
-      if (Assigned(MartCert) and (Not MartCert.IsType(stNull))) then begin
+    if (MaritInfo <> nil) then begin
+      MaritCert := MaritInfo.O['cert_data'];
+      if (Assigned(MaritCert) and (Not MaritCert.IsType(stNull))) then begin
 
-         if NOT (ISO8601DateToDelphiDateTime(MartCert.S['invalid_mrg_date'], EventDate)) then begin
-           if NOT (ISO8601DateToDelphiDateTime(MartCert.S['invalid_mrg_date'], EventDate)) then begin
+        if NOT (ISO8601DateToDelphiDateTime(MaritCert.S['invalid_mrg_date'], EventDate)) then begin
+          if NOT (ISO8601DateToDelphiDateTime(MaritCert.S['dvc_date'], EventDate)) then begin
 
-           if (ISO8601DateToDelphiDateTime(MartCert.S['date'], EventDate)) then begin
-             Org := TClassifier.SObj2TKN(MartCert.O['region']);
+            if (ISO8601DateToDelphiDateTime(MaritCert.S['date'], EventDate)) then begin
+              Org := TClassifier.SObj2TKN(MaritCert.O['region']);
+              if (Org.FullFill = True) then
+                Ms.Status := MRG_STATE_PRESENT;
 
 
-
-           end else begin
+            end
+            else begin
              // ни одна из дат не установлена ???
-           end;
+            end;
 
-
-           end else begin
+          end
+          else begin
              // брак расторгнут по суду
-             Status := MRG_STATE_BYDVC;
-           end;
-         end else begin
+            Ms.Status := MRG_STATE_DVCCRT;
+          end;
+        end
+        else begin
            // брак признан недействительным
-           Status := MRG_STATE_INVALID;
+          Ms.Status := MRG_STATE_INVALID;
 
-         end;
+        end;
 
       end;
     end;
   except
     iMax := 0;
   end;
-  Result := iMax;
+  Response.MaritState := Ms;
+  Result := Ms.Status;
 end;
 
 
+
+
 // Заполнить DataSet информацией о членах семьи
-function TRegIntX.AddFamily(PersData: ISuperObject; slPar : TStringList; const ReqID, Pfx : string): integer;
+function TRegIntX.AddFamily(PersData: ISuperObject; slPar: TStringList; const ReqID, Pfx: string): integer;
 var
   i, iMax: Integer;
   Child, Fam: ISuperObject;
 
   // Добавить одного члена семьи в DataSet
-  function OneFamMember(const ParName : string): integer;
+
+  function OneFamMember(const ParName: string): integer;
   begin
     if (Assigned(Fam.O[ParName]) and (Not Fam.O[ParName].IsType(stNull))) then begin
       if (slPar.Values[ParName] = '1') then begin
         TPersData.SObj2DSPersData(Fam.O[ParName].O['person_data'], Response.OutDS);
         Response.OutDS.Edit;
         Response.OutDS.FieldByName('IS_PERSON').AsBoolean := False;
-        Response.OutDS.FieldByName('PREFIX').AsString     := Pfx + '_' + UpperCase(ParName);
+        Response.OutDS.FieldByName('PREFIX').AsString := Pfx + '_' + UpperCase(ParName);
         Response.OutDS.FieldByName('REQUEST_ID').AsString := ReqID;
         Response.OutDS.Post;
       end;
@@ -361,10 +384,10 @@ var
 begin
   iMax := 0;
   try
-      Fam := PersData.O['family'];
-      if (Assigned(Fam) and (Not Fam.IsType(stNull))) then begin
-        AddMartInfo(Fam.O['martial_status'], ReqID);
-        if (Assigned(slPar) and (NOT Iif(slPar.Values['family'] = '0', True, False))) then begin
+    Fam := PersData.O['family'];
+    if (Assigned(Fam) and (Not Fam.IsType(stNull))) then begin
+      AddMaritInfo(Fam.O['martial_status'], ReqID);
+      if (Assigned(slPar) and (NOT Iif(slPar.Values['family'] = '0', True, False))) then begin
 
         OneFamMember('mather');
         OneFamMember('father');
@@ -379,15 +402,14 @@ begin
               TPersData.SObj2DSPersData(Child.AsArray.O[i].O['person_data'], Response.OutDS);
               Response.OutDS.Edit;
               Response.OutDS.FieldByName('IS_PERSON').AsBoolean := False;
-              Response.OutDS.FieldByName('PREFIX').AsString     := Pfx + '_CHILD' + IntToStr(i + 1);
+              Response.OutDS.FieldByName('PREFIX').AsString := Pfx + '_CHILD' + IntToStr(i + 1);
               Response.OutDS.FieldByName('REQUEST_ID').AsString := ReqID;
               Response.OutDS.Post;
             end;
           end;
         end;
 
-
-        end;
+      end;
     end;
   except
     iMax := 0;
@@ -396,25 +418,45 @@ begin
 end;
 
 
-// Позиционирование входного DataSet
-function TRegIntX.LocateID(IDS: TDataSet; const RequestID: string): Boolean;
+
+
+
+
+// Дополнительная обработка персональных данных
+procedure TRegIntX.AdditDataProcess(PersData: ISuperObject; const ReqID: string);
+begin
+  if (Assigned(ProcPersData)) then begin
+    if (LocateID(Response.OutDS, ReqID)) then begin
+
+      ProcPersData(Response.OutDS, Response.CourtDS, Response.MaritState, PersData);
+
+    end;
+  end;
+
+end;
+
+
+// Позиционирование I/O DataSet на персональных данных
+function TRegIntX.LocateID(IODS: TDataSet; const RequestID: string): Boolean;
 begin
   Result := False;
-  IDS.First;
-  while not IDS.Eof do begin
-    if (IDS.FieldByName('REQUEST_ID').AsString = RequestID) then begin
+  IODS.First;
+  while not IODS.Eof do begin
+    if (IODS.FieldByName('REQUEST_ID').AsString = RequestID) AND
+       (IODS.FieldByName('IS_PERSON').AsBoolean = True)then begin
       Result := True;
       Break;
     end;
-    IDS.Next;
+    IODS.Next;
   end;
 end;
 
 
 // Для GET-запросов заполнение выходных DataSet
-function TRegIntX.SetOutDS(const Act: TActKind; slPar: TStringList; Resp: TRestResponse): Integer;
+function TRegIntX.SetOutDS(Resp: TRestResponse): Integer;
 var
   i, iMax, nErr: Integer;
+  RecID : LongInt;
   ReqID: string;
   OnePD, SOArrPD: ISuperObject;
 begin
@@ -428,15 +470,16 @@ begin
         ReqID := SOArrPD.AsArray.O[i].S['request_id'];
         if (LocateID(Resp.Req.InDS, ReqID)) then begin
           OnePD := SOArrPD.AsArray.O[i].O['data'];
-          if (Act = akGetPersonIdentif) then begin
+          if (Resp.Req.ActInf.Act = akGetPersonIdentif) then begin
         // Должен вернуть запрошенный ИН по ФИО
             TPersData.SObj2DSPersData(OnePD, Resp.OutDS, False);
           end
           else begin
         // Должен вернуть персональные данные
             TPersData.SObj2DSPersData(OnePD, Resp.OutDS);
-            AddCourts(OnePD, slPar, ReqID);
-            AddFamily(OnePD, slPar, ReqID, Resp.Req.InDS.FieldByName('PREFIX').AsString);
+            AddCourts(OnePD, Resp.Req.ActInf.CurPars, ReqID);
+            AddFamily(OnePD, Resp.Req.ActInf.CurPars, ReqID, Resp.Req.InDS.FieldByName('PREFIX').AsString);
+            AdditDataProcess(OnePD, ReqID);
           end;
         end
         else begin
@@ -534,29 +577,25 @@ end;
 // Получение из регистра
 function TRegIntX.Get(ActKind: TActKind; MessageType: string; const Input: TDataSet; var Output, Error: TDataSet; const Dokument: TDataSet = nil;
     slPar: TStringList = nil; ExchMode: Integer = EM_DEFLT): TRequestResult;
-var
-  nErr : Integer;
-  Resp : TRestResponse;
+//var
+  //nErr : Integer;
+  //Resp : TRestResponse;
 begin
+  // Дополнение запроса на сервер
+  with Input do begin
+    Edit;
+    FieldByName('REQUEST_ID').AsString := NewGUID;
+    Post;
+  end;
   if (ExchMode = EM_DEFLT) then
     ExchMode := FExchMode;
   if (ExchMode = EM_SOAP) then begin
     Result := inherited Get(ActKind, MessageType, Input, Output, Error, Dokument, slPar);
+    ProcPersData := nil;
   end
   else begin
     // Через REST-сервис
-    Resp := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar);
-    Result := Resp.RetAsSOAP;
-    if (Result = rrOk) then begin
-       Resp.OutDS := CreateOutputTable(akGetPersonalData);
-       Output := Resp.OutDS;
-       nErr := SetOutDS(ActKind, slPar, Resp);
-       if Assigned(FObrPersonalData) then begin
-         //FObrPersonalData(Person.data, output, dokument, slPar);
-       end;
-     end;
-    SetErrData(ActKind, Resp);
-    Error := Resp.ErrDS;
+    Result := GetRest(ActKind, MessageType, Input, Dokument, Output, Error, slPar).RetAsSOAP;
   end;
 end;
 
@@ -581,30 +620,32 @@ end;
 
 
 // Получение персональных данных, ИН, резервирование ИН через REST-сервис
-function TRegIntX.GetRest(ActKind: TActKind; MessageType: string; const InDS, Dokument: TDataSet; var Output, Error: TDataSet; slPar:TStringList): TRestResponse;
+function TRegIntX.GetRest(ActKind: TActKind; MessageType: string; const InDS, Dokument: TDataSet; var Output, Error: TDataSet; slPar: TStringList): TRestResponse;
 var
-  i : Integer;
-  s : string;
-  Req : TRestRequest;
-
+  Req: TRestRequest;
 begin
-  // Формирование запроса на сервер
-  with InDS do begin
-    Edit;
-    FieldByName('REQUEST_ID').AsString := NewGUID;
-    Post;
-  end;
   Req := TRestRequest.Create(Self.Config);
   Req.InDS := InDS;
-  Req.SetActInf(ActKind, MessageType, InDS, opGet);
+  Req.SetActInf(ActKind, MessageType, Dokument, slPar, opGet);
 
-  Req.MakeReqLine('POST', slPar);
+  Req.MakeReqLine(Req.ActInf.Method, slPar);
 
   // Формирование тела запроса
   Req.MakeReqBody(InDS, MessageType);
 
   Result := ApiClient.CallApi(Req);
+
+  if (Result.RetAsSOAP = rrOk) then begin
+    Result.OutDS := CreateOutputTable(akGetPersonalData);
+    Output := Result.OutDS;
+    SetOutDS(Result);
+  end;
+  SetErrData(Result);
+  Error := Result.ErrDS;
+
+  ProcPersData := nil;
 end;
+
 
 // Отправка данных через REST-сервис
 function TRegIntX.PostRest(RequestMessageId: string; ActKind: TActKind; MessageType: string; const InDS : TDataSet; var Error: TDataSet): TRestResponse;
@@ -616,7 +657,7 @@ begin
   // Формирование запроса на сервер
   Req := TRestRequest.Create(Self.Config);
   Req.InDS := InDS;
-  Req.SetActInf(ActKind, MessageType, InDS, opPost);
+  Req.SetActInf(ActKind, MessageType);
 
   Req.MakeReqLine('POST');
 

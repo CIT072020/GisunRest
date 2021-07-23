@@ -1,4 +1,4 @@
-unit uRestClient;
+unit uUNRestClient;
 
 interface
 
@@ -12,7 +12,7 @@ uses
   FuncPr,
   mRegInt,
   uGisun,
-  uROCService,
+  uRestService,
   uUNDTO
   ;
 
@@ -57,22 +57,38 @@ type
   TActInf = class
   private
   public
-    Act      : TActKind;
-    Oper     : TOperation;
-    ResPath  : string;
-    MsgType  : string;
+    Act     : TActKind;
+    Oper    : TOperation;
+    ResPath : string;
+    MsgType : string;
     VarMeth4MakeBody : TMakePostBoby;
-    Method   : string;
+    Method  : string;
+    CurDoc  : TDataSet;
+    CurPars : TStringList;
   end;
+
+  TMaritState = record
+     Status     : Integer;
+     NameStatus : String;
+     TypeResh   : Integer;
+     Prefix     : String;
+     FIO        : String;
+     Text       : String;
+     Organ      : String;
+     Date       : TDateTime;
+     Doc        : String;  // только инфа о документе для ON_SEM_DOK  ONA_SEM_DOK
+     SemStatus  : Integer;
+   end;
+
 
   // Запрос к REST-серверу
   TRestRequest = class
   private
-    FCfg    : TRestConfig;
+    FCfg     : TRestConfig;
     // Параметры каждого запроса
     FInputDS : TDataSet;
-    FActInf   : TActInf;
-    FMethod : string;
+    FActInf  : TActInf;
+    FMethod  : string;
     FFullURL : string;
     // Summary:
     //     The Resource URL to make the request against. Tokens are substituted with UrlSegment parameters and match by name.
@@ -101,12 +117,13 @@ type
     function MakeCover(const MsgSrcCode : string; MsgTypeCode : string = uGisun.QUERY_INFO; DSet : string = '[15]') : string;
     function MakeReqInBody(const InDS: TDataSet): string;
   public
+    property ActInf : TActInf read FActInf write FActInf;
     property Params : TStringList read FParams write FParams;
     property Header : TStringList read FHeader write FHeader;
     property Body   : string read FBody write FBody;
     property InDS   : TDataSet read FInputDS write FInputDS;
 
-    function SetActInf(ActKind: TActKind; MessageType: string; const Input : TDataSet; opCode : TOperation): TRestRequest;
+    function SetActInf(ActKind: TActKind; MessageType: string; const CallDoc: TDataSet = nil; CallPars : TStringList = nil; opCode: TOperation = opPost): TRestRequest;
     function MakeReqLine(Meth : string; Pars : TStringList = nil) : string;
     // Подготовка тела запроса
     function MakeReqBody(const InDS : TDataSet; MessageType: string = ''): TRestRequest;
@@ -128,7 +145,9 @@ type
     FCourt,
     FErrDS   : TDataSet;
     FOutDS   : TDataSet;
+    FMarSt   : TMaritState;
     FRespID  : string;
+
 
   public
     property Req : TRestRequest read FRestReq write FRestReq;
@@ -139,6 +158,7 @@ type
     property OutDS : TDataSet read FOutDS write FOutDS;
     property ErrDS : TDataSet read FErrDS write FErrDS;
     property CourtDS : TDataSet read FCourt write FCourt;
+    property MaritState : TMaritState read FMarSt write FMarSt;
 
     class function CreateCourts(IndexExp : string = '') : TDataSet;
 
@@ -255,61 +275,72 @@ end;
 
 
 // Заполнение дполнительных полей в зависимости от типа документа
-function TRestRequest.SetActInf(ActKind: TActKind; MessageType: string; const Input : TDataSet; opCode : TOperation): TRestRequest;
+function TRestRequest.SetActInf(ActKind: TActKind; MessageType: string; const CallDoc: TDataSet = nil; CallPars : TStringList = nil; opCode: TOperation = opPost): TRestRequest;
 var
   s: string;
 begin
   FActInf.Act     := ActKind;
-  FActInf.MsgType :=  MessageType;
+  FActInf.MsgType := MessageType;
   FActInf.Oper    := opCode;
-  case ActKind of
-    akGetPersonalData : begin
+  FActInf.CurDoc  := CallDoc;
+  FActInf.CurPars := CallPars;
+
+  FActInf.Method  := 'POST';
+
+  if (opCode = opGet) then begin
+    FActInf.VarMeth4MakeBody := nil;
+    if (ActKind = akGetPersonIdentif) then
+      FActInf.ResPath := 'common/person-identif'
+    else
       FActInf.ResPath := 'common/register';
-      FActInf.VarMeth4MakeBody := nil;
-      end;
-    akGetPersonIdentif : begin
-      FActInf.ResPath := 'common/person-identif';
-      FActInf.VarMeth4MakeBody := nil;
-      end;
-    akBirth : begin
+  end else begin
+
+    case ActKind of
+      akBirth: begin
     // Свидетельство о рождении
-      FActInf.ResPath  := 'zags/birth-certificate';
-      FActInf.MsgType  := '0160';
-      FActInf.VarMeth4MakeBody := TActBirth.BirthDS2Json;
-      end;
-    akAffiliation : begin
+          FActInf.ResPath := 'zags/birth-certificate';
+          FActInf.MsgType := '0160';
+          FActInf.VarMeth4MakeBody := TActBirth.BirthDS2Json;
+        end;
+      akAffiliation: begin
     // Свидетельство об установлении отцовства
-      FActInf.ResPath  := 'zags/affiliation-certificate';
-      FActInf.MsgType  := '0200';
-      FActInf.VarMeth4MakeBody := TActAffil.AffilDS2Json;
-      end;
-    akMarriage : begin
+          FActInf.ResPath := 'zags/affiliation-certificate';
+          FActInf.MsgType := '0200';
+          FActInf.VarMeth4MakeBody := TActAffil.AffilDS2Json;
+        end;
+      akMarriage: begin
     // Свидетельство о браке
-      FActInf.ResPath  := 'zags/marriage-certificate';
-      FActInf.MsgType  := '0300';
-      FActInf.VarMeth4MakeBody := TActMarr.MarrDS2Json;
-      end;
-    akDecease : begin
+          FActInf.ResPath := 'zags/marriage-certificate';
+          FActInf.MsgType := '0300';
+          FActInf.VarMeth4MakeBody := TActMarr.MarrDS2Json;
+        end;
+      akDecease: begin
     // Свидетельство о смерти
-      FActInf.ResPath  := 'zags/decease-certificate';
-      FActInf.MsgType  := '0400';
-      FActInf.VarMeth4MakeBody := TActDecease.DeceaseDS2Json;
-      end;
-    akDivorce : begin
+          FActInf.ResPath := 'zags/decease-certificate';
+          FActInf.MsgType := '0400';
+          FActInf.VarMeth4MakeBody := TActDecease.DeceaseDS2Json;
+        end;
+      akDivorce: begin
     // Свидетельство о расторжении брака
-      FActInf.ResPath  := 'zags/divorce-certificate';
-      FActInf.MsgType  := '0500';
-      FActInf.VarMeth4MakeBody := TActDvrc.DvrcDS2Json;
-      end;
-    akNameChange : begin
+          FActInf.ResPath := 'zags/divorce-certificate';
+          FActInf.MsgType := '0500';
+          FActInf.VarMeth4MakeBody := TActDvrc.DvrcDS2Json;
+        end;
+      akNameChange: begin
     // Свидетельство о смене ФИО
-      FActInf.ResPath  := 'zags/name-change-certificate';
-      FActInf.MsgType  := '0700';
-      FActInf.VarMeth4MakeBody := TActChgName.ChgNameDS2Json;
-      end;
+          FActInf.ResPath := 'zags/name-change-certificate';
+          FActInf.MsgType := '0700';
+          FActInf.VarMeth4MakeBody := TActChgName.ChgNameDS2Json;
+        end;
+    end;
+
   end;
+
   Result := Self;
 end;
+
+
+
 
 
 
@@ -586,7 +617,7 @@ begin
   FHTTP.Document.SaveToFile('BodyUN');
 
   Result.FRestReq := Req;
-  SetRetCodes('POST', sURL, Result);
+  SetRetCodes(Req.ActInf.Method, sURL, Result);
   FResp := Result;
 end;
 

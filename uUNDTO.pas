@@ -10,9 +10,10 @@ uses
   superobject,
   superdate,
   synautil,
+  kbmMemTable,
   XSBuiltIns,
   FuncPr,
-  uROCService;
+  uRestService;
 
 const
   BPLC_WITH_BY  = 1;
@@ -81,7 +82,8 @@ type
 
     class procedure SObj2DSBPlace(SOPersData: ISuperObject; ODS: TDataSet);
 
-    class procedure SObj2DSPersData(SOPersData: ISuperObject; ODS: TDataSet; FullSet : Boolean = True);
+    //class procedure SObj2DSPersData(SOPersData: ISuperObject; ODS: TDataSet; FullSet : Boolean = True);
+    class function SObj2DSPersData(SOPersData: ISuperObject; ODS: TDataSet; FullSet: Boolean = True) : Boolean;
   end;
 
   // Свидетельство о рождении
@@ -613,14 +615,13 @@ end;
 
 
 // Полный список персональных данных
-class procedure TPersData.SObj2DSPersData(SOPersData: ISuperObject; ODS: TDataSet; FullSet: Boolean = True);
+class function TPersData.SObj2DSPersData(SOPersData: ISuperObject; ODS: TDataSet; FullSet: Boolean = True) : Boolean;
 var
   s: string;
 begin
+  Result := False;
   try
-
     if (Assigned(SOPersData) and (Not SOPersData.IsType(stNull))) then begin
-
       with ODS do begin
         Append;
         try
@@ -651,6 +652,7 @@ begin
             SObj2DSDeaths(SOPersData.O['deaths'], ODS);
             // Данные о захоронении
             SObj2DSBurs(SOPersData.O['burials'], ODS);
+            Result := True;
           end;
         finally
           Post;

@@ -17,8 +17,8 @@ uses
   mRegInt,
   uGisun,
   uROCExchg,
-  uRestClient,
-  uRegIntX;
+  uUNRestClient,
+  uUNRegIntX;
 
 type
   TForm1 = class(TForm)
@@ -105,7 +105,7 @@ uses
   kbmMemTable,
   SasaINiFile,
   uAvest,
-  uROCService,
+  uRestService,
   fPIN4Av;
 
 {$R *.dfm}
@@ -114,7 +114,6 @@ uses
 procedure ShowDeb(const s: string; const ClearAll: Boolean = True);
 var
   AddS: string;
-  //Pos  : TPoint;
 begin
   AddS := '';
   if (ClearAll = True) then
@@ -122,7 +121,6 @@ begin
   else
     AddS := CRLF;
   ShowM.Text := ShowM.Text + AddS + s;
-  //Pos := ShowM.CaretPos;
 end;
 
 procedure Create4UN;
