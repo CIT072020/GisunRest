@@ -1,0 +1,1 @@
+{"error":"BadRequestException","data":[{"error_code":{"code":"01","type":-20,"lexema":{"value":[{"value":"Неизвестная ошибка","lang":"ru"}]}},"error_place":"6799947F-4FF8-42E7-9984-F8EB6590C3C4"}],"error_description":"The request could not be understood by the server due to malformed syntax. SHOULD NOT repeat the request without modifications"}

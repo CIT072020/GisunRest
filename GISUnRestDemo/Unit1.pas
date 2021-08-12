@@ -2,6 +2,8 @@ unit Unit1;
 
 interface
 
+{$I Task.inc}
+
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms, Dialogs, DateUtils,
   nativexml,
@@ -19,6 +21,15 @@ uses
   uROCExchg,
   uUNRestClient,
   uUNRegIntX;
+
+const
+//=== *** === === *** === === *** === === *** === =>
+  ROC_INI_NAME  = '..\..\Lais7\Service\RegUch.ini';
+
+  UN_INI_NAME  = '..\..\Lais7\Service\GISUN.ini';
+  UN_IN_FILES  = '..\..\Lais7\Service\GISUN_InputJ.ini';
+  UN_OUT_FILES = '..\..\Lais7\Service\GISUN_OutputJ.ini';
+
 
 type
   TForm1 = class(TForm)
@@ -68,21 +79,29 @@ type
     btnPostDivr: TButton;
     btnPostChgFIO: TButton;
     btnIsoTime: TButton;
+    btnGetNewIN: TButton;
+    btnPostBurial: TButton;
+    btnPostOpek: TButton;
+    btnPostTrust: TButton;
     procedure btnGetActualClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnGetDocsClick(Sender: TObject);
+    procedure btnGetNewINClick(Sender: TObject);
     procedure btnGetNSIClick(Sender: TObject);
     procedure btnGetPersDataClick(Sender: TObject);
     procedure btnGetUNClick(Sender: TObject);
     procedure btnIsoTimeClick(Sender: TObject);
     procedure btnPostAffilClick(Sender: TObject);
     procedure btnPostBirthClick(Sender: TObject);
+    procedure btnPostBurialClick(Sender: TObject);
     procedure btnPostChgFIOClick(Sender: TObject);
     procedure btnPostDeceaseClick(Sender: TObject);
     procedure btnPostDivrClick(Sender: TObject);
     procedure btnPostDocClick(Sender: TObject);
     procedure btnPostMarrClick(Sender: TObject);
+    procedure btnPostOpekClick(Sender: TObject);
+    procedure btnPostTrustClick(Sender: TObject);
   private
     { Private declarations }
     procedure PrepUNResult(r : TRestResponse);
@@ -146,9 +165,9 @@ begin
   edCount.Text  := '10';
   cbSrcPost.ItemIndex := 0;
 
-  BlackBox := TROCExchg.Create('..\..\Lais7\Service\' + INI_NAME);
-  Self.Caption := 'Обмен с адресом: ' + BlackBox.Host.URL;
+  BlackBox := TROCExchg.Create(ROC_INI_NAME);
   Create4UN;
+  Self.Caption := Format('Регистрация: %s ****---***** Регистр населения: %s', [BlackBox.Host.URL, RegInt.Config.BasePath]);
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -380,6 +399,8 @@ begin
   d['IDENTIF']    := '4230478A031PB8';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
+(*
+  // Запрос новых ИН
   d.Append;
   d['IS_PERSON']  := False;
   d['POL']        := 'F';
@@ -392,7 +413,7 @@ begin
   d['DATER']      := '20020612';
   d['REQUEST_ID'] := NewGUID;
   d.Post;
-
+*)
   sp.Add('father=1');
   sp.Add('child=1');
   dsRSud := TRestResponse.CreateCourts;
@@ -416,23 +437,42 @@ var
 begin
   d := RegInt.CreateInputTable(akGetPersonIdentif, opGet);
   d.Append;
-  d['FAMILIA'] := 'ИВАНОВ';
-  d['NAME']    := 'ИВАН';
-  d['OTCH']    := 'ИВАНОВИЧ';
-  d['DATER']   := '20120511';
+  d['FAMILIA'] := 'ГРОМОВИЧ';
+  d['NAME']    := 'ПАВЕЛ';
+  d['OTCH']    := 'ИГОРЕВИЧ';
+  d['DATER']   := '19851202';
   d.Post;
   RetSOAP := RegInt.Get(akGetPersonIdentif, QUERY_INFO, d, dsOut, dsErr);
   PrepUNResult(RegInt.Response);
 end;
 
+procedure TForm1.btnGetNewINClick(Sender: TObject);
+var
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  RetSOAP : TRequestResult;
+begin
+  d := RegInt.CreateInputTable(akGetPersonalData, opGet);
+  // Запрос новых ИН
+  d.Append;
+  d['IS_PERSON']  := False;
+  d['POL']        := 'F';
+  d['DATER']      := '20200511';
+  d['REQUEST_ID'] := NewGUID;
+  d.Post;
+  d.Append;
+  d['IS_PERSON']  := False;
+  d['POL']        := 'M';
+  d['DATER']      := '20020612';
+  d['REQUEST_ID'] := NewGUID;
+  d.Post;
 
+  RetSOAP := RegInt.Get(akGetPersonalData, QUERY_INFO, d, dsOut, dsErr);
+  PrepUNResult(RegInt.Response);
+end;
 
-
-
-
-
-
-
+//-------------------- POST ------------------------
 // Установление отцовства
 procedure TForm1.btnPostAffilClick(Sender: TObject);
 var
@@ -505,7 +545,7 @@ begin
   d['ONA_OTCH']      := 'ГЕОРГИЕВНА';
   d['ONA_FAMILIA_B'] := 'ДЗІЧКОЎСКАЯ';
   d['ONA_NAME_B']    := 'АНАСТАСІЯ';
-  d['ONA_OTCH_B']    := 'ГЕОРГІЕЎНА';
+  d['ONA_OTCH_B']    := '11ГЕОРГІЕЎНА';
   d['ONA_POL']       := 'F';
   d['ONA_DATER']     := '19830909';
 
@@ -528,7 +568,7 @@ begin
   d['ON_OTCH']      := 'ИГОРЕВИЧ';
   d['ON_FAMILIA_B'] := 'ГРАМОВІЧ';
   d['ON_NAME_B']    := 'ПАВЕЛ';
-  d['ON_OTCH_B']    := 'ІГАРАВІЧ';
+  d['ON_OTCH_B']    := '11ІГАРАВІЧ';
   d['ON_POL']       := 'M';
   d['ON_DATER']     := '19851202';
 
@@ -570,6 +610,7 @@ begin
   d.Post;
   s := NewGUID;
   RetSOAP := RegInt.Post(s, akAffiliation, '0200', d, dsErr);
+  PrepUNResult(RegInt.Response);
 end;
 
 // Свидетельство о рождении
@@ -672,8 +713,8 @@ begin
   d.Post;
   s := NewGUID;
   RetSOAP := RegInt.Post(s, akBirth, '0160', d, dsErr);
+  PrepUNResult(RegInt.Response);
 end;
-
 
 
 // Свидетельство о браке
@@ -753,6 +794,7 @@ begin
   d.Post;
   s := NewGUID;
   RetSOAP := RegInt.Post(s, akMarriage, '0300', d, dsErr);
+  PrepUNResult(RegInt.Response);
 end;
 
 // Свидетельство о смерти
@@ -821,6 +863,7 @@ begin
   d.Post;
   s := NewGUID;
   RetSOAP := RegInt.Post(s, akDecease, '0400', d, dsErr);
+  PrepUNResult(RegInt.Response);
 end;
 
 // Свидетельство о расторжении брака
@@ -916,6 +959,7 @@ begin
   d.Post;
   s := NewGUID;
   RetSOAP := RegInt.Post(s, akDivorce, '0500', d, dsErr);
+  PrepUNResult(RegInt.Response);
 end;
 
 procedure TForm1.btnPostChgFIOClick(Sender: TObject);
@@ -981,9 +1025,58 @@ begin
   d.Post;
   s := NewGUID;
   RetSOAP := RegInt.Post(s, akNameChange, '0700', d, dsErr);
+  PrepUNResult(RegInt.Response);
 end;
 
 
+//Местные - информация о месте захоронения
+procedure TForm1.btnPostBurialClick(Sender: TObject);
+var
+  i : Integer;
+  s : string;
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  r : TRestResponse;
+  RetSOAP : TRequestResult;
+begin
+  d := RegInt.CreateInputTable(akZah, opPost);
+  d.Append;
+
+  //
+  d['IDENTIF']    := '7720742A001PB6';
+  d['FAMILIA']    := 'ИВАНОВА';
+  d['NAME']       := 'ИНГА';
+  d['OTCH']       := 'ВИКТОРОВНА';
+
+  //
+  d['ZH_K_GOSUD'] := 'BLR';
+  d['ZH_K_OBL']   := '22672';
+  d['ZH_K_RAION'] := '23890';
+  d['ZH_K_SS']    := '25426';
+  d['ZH_K_NP']    := '12856';
+
+  //
+  d['ZH_K_KLAD']  := '1';   // code
+
+  d['ZH_UCH']     := '121'; // sector
+  d['ZH_RAD']     := '1';   // row
+  d['ZH_UCH2']    := '34';  // place
+  //d['ZH_MOG']     := '76';  // grave
+  d['ZH_SKLEP']   := 'vvv'; // vault
+  //d['ZH_KLUM']    := '88';  // wall_section
+  //d['ZH_STAKAN']  := '99';  // wall_box
+
+  d['DOC_TIP']       := '1';
+  d['DOC_ORGAN']     := '6';
+  d['DOC_DATE']      := StrToDate('03.01.2017');
+  d['DOC_NOMER']     := '1';
+
+  d.Post;
+  s := NewGUID;
+  RetSOAP := RegInt.Post(s, akZah, '101', d, dsErr);
+  PrepUNResult(RegInt.Response);
+end;
 
 
 
@@ -1009,17 +1102,42 @@ begin
 
 end;
 
+
 procedure TForm1.btnIsoTimeClick(Sender: TObject);
 var
   b : Boolean;
+  i : Integer;
   t : string;
   d : TDateTime;
   ds : TDataSet;
+  SORet: ISuperObject;
 begin
+  try
+    SORet := nil;
+
+    t := '';
+    SORet := SO(t);
+
+    t := '<htm>';
+    SORet := SO(t);
+
+    t := '{}';
+    SORet := SO(t);
+
+    t := '123{}sss987';
+    SORet := SO(t);
+
+  except
+    i := 99;
+  end;
+
   t := '2000-07-20T00:00:00.000+03:00';
   d := IsoTime(t);
   //d := IncHour(d, 3);
   ISO8601DateToDelphiDateTime(t, d);
+
+
+
 
   b := ds is TDataSet;
   if (b) then
@@ -1030,5 +1148,99 @@ begin
   TButton(Sender).Caption := t + '===Date: ' + FormatDateTime('yyyy-mm-dd hh:MM:ss', d);
 end;
 
-//
+procedure TForm1.btnPostOpekClick(Sender: TObject);
+var
+  i : Integer;
+  s : string;
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  r : TRestResponse;
+  RetSOAP : TRequestResult;
+begin
+  d := RegInt.CreateInputTable(akOpeka, opPost);
+  d.Append;
+
+  d['IDENTIF']   := '7172252A001PB3';
+  d['FAMILIA']   := 'СТАНКЕВИЧ';
+  d['NAME']      := 'СВЕТЛАНА';
+  d['OTCH']      := 'ПЕТРОВНА';
+  d['POL']       := 'F';
+  d['DATER']     := '20120511';
+
+  // Опекун
+  d['ON_IDENTIF']   := '3010182A132PB7';
+  d['ON_FAMILIA']   := 'ЮРЧЕНКО';
+  d['ON_NAME']      := 'НИКОЛАЙ';
+  d['ON_OTCH']      := 'НИКОЛАЕВИЧ';
+  d['ON_POL']       := 'M';
+  d['ON_DATER']     := '20120511';
+  d['ON_STATUS']    := '1';
+  d['ON_GRAJD']     := 'BLR';
+
+  d['DATE_UST']   := StrToDate('05.06.2016');
+  //d['DATE_OTM']   := StrToDate('08.08.2019');
+  //d['DATE_OTST']  := StrToDate('08.08.2018');
+  d['DATE_OSV']   := StrToDate('08.08.2017');
+
+  d['DOC_TIP']       := '4';
+  d['DOC_ORGAN']     := '6';
+  d['DOC_DATE']      := StrToDate('11.08.2013');
+  d['DOC_SERIA']     := 'I-АЛ';
+  d['DOC_NOMER']     := '0221734';
+
+  d.Post;
+  s := NewGUID;
+  RetSOAP := RegInt.Post(s, akOpeka, '103', d, dsErr);
+  PrepUNResult(RegInt.Response);
+end;
+
+procedure TForm1.btnPostTrustClick(Sender: TObject);
+var
+  i : Integer;
+  s : string;
+  dsOut,
+  dsErr,
+  d : TDataSet;
+  r : TRestResponse;
+  RetSOAP : TRequestResult;
+begin
+  d := RegInt.CreateInputTable(akPopech, opPost);
+  d.Append;
+
+  d['IDENTIF']   := '7492594A001PB1';
+  d['FAMILIA']   := 'СТАНКЕВИЧ';
+  d['NAME']      := 'СВЕТЛАНА';
+  d['OTCH']      := 'ПЕТРОВНА';
+  d['POL']       := 'F';
+  d['DATER']     := '20120511';
+
+  // Опекун
+  d['ON_IDENTIF']   := '7120691A001PB3';
+  d['ON_FAMILIA']   := 'ЮРЧЕНКО';
+  d['ON_NAME']      := 'НИКОЛАЙ';
+  d['ON_OTCH']      := 'НИКОЛАЕВИЧ';
+  d['ON_POL']       := 'M';
+  d['ON_DATER']     := '20120511';
+  d['ON_STATUS']    := '1';
+  d['ON_GRAJD']     := 'BLR';
+
+  d['DATE_UST']   := StrToDate('07.05.2016');
+  //d['DATE_OTM']   := StrToDate('08.08.2019');
+  //d['DATE_OTST']  := StrToDate('08.08.2018');
+  d['DATE_OSV']   := StrToDate('08.06.2017');
+
+  d['DOC_TIP']       := '4';
+  d['DOC_ORGAN']     := '6';
+  d['DOC_DATE']      := StrToDate('01.01.2014');
+  d['DOC_SERIA']     := 'I-АЛ';
+  d['DOC_NOMER']     := '0221734';
+
+  d.Post;
+  s := NewGUID;
+  RetSOAP := RegInt.Post(s, akPopech, '103', d, dsErr);
+  PrepUNResult(RegInt.Response);
+end;
+
+
 end.

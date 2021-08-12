@@ -3,7 +3,7 @@ object Form1: TForm1
   Top = 86
   Width = 1237
   Height = 812
-  Caption = 'Form1'
+  Caption = 'ile'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -413,13 +413,49 @@ object Form1: TForm1
     OnClick = btnPostChgFIOClick
   end
   object btnIsoTime: TButton
-    Left = 471
-    Top = 715
-    Width = 402
+    Left = 335
+    Top = 731
+    Width = 82
     Height = 25
     Caption = 'Time ='
     TabOrder = 30
     OnClick = btnIsoTimeClick
+  end
+  object btnGetNewIN: TButton
+    Left = 16
+    Top = 706
+    Width = 119
+    Height = 25
+    Caption = 'UN - GET '#1053#1086#1074#1099#1081' '#1048#1053
+    TabOrder = 31
+    OnClick = btnGetNewINClick
+  end
+  object btnPostBurial: TButton
+    Left = 472
+    Top = 732
+    Width = 169
+    Height = 25
+    Caption = 'UN - '#1052#1077#1089#1090#1085'-'#1047#1072#1093#1086#1088#1086#1085#1077#1085#1080#1077
+    TabOrder = 32
+    OnClick = btnPostBurialClick
+  end
+  object btnPostOpek: TButton
+    Left = 664
+    Top = 732
+    Width = 169
+    Height = 25
+    Caption = 'UN - '#1052#1077#1089#1090#1085'-'#1054#1087#1077#1082#1072
+    TabOrder = 33
+    OnClick = btnPostOpekClick
+  end
+  object btnPostTrust: TButton
+    Left = 840
+    Top = 732
+    Width = 169
+    Height = 25
+    Caption = 'UN - '#1052#1077#1089#1090#1085'-'#1055#1086#1087#1077#1095
+    TabOrder = 34
+    OnClick = btnPostTrustClick
   end
   object DataSource1: TDataSource
     Left = 664
