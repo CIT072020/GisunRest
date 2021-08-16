@@ -1,10 +1,7 @@
-POST /MVD-34001-Rest/v1/api/v1/common/register HTTP/1.1
+GET /MVD-35000/v1/kl_uni/type/24?code=&active=true&first&count HTTP/1.0
 Host: 127.0.0.1:10446
 Keep-Alive: 300
 Connection: keep-alive
-Cookie: route=24c1230bb4ea4ccb00b1906163acee54
 User-Agent: Mozilla/4.0 (compatible; Synapse)
-Content-Type: application/json;charset=UTF-8
-Content-Length: 3421
-Authorization:Bearer a3dc27f5-9c88-3e3e-955b-fa6fe013d212
+Authorization:Bearer a3dc27f5-9c88-3e3e-955b-fa6fe013d212 
 
