@@ -346,7 +346,7 @@ begin
   if (ValidPars = True) then begin
       cnctNsi.IsConnected := False;
       cnctNsi.ConnectPath := IncludeTrailingBackslash(BlackBox.Meta.ReadString(SCT_ADMIN, 'ADSPATH', '.'));
-    ParsNsi := TParsNsi.Create(NsiType, cnctNsi);
+    ParsNsi := TParsNsi.Create(NsiType, BlackBox.Meta, cnctNsi);
     ParsNsi.ADSCopy := cbAdsCvrt.Checked;
     ParsNsi.NsiCode := NsiCode;
     BlackBox.ResHTTP := BlackBox.GetNSI(ParsNsi);
