@@ -329,27 +329,24 @@ procedure TForm1.btnGetNSIClick(Sender: TObject);
 var
   ValidPars: Boolean;
   NsiCode, NsiType: integer;
-  Path2Nsi : string;
-  ParsNsi : TParsNsi;
+  NsiTypeStr, Path2Nsi: string;
 begin
   try
-    NsiType := StrToInt(edNsiType.Text);
-    if (Length(edNsiCode.Text) > 0) then
-      // только один элемент справочника
-      NsiCode := StrToInt(edNsiCode.Text)
-    else
-      NsiCode := 0;
+    NsiCode := 0;
+    NsiTypeStr := AnsiUpperCase(edNsiType.Text);
+    if (NsiTypeStr = 'ALL') OR (NsiTypeStr = 'ВСЕ') OR (NsiTypeStr = IntToStr(NSIALL)) then
+      NsiType := NSIALL
+    else begin
+      NsiType := StrToInt(NsiTypeStr);
+      if (Length(edNsiCode.Text) > 0) then
+        NsiCode := StrToInt(edNsiCode.Text)
+    end;
     ValidPars := True;
   except
     ValidPars := False;
   end;
   if (ValidPars = True) then begin
-      cnctNsi.IsConnected := False;
-      cnctNsi.ConnectPath := IncludeTrailingBackslash(BlackBox.Meta.ReadString(SCT_ADMIN, 'ADSPATH', '.'));
-    ParsNsi := TParsNsi.Create(NsiType, BlackBox.Meta, cnctNsi);
-    ParsNsi.ADSCopy := cbAdsCvrt.Checked;
-    ParsNsi.NsiCode := NsiCode;
-    BlackBox.ResHTTP := BlackBox.GetNSI(ParsNsi);
+    BlackBox.ResHTTP := BlackBox.GetROCNSI(NsiType);
     if (BlackBox.ResHTTP.ResCode = 0) then begin
       dsNsi.DataSet := BlackBox.ResHTTP.Nsi;
       BlackBox.ResHTTP.Nsi.First;
