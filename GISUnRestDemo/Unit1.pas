@@ -17,15 +17,11 @@ uses
   ssl_openssl, ssl_openssl_lib,
   funcpr,
   mRegInt,
-  uGisun,
-  uROCExchg,
   uUNRestClient,
   uUNRegIntX;
 
 const
 //=== *** === === *** === === *** === === *** === =>
-  ROC_INI_NAME  = '..\..\Lais7\Service\RegUch.ini';
-
   UN_INI_NAME  = '..\..\Lais7\Service\GISUN.ini';
   UN_IN_FILES  = '..\..\Lais7\Service\GISUN_InputJ.ini';
   UN_OUT_FILES = '..\..\Lais7\Service\GISUN_OutputJ.ini';
@@ -83,12 +79,10 @@ type
     btnPostBurial: TButton;
     btnPostOpek: TButton;
     btnPostTrust: TButton;
-    procedure btnGetActualClick(Sender: TObject);
+    procedure btnGetDocsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure btnGetDocsClick(Sender: TObject);
     procedure btnGetNewINClick(Sender: TObject);
-    procedure btnGetNSIClick(Sender: TObject);
     procedure btnGetPersDataClick(Sender: TObject);
     procedure btnGetUNClick(Sender: TObject);
     procedure btnIsoTimeClick(Sender: TObject);
@@ -98,7 +92,6 @@ type
     procedure btnPostChgFIOClick(Sender: TObject);
     procedure btnPostDeceaseClick(Sender: TObject);
     procedure btnPostDivrClick(Sender: TObject);
-    procedure btnPostDocClick(Sender: TObject);
     procedure btnPostMarrClick(Sender: TObject);
     procedure btnPostOpekClick(Sender: TObject);
     procedure btnPostTrustClick(Sender: TObject);
@@ -109,12 +102,28 @@ type
     { Public declarations }
   end;
 
+  TOldType = class
+  private
+  public
+    function GenFunc(Sender: TObject) : string;
+    function GetNum : integer;
+  published
+  end;
+
+  TNewType = class(TOldType)
+  private
+  public
+    function GenFunc(Sender: TObject) : string;
+  end;
+
+
 
 var
   Form1: TForm1;
   ShowM : TMemo;
   RegInt : TRegIntX;
-  BlackBox : TROCExchg;
+  xxx : TNewType;
+  //BlackBox : TROCExchg;
   // для отладки POST
   //GETRes : TResultHTTP;
 
@@ -124,10 +133,34 @@ uses
   kbmMemTable,
   SasaINiFile,
   uAvest,
+  uGisun,
   uRestService,
   fPIN4Av;
 
 {$R *.dfm}
+
+
+function TOldType.GenFunc(Sender: TObject) : string;
+begin
+  Result := 'old';
+end;
+
+function TOldType.GetNum : integer;
+begin
+  Result := 112233;
+end;
+
+
+function TNewType.GenFunc(Sender: TObject) : string;
+var
+  s : string;
+begin
+  s := inherited GenFunc(Self);
+  Result := s + ' + new' + IntToStr(GetNum);
+end;
+
+
+
 
 // Вывод отладки в Memo
 procedure ShowDeb(const s: string; const ClearAll: Boolean = True);
@@ -145,10 +178,17 @@ end;
 procedure Create4UN;
 var
   Ini : TSasaIniFile;
+  //xG : TGisun;
 begin
+(*
+  xG  := TGisun.Create(ExtractFilePath(UN_INI_NAME));
+  RegInt := xG.RegInt;
+*)
+
   Ini := TSasaIniFile.Create(UN_INI_NAME);
-  RegInt := TRegIntX.Create('1', Ini);
-  RegInt.ReadMetaInfo(UN_IN_FILES, UN_OUT_FILES);
+  RegInt := TRegIntX.Create(Ini);
+  RegInt.ReadMetaInfo(ExtractFilePath(UN_INI_NAME));
+
 end;
 
 
@@ -165,9 +205,9 @@ begin
   edCount.Text  := '10';
   cbSrcPost.ItemIndex := 0;
 
-  BlackBox := TROCExchg.Create(ROC_INI_NAME);
+  //BlackBox := TROCExchg.Create(ROC_INI_NAME);
   Create4UN;
-  Self.Caption := Format('Регистрация: %s ****---***** Регистр населения: %s', [BlackBox.Host.URL, RegInt.Config.BasePath]);
+  Self.Caption := Format('Регистр населения URL обмена: %s', [RegInt.Config.BasePath]);
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -175,86 +215,6 @@ begin
 end;
 
 
-// Уехавшие из Sys_Organ
-procedure TForm1.btnGetDocsClick(Sender: TObject);
-var
-  First, Count : Integer;
-  D1, D2: TDateTime;
-  P: TParsGet;
-begin
-  D1 := dtBegin.Value;
-  D2 := dtEnd.Value;
-  try
-    First := Integer(edFirst.Value);
-    except
-    First := 0;
-      end;
-
-  try
-    Count := Integer(edCount.Value);
-    except
-    Count := 0;
-      end;
-
-  if (First = 0) AND (Count = 0) then
-    BlackBox.ResHTTP := BlackBox.GetDeparted(D1, D2, edOrgan.Text)
-  else begin
-    P := TParsGet.Create(D1, D2, edOrgan.Text);
-    P.First := First;
-    P.Count := Count;
-    BlackBox.ResHTTP := BlackBox.GetDeparted(P);
-  end;
-  //GETRes := BlackBox.ResHTTP;
-  ShowDeb(IntToStr(BlackBox.ResHTTP.ResCode) + ' ' + BlackBox.ResHTTP.ResMsg, cbClearLog.Checked);
-
-  if (BlackBox.ResHTTP.INs.RecordCount > 0) then begin
-    DataSource1.DataSet := BlackBox.ResHTTP.INs;
-    dsDocs.DataSet := BlackBox.ResHTTP.Docs;
-    dsChild.DataSet := BlackBox.ResHTTP.Child;
-    BlackBox.ResHTTP.INs.First;
-    while (NOT BlackBox.ResHTTP.INs.Eof) do begin
-      if (BlackBox.ResHTTP.INs.Bof) then
-        lstINs.Clear;
-      lstINs.Items.Add(BlackBox.ResHTTP.INs.FieldValues['IDENTIF']);
-      BlackBox.ResHTTP.INs.Next;
-    end;
-
-  end;
-
-end;
-
-
-// Актуальные установочные данные для ИН
-procedure TForm1.btnGetActualClick(Sender: TObject);
-var
-  i: Integer;
-  IndNums: TStringList;
-  P: TParsGet;
-begin
-  if (lstINs.SelCount > 0) then begin
-    if (lstINs.SelCount = 1) then
-      // Выбран единственный - передается строка
-      BlackBox.ResHTTP := BlackBox.GetActualReg(lstINs.Items[lstINs.ItemIndex])
-    else begin
-      // Выбрано несколько - передается список
-      IndNums := TStringList.Create;
-      for i := 1 to lstINs.SelCount do begin
-        if (lstINs.Selected[i]) then
-          IndNums.Add(lstINs.Items[i]);
-      end;
-      BlackBox.ResHTTP := BlackBox.GetActualReg(IndNums);
-    end;
-  end
-  else
-      // Ничего не выбрано, берем из TextBox
-    BlackBox.ResHTTP := BlackBox.GetActualReg(edtIN.Text);
-  ShowDeb(IntToStr(BlackBox.ResHTTP.ResCode) + ' ' + BlackBox.ResHTTP.ResMsg, cbClearLog.Checked);
-  if (Assigned(BlackBox.ResHTTP)) then begin
-    dsDocs.DataSet := BlackBox.ResHTTP.Docs;
-    dsChild.DataSet := BlackBox.ResHTTP.Child;
-  end;
-
-end;
 
 // Сохранить PIN
 function SetAvestPass(Avest: TAvest): Boolean;
@@ -283,77 +243,6 @@ begin
     Result := True;
 end;
 
-
-// Записать Актуальные установочные данные для ИН
-procedure TForm1.btnPostDocClick(Sender: TObject);
-const
-  exmSign = 'amlsnandwkn&@871099udlaukbdeslfug12p91883y1hpd91h';
-  exmSert = '109uu21nu0t17togdy70-fuib';
-var
-  iSrc: Integer;
-  PPost: TParsPost;
-  Res: TResultHTTP;
-begin
-  //edMemo.Clear;
-  PPost := TParsPost.Create(exmSign, exmSert);
-  iSrc := cbSrcPost.ItemIndex;
-  if (cbSrcPost.ItemIndex in [0..1]) then begin
-    // из MemTable
-    PPost.JSONSrc := '';
-    PPost.Docs := BlackBox.ResHTTP.Docs;
-    PPost.Child := BlackBox.ResHTTP.Child;
-    if (cbSrcPost.ItemIndex = 0) then
-    // передача только текущей
-      LeaveOnly1(dsDocs.DataSet);
-  end
-  else begin
-    // из JSON-файла
-    PPost.JSONSrc := cbSrcPost.Items[cbSrcPost.ItemIndex];
-    //PPost.Docs := nil;
-  end;
-
-  BlackBox.Secure.SignPost := cbESTP.Checked;
-  if (BlackBox.Secure.SignPost = True) then
-    if (SetAvestPass(BlackBox.Secure.Avest) = False) then
-      Exit;
-
-  BlackBox.Secure.Avest.Debug := True;
-  BlackBox.ResHTTP := BlackBox.PostRegDocs(PPost);
-  ShowDeb(IntToStr(BlackBox.ResHTTP.ResCode) + ' ' + BlackBox.ResHTTP.ResMsg, cbClearLog.Checked);
-
-end;
-
-
-// Справочник ROC
-procedure TForm1.btnGetNSIClick(Sender: TObject);
-var
-  ValidPars: Boolean;
-  NsiCode, NsiType: integer;
-  NsiTypeStr, Path2Nsi: string;
-begin
-  try
-    NsiCode := 0;
-    NsiTypeStr := AnsiUpperCase(edNsiType.Text);
-    if (NsiTypeStr = 'ALL') OR (NsiTypeStr = 'ВСЕ') OR (NsiTypeStr = IntToStr(NSIALL)) then
-      NsiType := NSIALL
-    else begin
-      NsiType := StrToInt(NsiTypeStr);
-      if (Length(edNsiCode.Text) > 0) then
-        NsiCode := StrToInt(edNsiCode.Text)
-    end;
-    ValidPars := True;
-  except
-    ValidPars := False;
-  end;
-  if (ValidPars = True) then begin
-    BlackBox.ResHTTP := BlackBox.GetROCNSI(NsiType);
-    if (BlackBox.ResHTTP.ResCode = 0) then begin
-      dsNsi.DataSet := BlackBox.ResHTTP.Nsi;
-      BlackBox.ResHTTP.Nsi.First;
-    end;
-    ShowDeb(IntToStr(BlackBox.ResHTTP.ResCode) + ' ' + BlackBox.ResHTTP.ResMsg, cbClearLog.Checked);
-  end;
-end;
 
 
 
@@ -1100,6 +989,17 @@ begin
 end;
 
 
+procedure TForm1.btnGetDocsClick(Sender: TObject);
+var
+  s : string;
+  x : TNewType;
+begin
+  x := TNewType.Create;
+  s := x.GenFunc(Self);
+  FreeAndNil(x);
+  ShowDeb(s);
+end;
+
 procedure TForm1.btnIsoTimeClick(Sender: TObject);
 var
   b : Boolean;
@@ -1238,6 +1138,20 @@ begin
   RetSOAP := RegInt.Post(s, akPopech, '103', d, dsErr);
   PrepUNResult(RegInt.Response);
 end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 end.

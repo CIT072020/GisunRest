@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 100
-  Top = 86
+  Left = 566
+  Top = 99
   Width = 1237
   Height = 812
   Caption = 'ile'
@@ -155,7 +155,7 @@ object Form1: TForm1
     Top = 195
     Width = 121
     Height = 25
-    Caption = 'GET- '#1091#1073#1099#1074#1096#1080#1077' - BB'
+    Caption = ' --- '
     TabOrder = 4
     OnClick = btnGetDocsClick
   end
@@ -214,18 +214,16 @@ object Form1: TForm1
     Top = 235
     Width = 119
     Height = 25
-    Caption = 'POST-DOC-BB'
+    Caption = ' --- '
     TabOrder = 10
-    OnClick = btnPostDocClick
   end
   object btnGetActual: TButton
     Left = 160
     Top = 195
     Width = 121
     Height = 25
-    Caption = 'GET- '#1072#1082#1090#1091#1072#1083#1100#1085#1099#1077' - BB'
+    Caption = ' --- '
     TabOrder = 11
-    OnClick = btnGetActualClick
   end
   object lstINs: TListBox
     Left = 304
@@ -251,9 +249,8 @@ object Form1: TForm1
     Top = 195
     Width = 121
     Height = 25
-    Caption = 'GET- '#1053#1057#1048' - BB'
+    Caption = ' --- '
     TabOrder = 14
-    OnClick = btnGetNSIClick
   end
   object edNsiType: TDBEditEh
     Left = 160

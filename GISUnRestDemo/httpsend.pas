@@ -88,6 +88,7 @@ type
     FAlivePort: string;
     FHeaders: TStringList;
     FDocument: TMemoryStream;
+    FFileDocument: TFileStream;
     FMimeType: string;
     FProtocol: string;
     FKeepAlive: Boolean;
@@ -109,6 +110,9 @@ type
     function ReadUnknown: Boolean;
     function ReadIdentity(Size: Integer): Boolean;
     function ReadChunked: Boolean;
+    function ReadUnknown2: Boolean;
+    function ReadIdentity2(Size: Integer): Boolean;
+    function ReadChunked2: Boolean;
     procedure ParseCookies;
     function PrepareHeaders: AnsiString;
     function InternalDoConnect(needssl: Boolean): Boolean;
@@ -134,6 +138,7 @@ type
      instead standard port 80). If you use SSL/TLS request and you have defined
      HTTP proxy, then HTTP-tunnel mode is automaticly used .}
     function HTTPMethod(const Method, URL: string): Boolean;
+    function HTTPGet2File(const Method, URL, FileName: string): Boolean;
 
     {:You can call this method from OnStatus event for break current data
      transfer. (or from another thread.)}
@@ -265,6 +270,11 @@ function HttpPostURL(const URL, URLData: string; const Data: TStream): Boolean;
  in the ResultData Stringlist. Returns boolean TRUE if all went well.}
 function HttpPostFile(const URL, FieldName, FileName: string;
   const Data: TStream; const ResultData: TStrings): Boolean;
+  
+type
+  TLogHeaders = procedure(HeadersList : TStringList; Caption : string = '') of object;
+var
+  LogHeaders : TLogHeaders;
 
 implementation
 
@@ -502,6 +512,13 @@ begin
   if FHeaders[FHeaders.Count - 1] <> '' then
     FHeaders.Add('');
 
+  //!!!
+  try
+    if (Assigned(LogHeaders)) then 
+	  LogHeaders(FHeaders);
+  except
+  end;
+
   { connect }
   if not InternalConnect(UpperCase(Prot) = 'HTTPS') then
   begin
@@ -509,10 +526,8 @@ begin
     FAlivePort := '';
     Exit;
   end;
-  try
-    FHeaders.SaveToFile('headers'); // !!! vadim
-  except
-  end;
+
+
   { reading Status }
   FDocument.Position := 0;
   Status100Error := '';
@@ -676,6 +691,314 @@ begin
   ParseCookies;
 end;
 
+function THTTPSend.HTTPGet2File(const Method, URL, FileName: string): Boolean;
+var
+  Sending, Receiving: Boolean;
+  status100: Boolean;
+  status100error: string;
+  ToClose: Boolean;
+  Size: Integer;
+  Prot, User, Pass, Host, Port, Path, Para, URI: string;
+  s, su: AnsiString;
+  HttpTunnel: Boolean;
+  n: integer;
+  pp: string;
+  UsingProxy: boolean;
+  l: TStringList;
+  x: integer;
+begin
+  {initial values}
+  Result := False;
+  FResultCode := 500;
+  FResultString := '';
+  FDownloadSize := 0;
+  FUploadSize := 0;
+
+  FFileDocument := TFileStream.Create(FileName, fmCreate);
+  try
+    URI := ParseURL(URL, Prot, User, Pass, Host, Port, Path, Para);
+    User := DecodeURL(user);
+    Pass := DecodeURL(pass);
+    if User = '' then
+    begin
+      User := FUsername;
+      Pass := FPassword;
+    end;
+    if UpperCase(Prot) = 'HTTPS' then
+    begin
+      HttpTunnel := FProxyHost <> '';
+      FSock.HTTPTunnelIP := FProxyHost;
+      FSock.HTTPTunnelPort := FProxyPort;
+      FSock.HTTPTunnelUser := FProxyUser;
+      FSock.HTTPTunnelPass := FProxyPass;
+    end
+    else
+    begin
+      HttpTunnel := False;
+      FSock.HTTPTunnelIP := '';
+      FSock.HTTPTunnelPort := '';
+      FSock.HTTPTunnelUser := '';
+      FSock.HTTPTunnelPass := '';
+    end;
+    UsingProxy := (FProxyHost <> '') and not(HttpTunnel);
+    Sending := FFileDocument.Size > 0;
+    {Headers for Sending data}
+    status100 := FStatus100 and Sending and (FProtocol = '1.1');
+    if status100 then
+      FHeaders.Insert(0, 'Expect: 100-continue');
+    if Sending then
+    begin
+      FHeaders.Insert(0, 'Content-Length: ' + IntToStr(FFileDocument.Size));
+      if FMimeType <> '' then
+        FHeaders.Insert(0, 'Content-Type: ' + FMimeType);
+    end;
+    { setting User-agent }
+    if FUserAgent <> '' then
+      FHeaders.Insert(0, 'User-Agent: ' + FUserAgent);
+    { setting Ranges }
+    if (FRangeStart > 0) or (FRangeEnd > 0) then
+    begin
+      if FRangeEnd >= FRangeStart then
+        FHeaders.Insert(0, 'Range: bytes=' + IntToStr(FRangeStart) + '-' + IntToStr(FRangeEnd))
+      else
+        FHeaders.Insert(0, 'Range: bytes=' + IntToStr(FRangeStart) + '-');
+    end;
+    { setting Cookies }
+    s := '';
+    for n := 0 to FCookies.Count - 1 do
+    begin
+      if s <> '' then
+        s := s + '; ';
+      s := s + FCookies[n];
+    end;
+    if s <> '' then
+      FHeaders.Insert(0, 'Cookie: ' + s);
+    { setting KeepAlives }
+    pp := '';
+    if UsingProxy then
+      pp := 'Proxy-';
+    if FKeepAlive then
+    begin
+      FHeaders.Insert(0, pp + 'Connection: keep-alive');
+      FHeaders.Insert(0, 'Keep-Alive: ' + IntToStr(FKeepAliveTimeout));
+    end
+    else
+      FHeaders.Insert(0, pp + 'Connection: close');
+    { set target servers/proxy, authorizations, etc... }
+    if User <> '' then
+      FHeaders.Insert(0, 'Authorization: Basic ' + EncodeBase64(User + ':' + Pass));
+    if UsingProxy and (FProxyUser <> '') then
+      FHeaders.Insert(0, 'Proxy-Authorization: Basic ' +
+        EncodeBase64(FProxyUser + ':' + FProxyPass));
+    if isIP6(Host) then
+      s := '[' + Host + ']'
+    else
+      s := Host;
+    if FAddPortNumberToHost and (Port <> '80') then
+       FHeaders.Insert(0, 'Host: ' + s + ':' + Port)
+    else
+       FHeaders.Insert(0, 'Host: ' + s);
+    if UsingProxy then
+      URI := Prot + '://' + s + ':' + Port + URI;
+    if URI = '/*' then
+      URI := '*';
+    if FProtocol = '0.9' then
+      FHeaders.Insert(0, UpperCase(Method) + ' ' + URI)
+    else
+      FHeaders.Insert(0, UpperCase(Method) + ' ' + URI + ' HTTP/' + FProtocol);
+    if UsingProxy then
+    begin
+      FTargetHost := FProxyHost;
+      FTargetPort := FProxyPort;
+    end
+    else
+    begin
+      FTargetHost := Host;
+      FTargetPort := Port;
+    end;
+    if FHeaders[FHeaders.Count - 1] <> '' then
+      FHeaders.Add('');
+  //!!!
+  try
+    if (Assigned(LogHeaders)) then
+	  LogHeaders(FHeaders);
+  except
+  end;
+
+    { connect }
+    if not InternalConnect(UpperCase(Prot) = 'HTTPS') then
+    begin
+      FAliveHost := '';
+      FAlivePort := '';
+      Exit;
+    end;
+
+    { reading Status }
+    FFileDocument.Position := 0;
+    Status100Error := '';
+    if status100 then
+    begin
+      { send Headers }
+      FSock.SendString(PrepareHeaders);
+      if FSock.LastError <> 0 then
+        Exit;
+      repeat
+        s := FSock.RecvString(FTimeout);
+        if s <> '' then
+          Break;
+      until FSock.LastError <> 0;
+      DecodeStatus(s);
+      Status100Error := s;
+      repeat
+        s := FSock.recvstring(FTimeout);
+        if s = '' then
+          Break;
+      until FSock.LastError <> 0;
+      if (FResultCode >= 100) and (FResultCode < 200) then
+      begin
+        { we can upload content }
+        Status100Error := '';
+        FUploadSize := FFileDocument.Size;
+        //FSock.SendBuffer(FFileDocument.Memory, FFileDocument.Size);
+      end;
+    end
+    else
+      { upload content }
+      if sending then
+      begin
+        if FFileDocument.Size >= c64k then
+        begin
+          FSock.SendString(PrepareHeaders);
+          FUploadSize := FFileDocument.Size;
+          //FSock.SendBuffer(FFileDocument.Memory, FFileDocument.Size);
+        end
+        else
+        begin
+          s := PrepareHeaders + ReadStrFromStream(FFileDocument, FFileDocument.Size);
+          FUploadSize := Length(s);
+          FSock.SendString(s);
+        end;
+      end
+      else
+      begin
+        { we not need to upload document, send headers only }
+        FSock.SendString(PrepareHeaders);
+      end;
+
+    if FSock.LastError <> 0 then
+      Exit;
+
+    Clear;
+    Size := -1;
+    FTransferEncoding := TE_UNKNOWN;
+
+    { read status }
+    if Status100Error = '' then
+    begin
+      repeat
+        repeat
+          s := FSock.RecvString(FTimeout);
+          if s <> '' then
+            Break;
+        until FSock.LastError <> 0;
+        if Pos('HTTP/', UpperCase(s)) = 1 then
+        begin
+          FHeaders.Add(s);
+          DecodeStatus(s);
+        end
+        else
+        begin
+          { old HTTP 0.9 and some buggy servers not send result }
+          s := s + CRLF;
+          WriteStrToStream(FFileDocument, s);
+          FResultCode := 0;
+        end;
+      until (FSock.LastError <> 0) or (FResultCode <> 100);
+    end
+    else
+      FHeaders.Add(Status100Error);
+
+    { if need receive headers, receive and parse it }
+    ToClose := FProtocol <> '1.1';
+    if FHeaders.Count > 0 then
+    begin
+      l := TStringList.Create;
+      try
+        repeat
+          s := FSock.RecvString(FTimeout);
+          l.Add(s);
+          if s = '' then
+            Break;
+        until FSock.LastError <> 0;
+        x := 0;
+        while l.Count > x do
+        begin
+          s := NormalizeHeader(l, x);
+          FHeaders.Add(s);
+          su := UpperCase(s);
+          if Pos('CONTENT-LENGTH:', su) = 1 then
+          begin
+            Size := StrToIntDef(Trim(SeparateRight(s, ' ')), -1);
+            if (Size <> -1) and (FTransferEncoding = TE_UNKNOWN) then
+              FTransferEncoding := TE_IDENTITY;
+          end;
+          if Pos('CONTENT-TYPE:', su) = 1 then
+            FMimeType := Trim(SeparateRight(s, ' '));
+          if Pos('TRANSFER-ENCODING:', su) = 1 then
+          begin
+            s := Trim(SeparateRight(su, ' '));
+            if Pos('CHUNKED', s) > 0 then
+              FTransferEncoding := TE_CHUNKED;
+          end;
+          if UsingProxy then
+          begin
+            if Pos('PROXY-CONNECTION:', su) = 1 then
+              if Pos('CLOSE', su) > 0 then
+                ToClose := True;
+          end
+          else
+          begin
+            if Pos('CONNECTION:', su) = 1 then
+              if Pos('CLOSE', su) > 0 then
+                ToClose := True;
+          end;
+        end;
+      finally
+        l.free;
+      end;
+    end;
+
+    Result := FSock.LastError = 0;
+    if not Result then
+      Exit;
+
+    {if need receive response body, read it}
+    Receiving := Method <> 'HEAD';
+    Receiving := Receiving and (FResultCode <> 204);
+    Receiving := Receiving and (FResultCode <> 304);
+    if Receiving then
+      case FTransferEncoding of
+        TE_UNKNOWN:
+          Result := ReadUnknown2;
+        TE_IDENTITY:
+          Result := ReadIdentity2(Size);
+        TE_CHUNKED:
+          Result := ReadChunked2;
+      end;
+
+    FFileDocument.Seek(0, soFromBeginning);
+    if ToClose then
+    begin
+      FSock.CloseSocket;
+      FAliveHost := '';
+      FAlivePort := '';
+    end;
+    ParseCookies;
+  finally
+    FFileDocument.Free
+  end;
+end;
+
 function THTTPSend.ReadUnknown: Boolean;
 var
   s: ansistring;
@@ -727,6 +1050,75 @@ begin
   until False;
   Result := FSock.LastError = 0;
 end;
+
+function THTTPSend.ReadUnknown2: Boolean;
+var
+  s: ansistring;
+begin
+  Result := false;
+  repeat
+    s := FSock.RecvPacket(FTimeout);
+    if FSock.LastError = 0 then
+      WriteStrToStream(FFileDocument, s);
+  until FSock.LastError <> 0;
+  if FSock.LastError = WSAECONNRESET then
+  begin
+    Result := true;
+    FSock.ResetLastError;
+  end;
+end;
+
+function THTTPSend.ReadIdentity2(Size: Integer): Boolean;
+begin
+  if Size > 0 then
+  begin
+    FDownloadSize := Size;
+    FSock.RecvStreamSize(FFileDocument, FTimeout, Size);
+    FFileDocument.Position := FFileDocument.Size;
+    Result := FSock.LastError = 0;
+  end
+  else
+    Result := true;
+end;
+
+function THTTPSend.ReadChunked2: Boolean;
+var
+  s: ansistring;
+  Size: Integer;
+begin
+  repeat
+    repeat
+      s := FSock.RecvString(FTimeout);
+    until (s <> '') or (FSock.LastError <> 0);
+    if FSock.LastError <> 0 then
+      Break;
+    s := Trim(SeparateLeft(s, ' '));
+    s := Trim(SeparateLeft(s, ';'));
+    Size := StrToIntDef('$' + s, 0);
+    if Size = 0 then
+      Break;
+    if not ReadIdentity2(Size) then
+      break;
+  until False;
+  Result := FSock.LastError = 0;
+end;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 procedure THTTPSend.ParseCookies;
 var
@@ -844,5 +1236,8 @@ begin
     HTTP.Free;
   end;
 end;
+
+initialization
+  LogHeaders := nil;
 
 end.
