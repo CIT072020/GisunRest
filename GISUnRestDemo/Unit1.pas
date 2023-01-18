@@ -79,10 +79,12 @@ type
     btnPostBurial: TButton;
     btnPostOpek: TButton;
     btnPostTrust: TButton;
+    btnGetNsiUN: TButton;
     procedure btnGetDocsClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure btnGetNewINClick(Sender: TObject);
+    procedure btnGetNsiUNClick(Sender: TObject);
     procedure btnGetPersDataClick(Sender: TObject);
     procedure btnGetUNClick(Sender: TObject);
     procedure btnIsoTimeClick(Sender: TObject);
@@ -997,6 +999,14 @@ begin
   x := TNewType.Create;
   s := x.GenFunc(Self);
   FreeAndNil(x);
+  ShowDeb(s);
+end;
+
+procedure TForm1.btnGetNsiUNClick(Sender: TObject);
+var
+  s : string;
+begin
+  s := 'NSI Load Call';
   ShowDeb(s);
 end;
 

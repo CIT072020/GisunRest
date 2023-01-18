@@ -340,7 +340,7 @@ object Form1: TForm1
   object btnGetUN: TButton
     Left = 16
     Top = 626
-    Width = 119
+    Width = 127
     Height = 25
     Caption = 'UN - GET IN (by FIO)'
     TabOrder = 22
@@ -349,7 +349,7 @@ object Form1: TForm1
   object btnGetPersData: TButton
     Left = 16
     Top = 668
-    Width = 119
+    Width = 127
     Height = 25
     Caption = 'UN - GET PersData'
     TabOrder = 23
@@ -421,7 +421,7 @@ object Form1: TForm1
   object btnGetNewIN: TButton
     Left = 16
     Top = 706
-    Width = 119
+    Width = 127
     Height = 25
     Caption = 'UN - GET '#1053#1086#1074#1099#1081' '#1048#1053
     TabOrder = 31
@@ -453,6 +453,15 @@ object Form1: TForm1
     Caption = 'UN - '#1052#1077#1089#1090#1085'-'#1055#1086#1087#1077#1095
     TabOrder = 34
     OnClick = btnPostTrustClick
+  end
+  object btnGetNsiUN: TButton
+    Left = 15
+    Top = 739
+    Width = 127
+    Height = 25
+    Caption = 'UN - GET NSI'
+    TabOrder = 35
+    OnClick = btnGetNsiUNClick
   end
   object DataSource1: TDataSource
     Left = 664
